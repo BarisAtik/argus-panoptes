@@ -1,0 +1,25 @@
+{
+  "dev": {
+    "tp": 21,
+    "fp": 0,
+    "fn": 0,
+    "tn": 10,
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "holdout": {
+    "tp": 2,
+    "fp": 0,
+    "fn": 23,
+    "tn": 15,
+    "precision": 1.0,
+    "recall": 0.08
+  },
+  "third_party": {
+    "tools": 74,
+    "flagged": 1,
+    "by_rule": {
+      "ML007": 1
+    }
+  }
+}

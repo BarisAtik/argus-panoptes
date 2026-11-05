@@ -1,0 +1,4 @@
+corpus/real/
+*.lock.json
+*.egg-info/
+.pytest_cache/

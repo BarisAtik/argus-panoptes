@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-lens"
+version = "0.2.0"
+description = "Static scanner for MCP tool manifests: hidden instructions, tool poisoning, rug pulls, risky capability mixes"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+live = ["mcp>=2.0"]
+dev = ["pytest>=8", "mcp>=2.0"]
+
+[project.scripts]
+mcp-lens = "mcp_lens.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

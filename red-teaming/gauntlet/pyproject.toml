@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "argus-gauntlet"
+version = "0.1.0"
+description = "Local, canary-based evaluation harness for prompt injection and tool misuse in LLM agents"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = ["pyyaml>=6"]
+
+[project.optional-dependencies]
+llm = ["openai>=1.40"]
+mcp = ["mcp>=2.0"]
+hf = ["torch", "transformers>=4.45", "accelerate"]
+agentdojo = ["agentdojo>=0.1.35"]
+dev = ["pytest>=8", "mcp>=2.0"]
+
+[project.scripts]
+gauntlet = "gauntlet.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+gauntlet = ["scenarios/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

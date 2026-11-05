@@ -1,0 +1,4 @@
+runs/
+promptfooconfig.yaml
+*.egg-info/
+.pytest_cache/

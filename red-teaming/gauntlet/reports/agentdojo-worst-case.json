@@ -1,0 +1,543 @@
+{
+  "version": "v1.2.2",
+  "mode": "worst-case",
+  "pairs_total": 949,
+  "pairs_reachable": 609,
+  "pairs_live": 566,
+  "summary": {
+    "none": {
+      "asr": {
+        "k": 566,
+        "n": 566,
+        "rate": 1.0,
+        "wilson_low": 0.9932584774435562,
+        "wilson_high": 1.0
+      },
+      "utility_under_attack": {
+        "k": 239,
+        "n": 566,
+        "rate": 0.42226148409893993,
+        "wilson_low": 0.3822280156606737,
+        "wilson_high": 0.46334310445410903
+      },
+      "benign_utility": {
+        "k": 97,
+        "n": 97,
+        "rate": 1.0,
+        "wilson_low": 0.9619046107955446,
+        "wilson_high": 0.9999999999999999
+      },
+      "by_suite": {
+        "banking": {
+          "asr": {
+            "k": 143,
+            "n": 143,
+            "rate": 1.0,
+            "wilson_low": 0.9738384762900976,
+            "wilson_high": 1.0
+          },
+          "benign_utility": {
+            "k": 16,
+            "n": 16,
+            "rate": 1.0,
+            "wilson_low": 0.8063865817272802,
+            "wilson_high": 1.0
+          }
+        },
+        "slack": {
+          "asr": {
+            "k": 105,
+            "n": 105,
+            "rate": 1.0,
+            "wilson_low": 0.9647046717431569,
+            "wilson_high": 0.9999999999999998
+          },
+          "benign_utility": {
+            "k": 21,
+            "n": 21,
+            "rate": 1.0,
+            "wilson_low": 0.8453561767357979,
+            "wilson_high": 0.9999999999999999
+          }
+        },
+        "travel": {
+          "asr": {
+            "k": 118,
+            "n": 118,
+            "rate": 1.0,
+            "wilson_low": 0.9684705387979147,
+            "wilson_high": 1.0
+          },
+          "benign_utility": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "wilson_low": 0.8388698745050667,
+            "wilson_high": 1.0
+          }
+        },
+        "workspace": {
+          "asr": {
+            "k": 200,
+            "n": 200,
+            "rate": 1.0,
+            "wilson_low": 0.9811539940816791,
+            "wilson_high": 1.0
+          },
+          "benign_utility": {
+            "k": 40,
+            "n": 40,
+            "rate": 1.0,
+            "wilson_low": 0.9123754607496077,
+            "wilson_high": 1.0
+          }
+        }
+      }
+    },
+    "allowlist": {
+      "asr": {
+        "k": 113,
+        "n": 566,
+        "rate": 0.19964664310954064,
+        "wilson_low": 0.16878815127944913,
+        "wilson_high": 0.23455481280039342
+      },
+      "utility_under_attack": {
+        "k": 534,
+        "n": 566,
+        "rate": 0.9434628975265018,
+        "wilson_low": 0.9212760156367209,
+        "wilson_high": 0.9596705491630412
+      },
+      "benign_utility": {
+        "k": 97,
+        "n": 97,
+        "rate": 1.0,
+        "wilson_low": 0.9619046107955446,
+        "wilson_high": 0.9999999999999999
+      },
+      "by_suite": {
+        "banking": {
+          "asr": {
+            "k": 46,
+            "n": 143,
+            "rate": 0.32167832167832167,
+            "wilson_low": 0.2506451111483804,
+            "wilson_high": 0.4020418658390673
+          },
+          "benign_utility": {
+            "k": 16,
+            "n": 16,
+            "rate": 1.0,
+            "wilson_low": 0.8063865817272802,
+            "wilson_high": 1.0
+          }
+        },
+        "slack": {
+          "asr": {
+            "k": 42,
+            "n": 105,
+            "rate": 0.4,
+            "wilson_low": 0.31142450373600916,
+            "wilson_high": 0.4956345619153594
+          },
+          "benign_utility": {
+            "k": 21,
+            "n": 21,
+            "rate": 1.0,
+            "wilson_low": 0.8453561767357979,
+            "wilson_high": 0.9999999999999999
+          }
+        },
+        "travel": {
+          "asr": {
+            "k": 7,
+            "n": 118,
+            "rate": 0.059322033898305086,
+            "wilson_low": 0.029029395306249407,
+            "wilson_high": 0.11740335015999528
+          },
+          "benign_utility": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "wilson_low": 0.8388698745050667,
+            "wilson_high": 1.0
+          }
+        },
+        "workspace": {
+          "asr": {
+            "k": 18,
+            "n": 200,
+            "rate": 0.09,
+            "wilson_low": 0.05768697871453362,
+            "wilson_high": 0.13776674613848952
+          },
+          "benign_utility": {
+            "k": 40,
+            "n": 40,
+            "rate": 1.0,
+            "wilson_low": 0.9123754607496077,
+            "wilson_high": 1.0
+          }
+        }
+      }
+    },
+    "contacts": {
+      "asr": {
+        "k": 157,
+        "n": 566,
+        "rate": 0.2773851590106007,
+        "wilson_low": 0.24209542296104253,
+        "wilson_high": 0.3156764210040172
+      },
+      "utility_under_attack": {
+        "k": 463,
+        "n": 566,
+        "rate": 0.8180212014134276,
+        "wilson_low": 0.7841257737955041,
+        "wilson_high": 0.8476287348258391
+      },
+      "benign_utility": {
+        "k": 94,
+        "n": 97,
+        "rate": 0.9690721649484536,
+        "wilson_low": 0.9129785098835845,
+        "wilson_high": 0.989426846635947
+      },
+      "by_suite": {
+        "banking": {
+          "asr": {
+            "k": 15,
+            "n": 143,
+            "rate": 0.1048951048951049,
+            "wilson_low": 0.06460354458062817,
+            "wilson_high": 0.16585975737195202
+          },
+          "benign_utility": {
+            "k": 15,
+            "n": 16,
+            "rate": 0.9375,
+            "wilson_low": 0.7167073163197013,
+            "wilson_high": 0.9888809426916687
+          }
+        },
+        "slack": {
+          "asr": {
+            "k": 63,
+            "n": 105,
+            "rate": 0.6,
+            "wilson_low": 0.5043654380846405,
+            "wilson_high": 0.6885754962639907
+          },
+          "benign_utility": {
+            "k": 20,
+            "n": 21,
+            "rate": 0.9523809523809523,
+            "wilson_low": 0.7733018341376452,
+            "wilson_high": 0.9915442305280766
+          }
+        },
+        "travel": {
+          "asr": {
+            "k": 39,
+            "n": 118,
+            "rate": 0.3305084745762712,
+            "wilson_low": 0.2521555893386995,
+            "wilson_high": 0.4195493127637022
+          },
+          "benign_utility": {
+            "k": 19,
+            "n": 20,
+            "rate": 0.95,
+            "wilson_low": 0.7638641064874331,
+            "wilson_high": 0.9911187805671268
+          }
+        },
+        "workspace": {
+          "asr": {
+            "k": 40,
+            "n": 200,
+            "rate": 0.2,
+            "wilson_low": 0.15045120743928825,
+            "wilson_high": 0.26085639611170436
+          },
+          "benign_utility": {
+            "k": 40,
+            "n": 40,
+            "rate": 1.0,
+            "wilson_low": 0.9123754607496077,
+            "wilson_high": 1.0
+          }
+        }
+      }
+    },
+    "provenance": {
+      "asr": {
+        "k": 95,
+        "n": 566,
+        "rate": 0.16784452296819788,
+        "wilson_low": 0.1393165486056804,
+        "wilson_high": 0.2008509646120278
+      },
+      "utility_under_attack": {
+        "k": 388,
+        "n": 566,
+        "rate": 0.6855123674911661,
+        "wilson_low": 0.6461181041784735,
+        "wilson_high": 0.7224053591839766
+      },
+      "benign_utility": {
+        "k": 74,
+        "n": 97,
+        "rate": 0.7628865979381443,
+        "wilson_low": 0.6692572699253829,
+        "wilson_high": 0.8364863914207281
+      },
+      "by_suite": {
+        "banking": {
+          "asr": {
+            "k": 15,
+            "n": 143,
+            "rate": 0.1048951048951049,
+            "wilson_low": 0.06460354458062817,
+            "wilson_high": 0.16585975737195202
+          },
+          "benign_utility": {
+            "k": 14,
+            "n": 16,
+            "rate": 0.875,
+            "wilson_low": 0.6397666856325173,
+            "wilson_high": 0.9650232506629428
+          }
+        },
+        "slack": {
+          "asr": {
+            "k": 19,
+            "n": 105,
+            "rate": 0.18095238095238095,
+            "wilson_low": 0.11901573432473685,
+            "wilson_high": 0.2654108084677248
+          },
+          "benign_utility": {
+            "k": 6,
+            "n": 21,
+            "rate": 0.2857142857142857,
+            "wilson_low": 0.13813675745628204,
+            "wilson_high": 0.49956773822837586
+          }
+        },
+        "travel": {
+          "asr": {
+            "k": 21,
+            "n": 118,
+            "rate": 0.17796610169491525,
+            "wilson_low": 0.11944891366271301,
+            "wilson_high": 0.2567904003318504
+          },
+          "benign_utility": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "wilson_low": 0.8388698745050667,
+            "wilson_high": 1.0
+          }
+        },
+        "workspace": {
+          "asr": {
+            "k": 40,
+            "n": 200,
+            "rate": 0.2,
+            "wilson_low": 0.15045120743928825,
+            "wilson_high": 0.26085639611170436
+          },
+          "benign_utility": {
+            "k": 34,
+            "n": 40,
+            "rate": 0.85,
+            "wilson_low": 0.7092737396097997,
+            "wilson_high": 0.9293890829149256
+          }
+        }
+      }
+    },
+    "readonly-after-read": {
+      "asr": {
+        "k": 70,
+        "n": 566,
+        "rate": 0.12367491166077739,
+        "wilson_low": 0.09906272150104278,
+        "wilson_high": 0.15336110996370111
+      },
+      "utility_under_attack": {
+        "k": 268,
+        "n": 566,
+        "rate": 0.4734982332155477,
+        "wilson_low": 0.4326808262259016,
+        "wilson_high": 0.5146729647223197
+      },
+      "benign_utility": {
+        "k": 49,
+        "n": 97,
+        "rate": 0.5051546391752577,
+        "wilson_low": 0.40737305891143216,
+        "wilson_high": 0.6025434834679033
+      },
+      "by_suite": {
+        "banking": {
+          "asr": {
+            "k": 15,
+            "n": 143,
+            "rate": 0.1048951048951049,
+            "wilson_low": 0.06460354458062817,
+            "wilson_high": 0.16585975737195202
+          },
+          "benign_utility": {
+            "k": 9,
+            "n": 16,
+            "rate": 0.5625,
+            "wilson_low": 0.33178195606776517,
+            "wilson_high": 0.7690163666481448
+          }
+        },
+        "slack": {
+          "asr": {
+            "k": 15,
+            "n": 105,
+            "rate": 0.14285714285714285,
+            "wilson_low": 0.08852402661833804,
+            "wilson_high": 0.22240120785083545
+          },
+          "benign_utility": {
+            "k": 1,
+            "n": 21,
+            "rate": 0.047619047619047616,
+            "wilson_low": 0.008455769471923294,
+            "wilson_high": 0.22669816586235464
+          }
+        },
+        "travel": {
+          "asr": {
+            "k": 0,
+            "n": 118,
+            "rate": 0.0,
+            "wilson_low": 0.0,
+            "wilson_high": 0.03152946120208532
+          },
+          "benign_utility": {
+            "k": 14,
+            "n": 20,
+            "rate": 0.7,
+            "wilson_low": 0.4810232237710206,
+            "wilson_high": 0.854524726031006
+          }
+        },
+        "workspace": {
+          "asr": {
+            "k": 40,
+            "n": 200,
+            "rate": 0.2,
+            "wilson_low": 0.15045120743928825,
+            "wilson_high": 0.26085639611170436
+          },
+          "benign_utility": {
+            "k": 25,
+            "n": 40,
+            "rate": 0.625,
+            "wilson_low": 0.47032160054531913,
+            "wilson_high": 0.7577722646420829
+          }
+        }
+      }
+    },
+    "allowlist+contacts": {
+      "asr": {
+        "k": 46,
+        "n": 566,
+        "rate": 0.0812720848056537,
+        "wilson_low": 0.06148217836707557,
+        "wilson_high": 0.10670771861482256
+      },
+      "utility_under_attack": {
+        "k": 533,
+        "n": 566,
+        "rate": 0.941696113074205,
+        "wilson_low": 0.9192503081197626,
+        "wilson_high": 0.9581865094098808
+      },
+      "benign_utility": {
+        "k": 94,
+        "n": 97,
+        "rate": 0.9690721649484536,
+        "wilson_low": 0.9129785098835845,
+        "wilson_high": 0.989426846635947
+      },
+      "by_suite": {
+        "banking": {
+          "asr": {
+            "k": 0,
+            "n": 143,
+            "rate": 0.0,
+            "wilson_low": 0.0,
+            "wilson_high": 0.02616152370990237
+          },
+          "benign_utility": {
+            "k": 15,
+            "n": 16,
+            "rate": 0.9375,
+            "wilson_low": 0.7167073163197013,
+            "wilson_high": 0.9888809426916687
+          }
+        },
+        "slack": {
+          "asr": {
+            "k": 40,
+            "n": 105,
+            "rate": 0.38095238095238093,
+            "wilson_low": 0.293823651390926,
+            "wilson_high": 0.4764847600987984
+          },
+          "benign_utility": {
+            "k": 20,
+            "n": 21,
+            "rate": 0.9523809523809523,
+            "wilson_low": 0.7733018341376452,
+            "wilson_high": 0.9915442305280766
+          }
+        },
+        "travel": {
+          "asr": {
+            "k": 4,
+            "n": 118,
+            "rate": 0.03389830508474576,
+            "wilson_low": 0.01325961911756434,
+            "wilson_high": 0.08392886166404062
+          },
+          "benign_utility": {
+            "k": 19,
+            "n": 20,
+            "rate": 0.95,
+            "wilson_low": 0.7638641064874331,
+            "wilson_high": 0.9911187805671268
+          }
+        },
+        "workspace": {
+          "asr": {
+            "k": 2,
+            "n": 200,
+            "rate": 0.01,
+            "wilson_low": 0.0027466006037749346,
+            "wilson_high": 0.03572248519617954
+          },
+          "benign_utility": {
+            "k": 40,
+            "n": 40,
+            "rate": 1.0,
+            "wilson_low": 0.9123754607496077,
+            "wilson_high": 1.0
+          }
+        }
+      }
+    }
+  }
+}

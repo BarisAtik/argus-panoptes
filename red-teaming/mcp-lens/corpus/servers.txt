@@ -1,0 +1,11 @@
+# One local stdio command per line, for scripts/harvest.py. Starting a package runs
+# its code, so only list servers you are willing to run, and do it inside a throwaway
+# container. Each is started with no credentials, its tool list is read, and it is
+# stopped. No tool is ever called.
+npx -y @modelcontextprotocol/server-everything
+npx -y @modelcontextprotocol/server-memory
+npx -y @modelcontextprotocol/server-filesystem /tmp
+npx -y @modelcontextprotocol/server-sequential-thinking
+uvx mcp-server-time
+uvx mcp-server-fetch
+uvx mcp-server-git
