@@ -29,3 +29,10 @@ baseline:
 	  --out runs/$(subst :,-,$(MODEL)).jsonl
 	gauntlet report runs/$(subst :,-,$(MODEL)).jsonl --title "Baseline: $(MODEL)" \
 	  --md reports/baseline-$(subst :,-,$(MODEL)).md --json reports/baseline-$(subst :,-,$(MODEL)).json
+
+# Blind holdout: score once, see holdout/README.md.
+holdout-run:
+	gauntlet run --agent compromised --seeds 3 --scenarios holdout \
+	  --defenses none,injection_filter,egress,dlp,provenance,layered,strict --out runs/holdout.jsonl
+	gauntlet report runs/holdout.jsonl --title "Blind holdout, worst-case agent" \
+	  --md reports/holdout.md --json reports/holdout.json
