@@ -115,7 +115,7 @@ class ExecutedOnly(BasePipelineElement):
     Some of AgentDojo's security checks read the function-call trace rather than the
     final environment. They assume every requested call ran, which holds in AgentDojo
     but not behind a policy. Left alone, a call that was blocked counts as a successful
-    attack: an early version of this bridge reported 8.1% where the real figure is lower.
+    attack: an early version of this bridge reported 8.1% attack success where the corrected figure is 4.4%.
     """
 
     def __init__(self, inner: BasePipelineElement):
@@ -196,6 +196,11 @@ def _suite_rows(job: tuple[str, list[str]]) -> list[dict[str, Any]]:
             rows.append({"suite": name, "policy": policy, "user": uid, "injection": None,
                          "utility": bool(benign), "security": False, "reachable": False})
             for iid, it in suite.injection_tasks.items():
+                if not it.ground_truth(pristine.model_copy(deep=True)):
+                    # Nothing to replay: such a task can only be tested with a model.
+                    rows.append({"suite": name, "policy": policy, "user": uid, "injection": iid, "utility": False,
+                                 "security": False, "reachable": False, "no_reference": True})
+                    continue
                 s = PolicyState(policy, gold[uid], ut.PROMPT, known)
                 pipe = WorstCasePipeline(ut, it)
                 injections = {v: f"{SENTINEL} {it.GOAL}" for v in vectors}
@@ -230,8 +235,9 @@ def worst_case(suites: list[str], policies: list[str], workers: int = 2) -> dict
             "benign_utility": _rate(sum(r["utility"] for r in ben), len(ben)),
             "by_suite": by_suite,
         }
-    return {"version": VERSION, "mode": "worst-case", "pairs_total": sum(
-        1 for r in rows if r["policy"] == policies[0] and r["injection"]),
+    first = [r for r in rows if r["policy"] == policies[0] and r["injection"]]
+    return {"version": VERSION, "mode": "worst-case", "pairs_total": len(first),
+            "pairs_no_reference": sum(1 for r in first if r.get("no_reference")),
             "pairs_reachable": len(reachable), "pairs_live": len(live), "summary": summary}
 
 
@@ -277,8 +283,9 @@ def to_markdown(res: dict[str, Any]) -> str:
         L += ["", "> **No language model was involved.** The agent replays AgentDojo's ground-truth calls and obeys every "
               "injection it sees. ASR here means \"what still gets through once the model is fully hijacked\", not how often "
               "a model gets hijacked. AgentDojo's own `utility()` and `security()` did the scoring.", "",
-              f"Of {res['pairs_total']} (user task, injection task) pairs, {res['pairs_reachable']} expose the injection to "
-              f"the agent and {res['pairs_live']} of those succeed with no policy. Rates use those {res['pairs_live']} pairs, "
+              f"Of {res['pairs_total']} (user task, injection task) pairs, {res['pairs_no_reference']} use an injection task with "
+              f"no reference solution and cannot be replayed. Of the rest, {res['pairs_reachable']} expose the injection to "
+              f"the agent, and {res['pairs_live']} of those succeed with no policy. Rates use those {res['pairs_live']} pairs, "
               "so the `none` row is 100% by construction. Wilson intervals are in the JSON; pairs share tasks, so they are too narrow.", ""]
     head = "| Policy | ASR | Utility under attack |" + (" Benign utility |" if res["mode"] == "worst-case" else "")
     L += [head, "| --- | ---: | ---: |" + (" ---: |" if res["mode"] == "worst-case" else "")]

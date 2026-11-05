@@ -12,16 +12,17 @@ from collections import Counter
 from pathlib import Path
 
 from mcp_lens.core import Metrics, is_flagged, load_manifest, scan
+from mcp_lens.semantic import review
 
 root = Path(__file__).resolve().parent.parent
 
 
-def score(path: Path, show: bool) -> Metrics:
+def score(path: Path, show: bool, model: str | None = None) -> Metrics:
     m = Metrics()
     for line in path.read_text(encoding="utf-8").splitlines():
         row = json.loads(line)
         tools = load_manifest({"server": "x", "tools": [row]})
-        hit = is_flagged(scan(tools))
+        hit = review(tools[0], model) is not None if model else is_flagged(scan(tools))
         if row["label"] and hit:
             m.tp += 1
         elif row["label"]:
@@ -37,11 +38,12 @@ def score(path: Path, show: bool) -> Metrics:
 
 def main() -> None:
     show = "--show" in sys.argv
+    model = sys.argv[sys.argv.index("--semantic") + 1] if "--semantic" in sys.argv else None
     res = {}
     for name in ("dev", "dev2", "holdout"):
         p = root / "corpus" / f"{name}.jsonl"
         if p.exists():
-            m = score(p, show)
+            m = score(p, show, model)
             res[name] = {"tp": m.tp, "fp": m.fp, "fn": m.fn, "tn": m.tn,
                          "precision": round(m.precision, 3), "recall": round(m.recall, 3)}
     flagged = total = 0
@@ -57,6 +59,7 @@ def main() -> None:
             for f in findings:
                 print(f"  real {f.rule} {f.server}/{f.tool}: {f.message} > {f.excerpt}")
     res["third_party"] = {"tools": total, "flagged": flagged, "by_rule": dict(rules)}
+    res["method"] = f"semantic:{model}" if model else "rules"
     print(json.dumps(res, indent=2))
     (root / "reports" / "evaluation.json").write_text(json.dumps(res, indent=2) + "\n")
 

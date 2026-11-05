@@ -20,7 +20,10 @@ Anything a platform asks to keep private stays private.
 ## Three findings so far
 
 1. **Rules on actions beat filters on text.** With an agent assumed fully hijacked, a phrase filter stops
-   2 of 28 scenarios. An egress allowlist stops 15. Layered policies stop 23.
+   2 of 28 scenarios, an egress allowlist stops 15 and layered policies stop 23. On the independent
+   AgentDojo benchmark, a tool allowlist plus a contact-book check takes attack success from 100% to
+   4.4% and keeps 96.9% of benign tasks. No language model was involved in either figure, which is the
+   point: these controls hold whatever the model does.
 2. **A scanner's dev score means little.** mcp-lens scored 100% on dev and 5–8% on fresh, adversarial
    holdouts, twice in a row, after improvements that looked successful.
 3. **Evaluators have bugs too.** A naive canary check would have called 6 of 84 successful attacks

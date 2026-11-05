@@ -49,7 +49,24 @@ the stack is present on this sample, while removing `egress` nearly doubles it. 
 that beat `layered` are in [the write-ups](../writeups/README.md): each is an allowed tool, an
 allowed destination, or a harm that lives in plain text.
 
-**On AgentDojo** ([agentdojo-worst-case.md](reports/agentdojo-worst-case.md)): see the table there.
+**On AgentDojo** ([agentdojo-worst-case.md](reports/agentdojo-worst-case.md)), 566 live
+(user task, injection task) pairs across its four suites, scored by its own checkers:
+
+| Policy | Attack success | Benign utility |
+| --- | ---: | ---: |
+| none | 100% | 100% |
+| tool allowlist | 16.3% | 100% |
+| contact-book check on destinations | 24.0% | 96.9% |
+| destination must come from the user | 14.0% | 76.3% |
+| no sinks after reading anything | 9.7% | 50.5% |
+| allowlist + contact book | **4.4%** | **96.9%** |
+
+The combination beats the strictest single rule on both axes. Three caveats keep this honest. The
+allowlist uses each task's gold tool list, so it is an upper bound on what a task router would
+achieve. The contact book is built from the benchmark's clean environment, so it may contain more
+than a real one would. And the 566 pairs leave out 340 whose injection task has no reference solution
+to replay and 43 where the reference solution did not succeed even with no policy. These numbers are a different
+experiment from the model results in the AgentDojo paper and cannot be compared to them.
 
 **Oracle quality matters.** 6 of 84 successful attacks in the no-defense run were invisible to a
 plain substring check on the canary, so a naive evaluator would have called them stopped.

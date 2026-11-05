@@ -124,14 +124,17 @@ and the user acts on it. There is no tool call for a policy to block.
 
 ## From the outside benchmark
 
-On AgentDojo the same conclusions held, with a useful addition. What got through a tool allowlist plus
-a contact-book check was mostly attacks that stay inside the rules: messaging a real colleague with an
-attacker's link, or visiting a site that was already known. See
+On AgentDojo the same conclusions held: a tool allowlist plus a contact-book check brought attack success
+from 100% to 4.4% of 566 pairs and kept 96.9% benign utility, while the bluntest rule, no sinks after any
+read, only reached 9.7% and cost half of all tasks. What still got through stayed inside the rules:
+messaging a real colleague with an attacker's link, or visiting a site that was already known. Rules
+that only watch destinations also miss actions that have none: deleting a file and changing a password
+passed `contacts` and `provenance` until the tool allowlist removed them. See
 [the report](../gauntlet/reports/agentdojo-worst-case.md).
 
-There is a methodology lesson there too. AgentDojo's checks read the call trace, so behind a policy a
-blocked call looked like a successful attack, and the first run overstated what got through. A
-scanner of traces needs to know the difference between requested and executed.
+There is a methodology lesson there too. Some of AgentDojo's checks read the call trace, which is sound
+in its own setup, but behind a policy a blocked call then looks like a successful attack. The first run
+reported 8.1% instead of 4.4%. An evaluator has to know the difference between requested and executed.
 
 ## Sources
 

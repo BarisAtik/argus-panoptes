@@ -38,8 +38,10 @@ from a third party (AgentDojo) is low. So:
 
 - It is a cheap hygiene check, and pinning catches silent changes whatever the wording.
 - It is not a defense against someone who knows it exists. Do not ship it as one.
-- More regexes are the wrong next step. The right one is a semantic review (does this description
-  ask for anything beyond the tool's stated job?), scored on a holdout the same way.
+- More regexes are the wrong next step. The right one is a semantic review: does this definition ask
+  for anything beyond the tool's stated job? `mcp_lens/semantic.py` does that with a local model and
+  `python scripts/evaluate.py --semantic MODEL` scores it. It has not met a real model yet, and it
+  faces the obvious problem that the text under review can address the reviewer.
 
 Numbers: [`reports/`](reports/). Reproduce with `python scripts/export_agentdojo_tools.py` and
 `python scripts/evaluate.py --show`. The evaluation script now covers all corpora; earlier scores
@@ -70,6 +72,7 @@ which means the numbers above have not been checked against real MCP servers yet
 | ML015 | high/medium/low | Changed, new or removed tools against a lock file |
 | ML016 | medium | Instructions to the agent about data or destinations |
 | ML017 | high | Text in HTML comments |
+| ML018 | medium | Local model thinks the definition reaches beyond its job (optional) |
 
 Before normalising, every field a client may show a model is walked (descriptions, titles, defaults,
 enums), and cheap evasions are undone: NFKC, confusables, leetspeak, s p a c e d text, short base64,

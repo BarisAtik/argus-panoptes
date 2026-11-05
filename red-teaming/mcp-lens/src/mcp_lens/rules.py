@@ -321,4 +321,5 @@ RULE_DOCS = {
     "ML015": "A pinned tool changed (rug pull).",
     "ML016": "Instructions to the agent about data, recipients or its replies.",
     "ML017": "Text hidden in an HTML comment.",
+    "ML018": "A local model flagged the definition as reaching beyond its job.",
 }
