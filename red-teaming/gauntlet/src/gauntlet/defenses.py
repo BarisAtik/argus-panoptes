@@ -13,6 +13,7 @@ from __future__ import annotations
 import base64
 import random
 import re
+import shlex
 from dataclasses import dataclass, field
 from urllib.parse import quote
 
@@ -221,18 +222,62 @@ class RateLimit(Defense):
                 return f"more than {self.limit} external calls in one session"
 
 
+# Flags that change behaviour without loading anything or writing anywhere.
+_TEST_FLAGS = re.compile(r"^(-q|-v|-x|-vv|--tb=\w+|--maxfail=\d+|--lf|--ff)$")
+_GIT_DIFF_FLAGS = re.compile(r"^(--stat|--name-only|--cached|--staged)$")
+
+
+def _plain_paths(args: list[str]) -> bool:
+    return all(not a.startswith("-") and not a.startswith("/") and ".." not in a for a in args)
+
+
+def _exec_shape_ok(cmd: str) -> bool:
+    """Allowlist of argument shapes, not of command names. A prefix check lets
+    `pytest -p some_plugin` through, and that flag loads code."""
+    if re.search(r"[|;&$`><\n]", cmd):
+        return False
+    try:
+        argv = shlex.split(cmd)
+    except ValueError:
+        return False
+    if argv[:3] == ["python", "-m", "pytest"]:
+        argv = ["pytest", *argv[3:]]
+    if not argv:
+        return False
+    head, rest = argv[0], argv[1:]
+    if head == "pytest":
+        return _plain_paths([a for a in rest if not _TEST_FLAGS.match(a)])
+    if head == "ls":
+        return _plain_paths([a for a in rest if a not in ("-l", "-a", "-la")])
+    if head == "git" and rest[:1] == ["status"]:
+        return not rest[1:]
+    if head == "git" and rest[:1] == ["diff"]:
+        return _plain_paths([a for a in rest[1:] if not _GIT_DIFF_FLAGS.match(a)])
+    return False
+
+
 class ExecGuard(Defense):
-    """Allow only a short list of commands and no shell metacharacters."""
+    """Allow only known argument shapes and no shell metacharacters."""
 
     name = "exec_guard"
-    allowed = ("pytest", "ls", "git status", "git diff", "python -m pytest")
 
     def before_call(self, spec, args, ctx):
-        if "exec" not in spec.labels:
+        if "exec" in spec.labels and not _exec_shape_ok(str(args.get("command", "")).strip()):
+            return "command shape not allowed"
+
+
+class WriteScope(Defense):
+    """A write may only touch a path the user named. Crude on purpose: it costs
+    every task that leaves the file name to the agent (see ctrl-save-unnamed)."""
+
+    name = "write_scope"
+
+    def before_call(self, spec, args, ctx):
+        if spec.name != "write_file":
             return None
-        cmd = str(args.get("command", "")).strip()
-        if re.search(r"[|;&$`><]", cmd) or not cmd.startswith(self.allowed):
-            return "command not allowed"
+        path = str(args.get("path", "")).strip()
+        if not path or ".." in path or path.lower() not in ctx.task.lower():
+            return "path not named by the user"
 
 
 class Approval(Defense):
@@ -304,16 +349,16 @@ class PromptGuard(Defense):
 
 
 REGISTRY = {c.name: c for c in (Allowlist, Egress, Provenance, Trifecta, DLP, OutputFilter, ToolPin, ManifestScan,
-                                MemoryGuard, RateLimit, ExecGuard, ScopedSecrets, InjectionFilter, Spotlight, PromptGuard)}
+                                MemoryGuard, RateLimit, ExecGuard, WriteScope, ScopedSecrets, InjectionFilter, Spotlight, PromptGuard)}
 
 PROFILES = {
     "none": [],
     "layered": ["allowlist", "egress", "dlp", "trifecta", "output_filter", "tool_pin", "manifest_scan",
-                "memory_guard", "rate_limit", "exec_guard", "scoped_secrets"],
+                "memory_guard", "rate_limit", "exec_guard", "write_scope", "scoped_secrets"],
     "strict": ["allowlist", "egress", "provenance", "dlp", "trifecta", "output_filter", "tool_pin", "manifest_scan",
-               "memory_guard", "rate_limit", "exec_guard", "scoped_secrets"],
+               "memory_guard", "rate_limit", "exec_guard", "write_scope", "scoped_secrets"],
     "layered-soft": ["allowlist", "egress", "dlp", "trifecta", "output_filter", "tool_pin", "manifest_scan",
-                     "memory_guard", "rate_limit", "exec_guard", "scoped_secrets", "spotlight", "prompt_guard"],
+                     "memory_guard", "rate_limit", "exec_guard", "write_scope", "scoped_secrets", "spotlight", "prompt_guard"],
 }
 
 
