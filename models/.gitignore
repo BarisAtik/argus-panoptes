@@ -1,0 +1,16 @@
+# Everything generated stays local. Curated results go in results/ as .md/.json.
+runs/
+hf_cache/
+*.egg-info/
+*.npy
+*.npz
+*.mp3
+*.wav
+*.flac
+*.zip
+*.tar.gz
+*.bin
+*.onnx
+.mozdata/
+.pytest_cache/
+.ruff_cache/

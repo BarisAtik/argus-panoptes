@@ -1,0 +1,22 @@
+# Run from models/ after indexing:  docker compose -f clip_search/docker-compose.yml up --build
+# The named Elasticsearch service is optional: start it with `--profile search`.
+services:
+  demo:
+    build:
+      context: ..
+      dockerfile: clip_search/Dockerfile
+    ports: ["127.0.0.1:7860:7860"]
+    volumes:
+      - ../runs/clip/index/openclip_xlm-roberta-base-ViT-B-32_laion5b_s13b_b90k:/runs/index:ro
+      - ../runs/coco/val2017:/images:ro
+      - hf-cache:/root/.cache/huggingface
+  elasticsearch:
+    profiles: [search]
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false  # local experiments only, bound to localhost below
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports: ["127.0.0.1:9200:9200"]
+volumes:
+  hf-cache:

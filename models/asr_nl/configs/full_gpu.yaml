@@ -1,0 +1,14 @@
+# The main experiment, for a free Kaggle/Colab GPU. Tests whether the large-v2 > large-v3
+# ranking reported for Dutch at CLIN 34 holds on Common Voice (see README: pre-registered).
+manifest: runs/cv_nl/manifest_test_2000.jsonl
+out_dir: runs/asr_full
+language: nl
+batch_size: 16
+min_speakers: 10
+models:
+  - openai/whisper-small
+  - openai/whisper-medium
+  - openai/whisper-large-v2
+  - openai/whisper-large-v3
+  - openai/whisper-large-v3-turbo
+conditions: [clean, white_20, pink_10, pink_0, babble_10, babble_5, telephone, reverb, noise_only]

@@ -1,0 +1,24 @@
+# Copy to .github/workflows/forge-ci.yml in the repo root to enable. It lives here because
+# sessions working on models/ stay inside that folder.
+name: forge
+on:
+  push:
+    paths: ["models/**"]
+  pull_request:
+    paths: ["models/**"]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: models
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: pip install --extra-index-url https://download.pytorch.org/whl/cpu -e ".[dev,text,vision]" soundfile
+      - run: ruff check .
+      - run: pytest -q

@@ -1,0 +1,11 @@
+# Fast first pass: about an hour on a laptop GPU for 1000 clips. Scale `models` up from here.
+manifest: runs/cv_nl/manifest_test_1000.jsonl
+out_dir: runs/asr_laptop
+language: nl
+batch_size: 8
+min_speakers: 10
+models:
+  - openai/whisper-tiny
+  - openai/whisper-base
+  - openai/whisper-small
+conditions: [clean, pink_10, babble_10, telephone, reverb, noise_only]

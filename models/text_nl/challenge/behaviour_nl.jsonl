@@ -1,0 +1,86 @@
+{"id": "plain_positive-1", "test": "plain_positive", "label": 1, "text": "Een prachtig boek, ik kon het niet wegleggen."}
+{"id": "plain_positive-2", "test": "plain_positive", "label": 1, "text": "Wat een schitterend verhaal, echt een aanrader."}
+{"id": "plain_positive-3", "test": "plain_positive", "label": 1, "text": "Ik heb genoten van elke bladzijde."}
+{"id": "plain_positive-4", "test": "plain_positive", "label": 1, "text": "Heel mooi geschreven en ontroerend tot het einde."}
+{"id": "plain_positive-5", "test": "plain_positive", "label": 1, "text": "Dit is het beste boek dat ik dit jaar gelezen heb."}
+{"id": "plain_positive-6", "test": "plain_positive", "label": 1, "text": "De personages zijn levensecht en de plot is spannend."}
+{"id": "plain_positive-7", "test": "plain_positive", "label": 1, "text": "Een topper, ik ga het zeker aan vrienden geven."}
+{"id": "plain_positive-8", "test": "plain_positive", "label": 1, "text": "Vijf sterren, wat een meesterwerk."}
+{"id": "plain_negative-9", "test": "plain_negative", "label": 0, "text": "Een saai boek, ik ben halverwege gestopt."}
+{"id": "plain_negative-10", "test": "plain_negative", "label": 0, "text": "Wat een slecht verhaal, zonde van mijn tijd."}
+{"id": "plain_negative-11", "test": "plain_negative", "label": 0, "text": "Ik heb me door elke bladzijde heen moeten worstelen."}
+{"id": "plain_negative-12", "test": "plain_negative", "label": 0, "text": "Slecht geschreven en voorspelbaar tot het einde."}
+{"id": "plain_negative-13", "test": "plain_negative", "label": 0, "text": "Dit is het slechtste boek dat ik dit jaar gelezen heb."}
+{"id": "plain_negative-14", "test": "plain_negative", "label": 0, "text": "De personages zijn vlak en de plot is rommelig."}
+{"id": "plain_negative-15", "test": "plain_negative", "label": 0, "text": "Een afrader, ik zou het niemand cadeau doen."}
+{"id": "plain_negative-16", "test": "plain_negative", "label": 0, "text": "Eén ster, wat een teleurstelling."}
+{"id": "negation_of_positive-17", "test": "negation_of_positive", "label": 0, "text": "Dit boek is niet goed."}
+{"id": "negation_of_positive-18", "test": "negation_of_positive", "label": 0, "text": "Ik vond het verhaal helemaal niet spannend."}
+{"id": "negation_of_positive-19", "test": "negation_of_positive", "label": 0, "text": "Geen aanrader, om eerlijk te zijn."}
+{"id": "negation_of_positive-20", "test": "negation_of_positive", "label": 0, "text": "Het is zeker geen meesterwerk."}
+{"id": "negation_of_positive-21", "test": "negation_of_positive", "label": 0, "text": "De schrijfstijl is verre van mooi."}
+{"id": "negation_of_positive-22", "test": "negation_of_positive", "label": 0, "text": "Nergens werd het boeiend."}
+{"id": "negation_of_positive-23", "test": "negation_of_positive", "label": 0, "text": "Ik heb er niet van genoten."}
+{"id": "negation_of_positive-24", "test": "negation_of_positive", "label": 0, "text": "De auteur weet de lezer nooit te raken."}
+{"id": "negation_of_negative-25", "test": "negation_of_negative", "label": 1, "text": "Dit boek is helemaal niet saai."}
+{"id": "negation_of_negative-26", "test": "negation_of_negative", "label": 1, "text": "Ik vond het verhaal allesbehalve voorspelbaar."}
+{"id": "negation_of_negative-27", "test": "negation_of_negative", "label": 1, "text": "Geen moment verveelde ik me."}
+{"id": "negation_of_negative-28", "test": "negation_of_negative", "label": 1, "text": "Het is zeker geen slecht boek, integendeel."}
+{"id": "negation_of_negative-29", "test": "negation_of_negative", "label": 1, "text": "De plot stelt nergens teleur."}
+{"id": "negation_of_negative-30", "test": "negation_of_negative", "label": 1, "text": "Ik heb er geen seconde spijt van dat ik het kocht."}
+{"id": "negation_of_negative-31", "test": "negation_of_negative", "label": 1, "text": "Nooit eerder was ik zo weinig afgeleid tijdens het lezen."}
+{"id": "negation_of_negative-32", "test": "negation_of_negative", "label": 1, "text": "Dit is niet te vergelijken met die saaie thrillers van tegenwoordig: veel beter."}
+{"id": "understatement-33", "test": "understatement", "label": 1, "text": "Niet onaardig, dit debuut."}
+{"id": "understatement-34", "test": "understatement", "label": 1, "text": "Best een aardig boek, ik had het niet verwacht."}
+{"id": "understatement-35", "test": "understatement", "label": 1, "text": "Hier valt weinig op aan te merken."}
+{"id": "understatement-36", "test": "understatement", "label": 1, "text": "Dat smaakt naar meer."}
+{"id": "understatement-37", "test": "understatement", "label": 0, "text": "Het had beter gekund, om het vriendelijk te zeggen."}
+{"id": "understatement-38", "test": "understatement", "label": 0, "text": "Laten we zeggen dat dit niet zijn sterkste werk is."}
+{"id": "understatement-39", "test": "understatement", "label": 0, "text": "Tja, het is weer eens wat anders, maar uitlezen deed ik het niet."}
+{"id": "understatement-40", "test": "understatement", "label": 0, "text": "Nou ja, de kaft is mooi."}
+{"id": "sarcasm-41", "test": "sarcasm", "label": 0, "text": "Geweldig hoor, weer vierhonderd pagina's over niets."}
+{"id": "sarcasm-42", "test": "sarcasm", "label": 0, "text": "Fantastisch, de moordenaar was al op bladzijde tien duidelijk."}
+{"id": "sarcasm-43", "test": "sarcasm", "label": 0, "text": "Echt knap hoe je zoveel clichés in één hoofdstuk propt."}
+{"id": "sarcasm-44", "test": "sarcasm", "label": 0, "text": "Heerlijk boek als je slecht slaapt: na twee pagina's ben je weg."}
+{"id": "sarcasm-45", "test": "sarcasm", "label": 0, "text": "Wat een feest, nog een dronken rechercheer met een scheiding."}
+{"id": "sarcasm-46", "test": "sarcasm", "label": 0, "text": "Bravo, een plot dat nergens heen gaat."}
+{"id": "contrast_final_clause_decides-47", "test": "contrast_final_clause_decides", "label": 0, "text": "Mooie kaft en een goed begin, maar het einde is waardeloos."}
+{"id": "contrast_final_clause_decides-48", "test": "contrast_final_clause_decides", "label": 0, "text": "De eerste honderd pagina's zijn sterk, daarna zakt het volledig in."}
+{"id": "contrast_final_clause_decides-49", "test": "contrast_final_clause_decides", "label": 0, "text": "Hoewel de stijl fraai is, gebeurt er helemaal niets en verveelde het me."}
+{"id": "contrast_final_clause_decides-50", "test": "contrast_final_clause_decides", "label": 0, "text": "Ik wilde het echt goed vinden, maar het lukte niet."}
+{"id": "contrast_final_clause_decides-51", "test": "contrast_final_clause_decides", "label": 1, "text": "Het begin is wat traag, maar daarna is het fantastisch."}
+{"id": "contrast_final_clause_decides-52", "test": "contrast_final_clause_decides", "label": 1, "text": "De kritieken waren slecht, toch vond ik het prachtig."}
+{"id": "contrast_final_clause_decides-53", "test": "contrast_final_clause_decides", "label": 1, "text": "Hoewel het einde wat rommelig is, heb ik enorm genoten."}
+{"id": "contrast_final_clause_decides-54", "test": "contrast_final_clause_decides", "label": 1, "text": "Ik twijfelde eerst, maar het werd een van mijn favorieten."}
+{"id": "informal_and_typos-55", "test": "informal_and_typos", "label": 1, "text": "echt supergaaf boek!!! moet je lezen"}
+{"id": "informal_and_typos-56", "test": "informal_and_typos", "label": 1, "text": "vond m echt heel leuk, snel uit gelezen"}
+{"id": "informal_and_typos-57", "test": "informal_and_typos", "label": 1, "text": "woooow wat mooi zeg, zo ontroerend"}
+{"id": "informal_and_typos-58", "test": "informal_and_typos", "label": 1, "text": "Toppertje hoor, lekker weg gelezen op vakantie"}
+{"id": "informal_and_typos-59", "test": "informal_and_typos", "label": 0, "text": "wat een draak van n boek zeg"}
+{"id": "informal_and_typos-60", "test": "informal_and_typos", "label": 0, "text": "vond er geen ene reet aan"}
+{"id": "informal_and_typos-61", "test": "informal_and_typos", "label": 0, "text": "bah, sjaai en veels te lang"}
+{"id": "informal_and_typos-62", "test": "informal_and_typos", "label": 0, "text": "niet te doen dit, na 30 blz weggelegd"}
+{"id": "flemish_usage-63", "test": "flemish_usage", "label": 1, "text": "Een straf boek, ik was er helemaal door gepakt."}
+{"id": "flemish_usage-64", "test": "flemish_usage", "label": 1, "text": "Goesting gekregen om alles van deze schrijfster te lezen."}
+{"id": "flemish_usage-65", "test": "flemish_usage", "label": 1, "text": "Plezant om te lezen, ik heb me goed geamuseerd."}
+{"id": "flemish_usage-66", "test": "flemish_usage", "label": 1, "text": "Dat is hier nog eens een deugddoend verhaal."}
+{"id": "flemish_usage-67", "test": "flemish_usage", "label": 0, "text": "Maar dat is toch niet te doen, zo'n flauw verhaal."}
+{"id": "flemish_usage-68", "test": "flemish_usage", "label": 0, "text": "Ik was er rap op uitgekeken."}
+{"id": "flemish_usage-69", "test": "flemish_usage", "label": 0, "text": "Zever van begin tot einde."}
+{"id": "flemish_usage-70", "test": "flemish_usage", "label": 0, "text": "Ik heb hiervoor mijn goed geld gegeven, spijtig."}
+{"id": "other_domain_film_food_hotel-71", "test": "other_domain_film_food_hotel", "label": 1, "text": "De film was prachtig, ik zat op het puntje van mijn stoel."}
+{"id": "other_domain_film_food_hotel-72", "test": "other_domain_film_food_hotel", "label": 1, "text": "Heerlijk gegeten, vriendelijke bediening en mooie porties."}
+{"id": "other_domain_film_food_hotel-73", "test": "other_domain_film_food_hotel", "label": 1, "text": "Schone kamer, fijn bed en een geweldig ontbijt."}
+{"id": "other_domain_film_food_hotel-74", "test": "other_domain_film_food_hotel", "label": 1, "text": "Snelle levering en de stofzuiger werkt perfect."}
+{"id": "other_domain_film_food_hotel-75", "test": "other_domain_film_food_hotel", "label": 0, "text": "De film sleepte zich voort en de acteurs waren houterig."}
+{"id": "other_domain_film_food_hotel-76", "test": "other_domain_film_food_hotel", "label": 0, "text": "Koud eten, lange wachttijd en een onbeschofte ober."}
+{"id": "other_domain_film_food_hotel-77", "test": "other_domain_film_food_hotel", "label": 0, "text": "Vieze kamer, dun gordijn en veel lawaai van de straat."}
+{"id": "other_domain_film_food_hotel-78", "test": "other_domain_film_food_hotel", "label": 0, "text": "Na twee weken ging de stofzuiger al kapot."}
+{"id": "topic_should_not_decide-79", "test": "topic_should_not_decide", "label": 1, "text": "Een aangrijpend en goed geschreven boek over oorlog en verlies."}
+{"id": "topic_should_not_decide-80", "test": "topic_should_not_decide", "label": 1, "text": "Dit verhaal over een moord is schitterend opgebouwd."}
+{"id": "topic_should_not_decide-81", "test": "topic_should_not_decide", "label": 1, "text": "Over ziekte en dood, en toch ongelooflijk mooi."}
+{"id": "topic_should_not_decide-82", "test": "topic_should_not_decide", "label": 1, "text": "Een sterk boek over armoede en geweld."}
+{"id": "topic_should_not_decide-83", "test": "topic_should_not_decide", "label": 0, "text": "Een vrolijk boek over liefde en geluk, maar slecht geschreven en vervelend."}
+{"id": "topic_should_not_decide-84", "test": "topic_should_not_decide", "label": 0, "text": "Dit verhaal over vakantie en zon is doodsaai."}
+{"id": "topic_should_not_decide-85", "test": "topic_should_not_decide", "label": 0, "text": "Over vriendschap en plezier, en toch ongelooflijk vervelend."}
+{"id": "topic_should_not_decide-86", "test": "topic_should_not_decide", "label": 0, "text": "Een zwak boek over een feestje vol lieve mensen."}

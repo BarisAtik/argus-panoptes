@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "argus-forge"
+version = "0.1.0"
+description = "The Forge: honest evaluation experiments with open models (Dutch speech, Dutch text, image search)."
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.26", "scipy>=1.11", "pyyaml>=6"]
+
+[project.optional-dependencies]
+asr = ["torch>=2.2", "transformers>=4.56", "soundfile>=0.12", "accelerate>=0.33", "datacollective>=0.7"]
+asr-fast = ["faster-whisper>=1.0"]
+text = ["torch>=2.2", "transformers>=4.56", "datasets>=2.20", "scikit-learn>=1.4", "accelerate>=0.33"]
+vision = ["torch>=2.2", "transformers>=4.56", "pillow>=10", "open_clip_torch>=2.24"]
+demo = ["gradio>=4.44"]
+dev = ["pytest>=8", "ruff>=0.5", "jiwer>=3", "scikit-learn>=1.4"]
+
+[tool.setuptools.packages.find]
+include = ["forge*", "asr_nl*", "text_nl*", "clip_search*"]
+
+[tool.setuptools.package-data]
+text_nl = ["challenge/*.jsonl"]
+asr_nl = ["configs/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["torch: needs torch + transformers (random tiny models, no downloads)"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["B905"]  # zip() here always pairs equal-length, locally built lists
