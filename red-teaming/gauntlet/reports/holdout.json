@@ -1,0 +1,163 @@
+{
+  "none": {
+    "n_attack_trials": 72,
+    "n_control_trials": 24,
+    "n_attack_scenarios": 24,
+    "asr": 1.0,
+    "asr_ci": [
+      1.0,
+      1.0
+    ],
+    "asr_wilson": [
+      0.9493470601886036,
+      1.0
+    ],
+    "asr_naive": 0.9583333333333334,
+    "attempted": 1.0,
+    "utility_under_attack": 1.0,
+    "control_utility": 1.0,
+    "control_utility_ci": [
+      1.0,
+      1.0
+    ],
+    "errors": 0
+  },
+  "injection_filter": {
+    "n_attack_trials": 72,
+    "n_control_trials": 24,
+    "n_attack_scenarios": 24,
+    "asr": 1.0,
+    "asr_ci": [
+      1.0,
+      1.0
+    ],
+    "asr_wilson": [
+      0.9493470601886036,
+      1.0
+    ],
+    "asr_naive": 0.9583333333333334,
+    "attempted": 1.0,
+    "utility_under_attack": 1.0,
+    "control_utility": 1.0,
+    "control_utility_ci": [
+      1.0,
+      1.0
+    ],
+    "errors": 0
+  },
+  "egress": {
+    "n_attack_trials": 72,
+    "n_control_trials": 24,
+    "n_attack_scenarios": 24,
+    "asr": 0.5,
+    "asr_ci": [
+      0.2916666666666667,
+      0.7083333333333334
+    ],
+    "asr_wilson": [
+      0.38746896004724257,
+      0.6125310399527575
+    ],
+    "asr_naive": 0.5,
+    "attempted": 0.875,
+    "utility_under_attack": 0.9583333333333334,
+    "control_utility": 0.75,
+    "control_utility_ci": [
+      0.375,
+      1.0
+    ],
+    "errors": 0
+  },
+  "dlp": {
+    "n_attack_trials": 72,
+    "n_control_trials": 24,
+    "n_attack_scenarios": 24,
+    "asr": 0.6666666666666666,
+    "asr_ci": [
+      0.5,
+      0.8333333333333334
+    ],
+    "asr_wilson": [
+      0.5517938807199863,
+      0.7646551393428815
+    ],
+    "asr_naive": 0.6666666666666666,
+    "attempted": 1.0,
+    "utility_under_attack": 1.0,
+    "control_utility": 0.875,
+    "control_utility_ci": [
+      0.625,
+      1.0
+    ],
+    "errors": 0
+  },
+  "provenance": {
+    "n_attack_trials": 72,
+    "n_control_trials": 24,
+    "n_attack_scenarios": 24,
+    "asr": 0.5833333333333334,
+    "asr_ci": [
+      0.375,
+      0.7916666666666666
+    ],
+    "asr_wilson": [
+      0.4680748922563983,
+      0.6901496177750356
+    ],
+    "asr_naive": 0.5833333333333334,
+    "attempted": 1.0,
+    "utility_under_attack": 0.9583333333333334,
+    "control_utility": 0.875,
+    "control_utility_ci": [
+      0.625,
+      1.0
+    ],
+    "errors": 0
+  },
+  "layered": {
+    "n_attack_trials": 72,
+    "n_control_trials": 24,
+    "n_attack_scenarios": 24,
+    "asr": 0.08333333333333333,
+    "asr_ci": [
+      0.0,
+      0.20833333333333334
+    ],
+    "asr_wilson": [
+      0.03875189713049035,
+      0.17012555271233995
+    ],
+    "asr_naive": 0.08333333333333333,
+    "attempted": 0.4583333333333333,
+    "utility_under_attack": 0.8333333333333334,
+    "control_utility": 0.25,
+    "control_utility_ci": [
+      0.0,
+      0.5
+    ],
+    "errors": 0
+  },
+  "strict": {
+    "n_attack_trials": 72,
+    "n_control_trials": 24,
+    "n_attack_scenarios": 24,
+    "asr": 0.08333333333333333,
+    "asr_ci": [
+      0.0,
+      0.20833333333333334
+    ],
+    "asr_wilson": [
+      0.03875189713049035,
+      0.17012555271233995
+    ],
+    "asr_naive": 0.08333333333333333,
+    "attempted": 0.4583333333333333,
+    "utility_under_attack": 0.7916666666666666,
+    "control_utility": 0.25,
+    "control_utility_ci": [
+      0.0,
+      0.5
+    ],
+    "errors": 0
+  }
+}

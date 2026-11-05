@@ -36,3 +36,11 @@ holdout-run:
 	  --defenses none,injection_filter,egress,dlp,provenance,layered,strict --out runs/holdout.jsonl
 	gauntlet report runs/holdout.jsonl --title "Blind holdout, worst-case agent" \
 	  --md reports/holdout.md --json reports/holdout.json
+
+# Decomposition of the frozen stack on the holdout. Descriptive only.
+holdout-posthoc:
+	gauntlet run --agent compromised --seeds 1 --scenarios holdout --defenses layered --ablate layered \
+	  --out runs/holdout-posthoc.jsonl
+	gauntlet report runs/holdout-posthoc.jsonl \
+	  --title "Blind holdout, post-hoc leave-one-out (not part of the registered scoring)" \
+	  --md reports/holdout-posthoc.md --json reports/holdout-posthoc.json
