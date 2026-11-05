@@ -1,0 +1,25 @@
+# Template only: not active here. To enable it, copy to .github/workflows/kaggle-tests.yml.
+# It lives in kaggle/ because work on this folder stays inside this folder. Never run yet.
+name: kaggle-tests
+on:
+  push:
+    paths: ["kaggle/**"]
+  pull_request:
+    paths: ["kaggle/**"]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [name-that-llm, nfl-big-data-bowl-2027]
+    defaults:
+      run:
+        working-directory: kaggle/${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: ruff check src tests
+      - run: PYTHONPATH=src pytest -q

@@ -1,0 +1,24 @@
+[project]
+name = "combinelink"
+version = "0.1.0"
+description = "Does Combine movement show up on the field? Tooling for NFL Big Data Bowl 2027."
+requires-python = ">=3.10"
+dependencies = ["numpy", "pandas", "scipy", "scikit-learn>=1.4"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["B905"]

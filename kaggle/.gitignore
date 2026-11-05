@@ -1,0 +1,15 @@
+# Everything generated or downloaded stays out of git.
+# (The root .gitignore already covers data/, *.csv, *.parquet, *.pt, *.safetensors, kaggle.json.)
+artifacts/
+**/reports/generated/
+*.joblib
+*.pkl
+*.bin
+*.onnx
+*.zip
+*.rds
+*.png
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+**/kernel/build/

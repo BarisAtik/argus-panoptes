@@ -1,0 +1,28 @@
+[project]
+name = "ntl"
+version = "0.1.0"
+description = "Baseline for the Kaggle 'Name That LLM' competition: attribute short passages to one of 18 models."
+requires-python = ">=3.10"
+dependencies = ["numpy", "pandas", "pyarrow", "scikit-learn>=1.4", "scipy", "joblib", "tabulate"]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+transformer = ["torch", "transformers>=4.40", "tokenizers"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E731", "B905"]

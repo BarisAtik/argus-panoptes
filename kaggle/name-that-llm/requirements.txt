@@ -1,0 +1,10 @@
+numpy
+pandas
+pyarrow
+scikit-learn>=1.4
+scipy
+joblib
+tabulate
+pytest
+ruff
+kaggle
