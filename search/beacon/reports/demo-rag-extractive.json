@@ -1,0 +1,18 @@
+{
+  "generator": "extractive",
+  "embedder": "spacy:nl_core_news_md",
+  "k": 5,
+  "queries": 34,
+  "answerable": {
+    "n": 30,
+    "context_hit": 27,
+    "answered": 12,
+    "cited_relevant": 12
+  },
+  "unanswerable": {
+    "n": 4,
+    "abstained": 4
+  },
+  "grounded": 34,
+  "answers_with_invalid_citations": 0
+}

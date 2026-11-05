@@ -1,0 +1,83 @@
+# Single-node Elasticsearch + Kibana for a laptop.
+#
+# - Security is on: both services need a login.
+# - Ports bind to 127.0.0.1 only, so nothing is reachable from your network.
+# - HTTP TLS is off because traffic stays on loopback. Turn it on before
+#   exposing this anywhere else.
+# - Basic licence: no trial is started, so no feature silently disappears after
+#   30 days. Beacon does hybrid fusion in the client for this reason.
+name: beacon
+
+x-required:
+  - &elastic_password ${ELASTIC_PASSWORD:?copy .env.example to .env and set ELASTIC_PASSWORD}
+  - &kibana_password ${KIBANA_PASSWORD:?copy .env.example to .env and set KIBANA_PASSWORD}
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION:-9.5.5}
+    container_name: beacon-es
+    environment:
+      discovery.type: single-node
+      cluster.name: beacon
+      xpack.security.enabled: "true"
+      xpack.security.http.ssl.enabled: "false"
+      xpack.security.transport.ssl.enabled: "false"
+      xpack.license.self_generated.type: basic
+      xpack.ml.enabled: "false"
+      ELASTIC_PASSWORD: *elastic_password
+      ES_JAVA_OPTS: -Xms${ES_HEAP:-1g} -Xmx${ES_HEAP:-1g}
+    ports:
+      - "127.0.0.1:9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - curl -fsS -u "elastic:$$ELASTIC_PASSWORD" "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s" >/dev/null
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 40s
+
+  # One-shot job. Kibana may not log in as `elastic`, so give kibana_system a password.
+  kibana-setup:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION:-9.5.5}
+    container_name: beacon-kibana-setup
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTIC_PASSWORD: *elastic_password
+      KIBANA_PASSWORD: *kibana_password
+    command:
+      - bash
+      - -ec
+      - |
+        curl -fsS -u "elastic:$$ELASTIC_PASSWORD" -H 'Content-Type: application/json' \
+          http://elasticsearch:9200/_security/user/kibana_system/_password \
+          -d "{\"password\":\"$$KIBANA_PASSWORD\"}" >/dev/null
+        echo "kibana_system password set"
+    restart: "no"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ES_VERSION:-9.5.5}
+    container_name: beacon-kibana
+    depends_on:
+      kibana-setup:
+        condition: service_completed_successfully
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: *kibana_password
+      XPACK_SECURITY_ENCRYPTIONKEY: ${KIBANA_ENCRYPTION_KEY:?set KIBANA_ENCRYPTION_KEY}
+      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: ${KIBANA_ENCRYPTION_KEY:?set KIBANA_ENCRYPTION_KEY}
+      XPACK_REPORTING_ENCRYPTIONKEY: ${KIBANA_ENCRYPTION_KEY:?set KIBANA_ENCRYPTION_KEY}
+      TELEMETRY_OPTIN: "false"
+    ports:
+      - "127.0.0.1:5601:5601"
+    profiles: ["kibana"]
+
+volumes:
+  esdata:

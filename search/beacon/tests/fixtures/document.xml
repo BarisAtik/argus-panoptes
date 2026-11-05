@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Synthetic. Shape follows "Technische documentatie Open Data van de Rechtspraak" v1.15. -->
+<open-rechtspraak>
+  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+           xmlns:dcterms="http://purl.org/dc/terms/"
+           xmlns:psi="http://psi.rechtspraak.nl/">
+    <rdf:Description>
+      <dcterms:identifier>ECLI:NL:XX:2025:999</dcterms:identifier>
+      <dcterms:format>text/XML</dcterms:format>
+      <dcterms:accessRights>public</dcterms:accessRights>
+      <dcterms:modified>2025-02-01T10:00:00</dcterms:modified>
+      <dcterms:publisher>Raad voor de Rechtspraak</dcterms:publisher>
+      <dcterms:language>nl</dcterms:language>
+      <dcterms:creator scheme="overheid.RechterlijkeMacht">Rechtbank Noordkust</dcterms:creator>
+      <dcterms:contributor>mr. Testnaam Rechter</dcterms:contributor>
+      <dcterms:date>2025-01-15</dcterms:date>
+      <psi:zaaknummer>NK/123, NK/124</psi:zaaknummer>
+      <dcterms:type>Uitspraak</dcterms:type>
+      <psi:procedure>Eerste aanleg - enkelvoudig</psi:procedure>
+      <dcterms:coverage>NL</dcterms:coverage>
+      <dcterms:spatial>Noordkust</dcterms:spatial>
+      <dcterms:subject>Civiel recht; Huurrecht</dcterms:subject>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://rechtspraak.nl/uitspraken?id=ECLI:NL:XX:2025:999">
+      <dcterms:identifier>http://rechtspraak.nl/uitspraken?id=ECLI:NL:XX:2025:999</dcterms:identifier>
+      <dcterms:title>ECLI:NL:XX:2025:999 Rechtbank Noordkust, 2025-01-15 / NK/123</dcterms:title>
+    </rdf:Description>
+  </rdf:RDF>
+  <inhoudsindicatie xmlns="http://www.rechtspraak.nl/schema/rechtspraak-1.0">
+    <para>Huurverhoging kwam te laat.</para>
+  </inhoudsindicatie>
+  <uitspraak xmlns="http://www.rechtspraak.nl/schema/rechtspraak-1.0">
+    <uitspraak.info>
+      <para>In de zaak van mr. Testnaam Advocaat, gemachtigde van eiser.</para>
+    </uitspraak.info>
+    <section>
+      <title><nr>1</nr> De feiten</title>
+      <parablock><para>De verhuurder stelde een verhoging voor.</para></parablock>
+    </section>
+    <section role="overwegingen">
+      <title><nr>2</nr> De beoordeling</title>
+      <paragroup><nr>2.1</nr><para>Het voorstel was niet <emphasis>tijdig</emphasis> gedaan.</para></paragroup>
+      <section>
+        <title>2.2 Nadere overweging</title>
+        <para>De huurder krijgt gelijk.</para>
+      </section>
+    </section>
+    <section role="beslissing">
+      <para>De kantonrechter wijst de vordering af.</para>
+    </section>
+  </uitspraak>
+</open-rechtspraak>

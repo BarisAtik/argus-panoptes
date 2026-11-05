@@ -1,0 +1,34 @@
+{"id": "q01", "kind": "lexical", "query": "gevangenisstraf voor woninginbraak", "relevant": {"ECLI:NL:XX:2025:1": 2}}
+{"id": "q02", "kind": "lexical", "query": "ontzegging rijbevoegdheid alcoholgehalte ademanalyse", "relevant": {"ECLI:NL:XX:2024:3": 2}}
+{"id": "q03", "kind": "lexical", "query": "computervredebreuk ransomware zorginstelling", "relevant": {"ECLI:NL:XX:2025:5": 2}}
+{"id": "q04", "kind": "lexical", "query": "ontslag op staande voet dringende reden", "relevant": {"ECLI:NL:XX:2025:19": 2}}
+{"id": "q05", "kind": "lexical", "query": "omgevingsvergunning bestemmingsplan bouwhoogte", "relevant": {"ECLI:NL:XX:2025:9": 2, "ECLI:NL:XX:2025:10": 1}}
+{"id": "q06", "kind": "lexical", "query": "terugvordering bijstand inlichtingenverplichting", "relevant": {"ECLI:NL:XX:2025:11": 2}}
+{"id": "q07", "kind": "lexical", "query": "WOZ-waarde woning taxatiematrix", "relevant": {"ECLI:NL:XX:2025:30": 2}}
+{"id": "q08", "kind": "lexical", "query": "transitievergoeding billijke vergoeding ernstig verwijtbaar", "relevant": {"ECLI:NL:XX:2025:20": 2}}
+{"id": "q09", "kind": "lexical", "query": "ontbinding huurovereenkomst huurachterstand ontruiming", "relevant": {"ECLI:NL:XX:2025:17": 2}}
+{"id": "q10", "kind": "lexical", "query": "last onder dwangsom illegale schuur", "relevant": {"ECLI:NL:XX:2025:10": 2}}
+{"id": "q11", "kind": "lexical", "query": "Wet open overheid persoonlijke levenssfeer", "relevant": {"ECLI:NL:XX:2024:12": 2}}
+{"id": "q12", "kind": "lexical", "query": "artikel 13b Opiumwet sluiting woning", "relevant": {"ECLI:NL:XX:2025:15": 2}}
+{"id": "q13", "kind": "paraphrase", "query": "iemand is mijn huis binnengedrongen en heeft spullen gejat", "relevant": {"ECLI:NL:XX:2025:1": 2, "ECLI:NL:XX:2025:2": 1}}
+{"id": "q14", "kind": "paraphrase", "query": "dronken achter het stuur betrapt, wat krijg je dan", "relevant": {"ECLI:NL:XX:2024:3": 2}}
+{"id": "q15", "kind": "paraphrase", "query": "nepmails namens de bank om wachtwoorden te stelen", "relevant": {"ECLI:NL:XX:2025:4": 2}}
+{"id": "q16", "kind": "paraphrase", "query": "hackers versleutelden onze systemen en eisen betaling", "relevant": {"ECLI:NL:XX:2025:5": 2}}
+{"id": "q17", "kind": "paraphrase", "query": "veel cash thuis zonder verklaring waar het vandaan komt", "relevant": {"ECLI:NL:XX:2025:6": 2}}
+{"id": "q18", "kind": "paraphrase", "query": "mijn baas zette me meteen op straat", "relevant": {"ECLI:NL:XX:2025:19": 2}}
+{"id": "q19", "kind": "paraphrase", "query": "mag ik een extra verdieping op mijn huis zetten van de gemeente", "relevant": {"ECLI:NL:XX:2025:9": 2}}
+{"id": "q20", "kind": "paraphrase", "query": "vocht en zwarte plekken op de muur van mijn huurhuis", "relevant": {"ECLI:NL:XX:2025:18": 2}}
+{"id": "q21", "kind": "paraphrase", "query": "tweedehands wagen kapot kort na aanschaf", "relevant": {"ECLI:NL:XX:2024:22": 2}}
+{"id": "q22", "kind": "paraphrase", "query": "spijt van online bestelling en geld terug willen", "relevant": {"ECLI:NL:XX:2025:23": 2}}
+{"id": "q23", "kind": "paraphrase", "query": "uitgegleden in de winkel en gewond geraakt", "relevant": {"ECLI:NL:XX:2025:24": 2}}
+{"id": "q24", "kind": "paraphrase", "query": "lawaai van de buren en een boom die over de schutting hangt", "relevant": {"ECLI:NL:XX:2025:25": 2}}
+{"id": "q25", "kind": "paraphrase", "query": "minder betalen aan mijn ex omdat ik werkloos ben", "relevant": {"ECLI:NL:XX:2025:26": 2}}
+{"id": "q26", "kind": "paraphrase", "query": "te veel belasting betaald over spaargeld", "relevant": {"ECLI:NL:XX:2025:29": 2}}
+{"id": "q27", "kind": "paraphrase", "query": "uitkering stiekem bijverdienen en geld terugbetalen", "relevant": {"ECLI:NL:XX:2025:11": 2}}
+{"id": "q28", "kind": "paraphrase", "query": "wie betaalt als het bedrijf failliet gaat door slechte directeur", "relevant": {"ECLI:NL:XX:2025:35": 2}}
+{"id": "q29", "kind": "paraphrase", "query": "iemand blijft mij achtervolgen en appen na de relatie", "relevant": {"ECLI:NL:XX:2025:32": 2}}
+{"id": "q30", "kind": "paraphrase", "query": "wiet kweken in een loods met een groep", "relevant": {"ECLI:NL:XX:2025:33": 2}}
+{"id": "q31", "kind": "unanswerable", "query": "Wat is de maximumsnelheid voor drones boven zee?", "relevant": {}}
+{"id": "q32", "kind": "unanswerable", "query": "Hoe vraag ik een visum aan voor Japan?", "relevant": {}}
+{"id": "q33", "kind": "unanswerable", "query": "Welke vissoorten mogen in het Veluwemeer worden gevangen?", "relevant": {}}
+{"id": "q34", "kind": "unanswerable", "query": "Wat kost een abonnement op de bibliotheek?", "relevant": {}}

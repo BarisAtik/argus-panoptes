@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Synthetic feed</title>
+  <subtitle>3 ECLI's gevonden</subtitle>
+  <entry><id>ECLI:NL:XX:2025:1</id><updated>2025-01-02T00:00:00</updated><summary>Een.</summary></entry>
+  <entry deleted="doc"><id>ECLI:NL:XX:2025:2</id><updated>2025-01-02T00:00:00</updated></entry>
+  <entry><id>ECLI:NL:XX:2025:3</id><updated>2025-01-03T00:00:00</updated><summary>Drie.</summary></entry>
+</feed>
