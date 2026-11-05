@@ -3,6 +3,16 @@
 Public hobby lab. Python package `argus-forge`, installed from this folder with
 `pip install -e ".[dev,asr,text,vision]"`. Read `PROGRESS.md` first: the TODO there is the plan.
 
+## Working style
+
+Work autonomously: make a sensible choice, note it in `PROGRESS.md`, and keep going without
+stopping to ask. The exceptions are steps that need Baris's own accounts, money or competition
+submissions. List those under "Needs Baris" instead.
+
+Network limits are not obstacles to route around. If a host or repository is refused, use what
+this session may reach, and record what is needed. A download that works through a gap in
+enforcement doesn't count as permission.
+
 ## Commands
 
 - `pytest` runs all tests (no network, no GPU). `pytest -m "not torch"` skips the tiny-model ones.
@@ -15,6 +25,7 @@ Public hobby lab. Python package `argus-forge`, installed from this folder with
   reimplement a metric inside a project.
 - `asr_nl/`, `text_nl/`, `clip_search/`: one package per project. Each has a README and an
   evaluation card (`text_nl/MODEL_CARD.md`, `*/EVALUATION_CARD.md`).
+- `scripts/first_results.sh`: first real runs, in order of effort (`text`, `clip`, `asr`).
 - `tests/`: one file per project. Heavy imports (torch, transformers) stay inside functions so
   that the shared code imports without them.
 - `runs/`: gitignored, for all generated output. `results/<project>/`: curated, committed reports.
@@ -36,7 +47,9 @@ Public hobby lab. Python package `argus-forge`, installed from this folder with
 `asr_nl/configs/laptop.yaml`, read the audit first. The first real run will test
 `from_common_voice_tsv` against the current archive layout, so look there if parsing fails.
 Common Voice accents are free text: they likely need a mapping table before slices mean anything.
-Then run `full_gpu.yaml` and fill in `asr_nl/EVALUATION_CARD.md`.
+Then run `full_gpu.yaml` and fill in `asr_nl/EVALUATION_CARD.md`. The `sherpa-*` backends run ONNX
+exports on CPU; add Parakeet this way for hypothesis 7. Slices use the cluster t interval on
+purpose (`docs/small_group_coverage.md`).
 
 **text_nl.** Start with `--baseline-only`, read the audit (leak share!), then fine-tune. Compare
 `--truncation head` with `head_tail`, over at least 3 seeds. Review `suspicious_labels.json` by

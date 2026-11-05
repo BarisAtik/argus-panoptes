@@ -5,6 +5,7 @@ from __future__ import annotations
 import time
 from collections.abc import Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Protocol
 
 import numpy as np
@@ -111,8 +112,65 @@ class FasterWhisper:
         return results
 
 
+def _find_model_file(folder: Path, pattern: str) -> str:
+    """Prefer the int8 export: it is what makes these models bearable on a CPU."""
+    matches = sorted(folder.glob(pattern), key=lambda path: ("int8" not in path.name, path.name))
+    if not matches:
+        raise FileNotFoundError(f"no {pattern} in {folder}")
+    return str(matches[0])
+
+
+class SherpaOffline:
+    """ONNX models through sherpa-onnx (`pip install .[asr-onnx]`): no torch, CPU friendly.
+
+    `kind` is "whisper", or "transducer" for NeMo Parakeet TDT 0.6b v3, a non-Whisper comparison
+    that lists Dutch among its languages. Parakeet detects the language itself, so `language`
+    only applies to Whisper. sherpa-onnx gives no log-probability, so `avg_logprob` stays None
+    and the confidence analysis skips these models.
+    """
+
+    def __init__(self, kind: str, folder: str, language: str = "nl", num_threads: int = 2):
+        import sherpa_onnx
+
+        root = Path(folder)
+        self.name = f"sherpa-{kind}:{root.name}"
+        recognizer = sherpa_onnx.OfflineRecognizer
+        if kind == "whisper":
+            self.recognizer = recognizer.from_whisper(
+                encoder=_find_model_file(root, "*encoder*.onnx"),
+                decoder=_find_model_file(root, "*decoder*.onnx"),
+                tokens=_find_model_file(root, "*tokens.txt"),
+                language=language, task="transcribe", num_threads=num_threads,
+            )
+        elif kind == "transducer":
+            self.recognizer = recognizer.from_transducer(
+                encoder=_find_model_file(root, "*encoder*.onnx"),
+                decoder=_find_model_file(root, "*decoder*.onnx"),
+                joiner=_find_model_file(root, "*joiner*.onnx"),
+                tokens=_find_model_file(root, "*tokens.txt"),
+                num_threads=num_threads, model_type="nemo_transducer",
+            )
+        else:
+            raise ValueError(f"unknown sherpa model kind {kind!r}")
+
+    def transcribe(self, batch: Sequence[np.ndarray]) -> list[Transcript]:
+        results = []
+        for audio in batch:
+            start = time.perf_counter()
+            stream = self.recognizer.create_stream()
+            stream.accept_waveform(16_000, audio.astype(np.float32))
+            self.recognizer.decode_stream(stream)
+            results.append(Transcript(stream.result.text.strip(), None,
+                                      time.perf_counter() - start))
+        return results
+
+
 def load_backend(spec: str, language: str = "nl") -> Backend:
-    """`openai/whisper-small` for Transformers; `faster:large-v3` for faster-whisper."""
+    """`openai/whisper-small` (Transformers), `faster:large-v3` (faster-whisper),
+    `sherpa-whisper:<folder>` or `sherpa-transducer:<folder>` (ONNX)."""
+    if spec.startswith(("sherpa-whisper:", "sherpa-transducer:")):
+        kind, _, folder = spec.removeprefix("sherpa-").partition(":")
+        return SherpaOffline(kind, folder, language=language)
     if spec.startswith("faster:"):
         return FasterWhisper(spec.removeprefix("faster:"), language=language)
     return TransformersWhisper(spec, language=language)

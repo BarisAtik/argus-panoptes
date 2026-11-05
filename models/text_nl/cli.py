@@ -15,7 +15,7 @@ import numpy as np
 
 from text_nl import baseline
 from text_nl.audit import audit_splits, group_split
-from text_nl.data import Split, load_dbrd, load_jsonl
+from text_nl.data import Split, load_dbrd, load_dbrd_archive, load_jsonl
 from text_nl.evaluate import build_report, evaluate_model
 
 
@@ -82,6 +82,7 @@ def main() -> None:
     parser.add_argument("--out", type=Path, default=Path("runs/text"))
     parser.add_argument("--train-jsonl", type=Path, help="Use your own data instead of DBRD.")
     parser.add_argument("--test-jsonl", type=Path)
+    parser.add_argument("--dbrd-folder", type=Path, help="Unpacked DBRD release, if not via HF.")
     parser.add_argument("--model", default="pdelobelle/robbert-v2-dutch-base")
     parser.add_argument("--truncation", default="head_tail", choices=["head", "head_tail"])
     parser.add_argument("--max-train", type=int)
@@ -94,7 +95,7 @@ def main() -> None:
     if args.train_jsonl:
         train, test = load_jsonl(args.train_jsonl), load_jsonl(args.test_jsonl)
     else:
-        data = load_dbrd()
+        data = load_dbrd_archive(args.dbrd_folder) if args.dbrd_folder else load_dbrd()
         train, test = data["train"], data["test"]
     config = None
     if not args.baseline_only:

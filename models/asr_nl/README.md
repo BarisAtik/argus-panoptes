@@ -19,6 +19,8 @@ Status: **pipeline tested, no real results yet.** See the [evaluation card](EVAL
 - **Hallucination test.** Speech-free audio goes in. The correct output is nothing.
 - **Controlled degradation.** Noise is seeded per clip, so every model hears exactly the same
   audio: white, pink, multi-speaker babble, telephone band, reverb.
+- **Honest small groups.** Slices use a cluster t interval, because a bootstrap on 10 speakers
+  covers about 88% in [simulation](../docs/small_group_coverage.md).
 - **Paired comparisons.** Model pairs are compared on identical clips with Holm correction.
 - **Selective transcription.** Can the mean token log-probability pick out the bad transcripts,
   or is it decoration? Measured with a risk-coverage curve against random and oracle.
@@ -35,7 +37,10 @@ python -m asr_nl.cli run --config asr_nl/configs/laptop.yaml
 
 The report lands in `runs/asr_laptop/report.md`. Transcription resumes where it stopped, so a
 disconnected notebook loses at most one batch. Add a model by editing the YAML; prefix
-`faster:` uses faster-whisper (`faster:large-v3`).
+`faster:` uses faster-whisper (`faster:large-v3`), and `sherpa-whisper:<folder>` or
+`sherpa-transducer:<folder>` runs an unpacked sherpa-onnx export (`.[asr-onnx]`), such as
+`sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8`, a non-Whisper model that lists Dutch. No real model
+has gone through this backend yet.
 
 Any other speech data works too: write a JSONL manifest with `id, path, text, speaker` and
 optionally `accent, gender, age`.

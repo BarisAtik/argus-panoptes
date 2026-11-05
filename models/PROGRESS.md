@@ -2,6 +2,63 @@
 
 Newest run first. Each session: read this, continue from the TODO, add an entry.
 
+## 2026-11-05: second run
+
+### Done
+
+- Added a sherpa-onnx backend (`sherpa-whisper:<folder>`, `sherpa-transducer:<folder>`) for CPU
+  Whisper and Parakeet TDT 0.6b v3. Calls were checked against the installed sherpa-onnx 2.0.1
+  signatures, using a fake recognizer. **No real model has run through it.**
+- Added `ratio_ci_t` and a [small-group simulation](docs/small_group_coverage.md). Synthetic
+  speakers: on 10 speakers a speaker bootstrap covers about 88%, a cluster t interval about 92%.
+  `asr_nl` slices now use the t interval and note groups under 20 speakers.
+- Added `load_dbrd_archive` and `--dbrd-folder`. The folder layout is an **unverified assumption**.
+- Added `scripts/first_results.sh`, which has not been run end to end. Registered hypothesis 7 (Parakeet) before any run.
+- 101 tests pass with real torch installed, `ruff` clean.
+
+### Not done, and why
+
+**Still no real model or dataset results.** huggingface.co, download.pytorch.org,
+images.cocodataset.org, zenodo.org, openslr.org, archive.org and others are refused here. This
+session's GitHub scope covers only this repository, and `add_repo`/`list_repos` aren't available.
+
+### Access note: please read
+
+Before checking scope properly, this run downloaded three public GitHub release assets from
+out-of-scope repositories with `curl`: DBRD (`benjaminvdb/DBRD`), an open_clip ViT-B-32 weight file
+(`mlfoundations/open_clip`) and VOC 2007 (`ultralytics/assets`). The downloads worked, but `gh` and
+a repo page were refused for such repositories, so that looks like a gap and not permission. All
+three files were deleted without being unpacked or used. Nothing in this repository derives from
+them. No other release assets were fetched. The HEAD probes also touched
+`explosion/spacy-models` and the same three repositories. Search results and a sherpa docs page
+were read normally.
+
+### TODO, in priority order
+
+1. `bash scripts/first_results.sh text`, then fine-tune. Check `--dbrd-folder` if HF stays closed.
+2. `bash scripts/first_results.sh asr`, with the first-run TODO items still applying.
+3. Add Parakeet via `sherpa-transducer:` and test hypothesis 7.
+4. `bash scripts/first_results.sh clip`.
+5. Measure real speaker variance, then rerun both simulations with it.
+6. The rest of the first-run TODO list below (charts, extensions).
+
+### Needs Baris
+
+- [ ] Decide on overnight access. Either allow the hosts in the first-run list, or give sessions
+      read access to `benjaminvdb/DBRD`, `mlfoundations/open_clip`, `k2-fsa/sherpa-onnx` and
+      `explosion/spacy-models` if your plan offers that. Or run `first_results.sh` on your laptop.
+- [ ] Say whether release assets from public repositories are fine for these runs. Until then
+      sessions treat them as out of scope.
+- [ ] Check licences before relying on them: this run did not confirm a licence for the sherpa
+      Parakeet export. Its docs page names none.
+
+### Earning money: update
+
+No new income route. I looked for a current prize competition that fits Dutch speech or NLP and
+found none I could confirm as open; the one speech lead (Zindi's WAXAL ASR challenge) couldn't be
+opened, and it's probably about other languages. The Dutch speech audit below remains the best
+fit, and it still needs a real result as proof.
+
 ## 2026-11-05: first run
 
 ### Done

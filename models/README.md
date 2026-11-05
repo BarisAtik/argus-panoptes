@@ -8,13 +8,15 @@ and images. The rule here: **a number only counts if it comes with how it could 
 | [`asr_nl/`](asr_nl/) | 🎙️ audio | Where does Whisper break on Dutch: accents, noise, compounds, silence? | Pipeline tested; first real run pending |
 | [`text_nl/`](text_nl/) | 📝 text | Can a small Dutch classifier be trusted beyond its accuracy score? | Pipeline tested; first real run pending |
 | [`clip_search/`](clip_search/) | 🖼️ image | How much worse is image search when you ask in Dutch? | Pipeline tested; first real run pending |
-| [`forge/`](forge/) | 🧰 shared | Cluster bootstrap, calibration, ranking metrics, stamped reports | Done |
+| [`forge/`](forge/) | 🧰 shared | Cluster bootstrap and t intervals, calibration, ranking metrics, stamped reports | Done |
 
 **Status means what it says.** The code is tested against tiny random models and synthetic data.
 No model has been evaluated on real data yet, so this folder contains no performance results
 yet. The one finished result is the [simulation](docs/ci_coverage_simulation.md) behind the
 evaluation design: resampling clips instead of speakers can make a "95%" interval cover the
-truth only about 55% of the time.
+truth only about 55% of the time. A [second simulation](docs/small_group_coverage.md) shows that
+even a speaker bootstrap covers only about 88% on a 10-speaker group, so small slices now use a
+cluster t interval.
 
 ## Quick start
 
@@ -23,7 +25,7 @@ cd models
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev,asr,text,vision]"
 pytest                                     # no downloads, under a minute on CPU
-python -m text_nl.cli --out runs/baseline --baseline-only   # first real result: CPU, minutes
+bash scripts/first_results.sh text         # first real result: CPU, minutes
 ```
 
 Each project README has the commands for the full experiment.

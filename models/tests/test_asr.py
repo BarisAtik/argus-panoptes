@@ -1,4 +1,5 @@
 import json
+import sys
 
 import numpy as np
 import pytest
@@ -350,3 +351,90 @@ def test_cli_run_evaluate_and_audit(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["cli", "audit", "--manifest", str(tmp_path / "m.jsonl")])
     cli.main()
     assert '"speakers": 6' in capsys.readouterr().out
+
+
+class FakeStream:
+    def __init__(self):
+        self.result = type("Result", (), {"text": ""})()
+
+    def accept_waveform(self, rate, audio):
+        assert rate == 16_000 and audio.dtype == np.float32
+        self.result.text = f" {len(audio)} samples "
+
+
+class FakeRecognizer:
+    calls = {}
+
+    @classmethod
+    def _make(cls, name, kwargs):
+        cls.calls[name] = kwargs
+        return cls()
+
+    @classmethod
+    def from_whisper(cls, **kwargs):
+        return cls._make("whisper", kwargs)
+
+    @classmethod
+    def from_transducer(cls, **kwargs):
+        return cls._make("transducer", kwargs)
+
+    def create_stream(self):
+        return FakeStream()
+
+    def decode_stream(self, stream):
+        pass
+
+
+def _sherpa_folder(tmp_path, names):
+    for name in names:
+        (tmp_path / name).touch()
+    return tmp_path
+
+
+def test_sherpa_backend_prefers_int8_and_sets_language(tmp_path, monkeypatch):
+    import types
+
+    from asr_nl.backends import load_backend
+
+    monkeypatch.setitem(sys.modules, "sherpa_onnx",
+                        types.SimpleNamespace(OfflineRecognizer=FakeRecognizer))
+    folder = _sherpa_folder(tmp_path, ["tiny-encoder.onnx", "tiny-encoder.int8.onnx",
+                                       "tiny-decoder.int8.onnx", "tiny-tokens.txt"])
+    backend = load_backend(f"sherpa-whisper:{folder}")
+    kwargs = FakeRecognizer.calls["whisper"]
+    assert kwargs["encoder"].endswith("tiny-encoder.int8.onnx") and kwargs["language"] == "nl"
+    [result] = backend.transcribe([np.zeros(8, dtype=np.float64)])
+    assert result.text == "8 samples" and result.avg_logprob is None
+
+
+def test_sherpa_transducer_uses_nemo_type(tmp_path, monkeypatch):
+    import types
+
+    from asr_nl.backends import load_backend
+
+    monkeypatch.setitem(sys.modules, "sherpa_onnx",
+                        types.SimpleNamespace(OfflineRecognizer=FakeRecognizer))
+    folder = _sherpa_folder(tmp_path, ["encoder.int8.onnx", "decoder.int8.onnx",
+                                       "joiner.int8.onnx", "tokens.txt"])
+    load_backend(f"sherpa-transducer:{folder}")
+    assert FakeRecognizer.calls["transducer"]["model_type"] == "nemo_transducer"
+
+
+def test_sherpa_calls_match_the_installed_library():
+    import inspect
+
+    sherpa = pytest.importorskip("sherpa_onnx")
+    whisper = inspect.signature(sherpa.OfflineRecognizer.from_whisper).parameters
+    transducer = inspect.signature(sherpa.OfflineRecognizer.from_transducer).parameters
+    assert {"encoder", "decoder", "tokens", "language", "task", "num_threads"} <= set(whisper)
+    assert {"encoder", "decoder", "joiner", "tokens", "model_type"} <= set(transducer)
+
+
+def test_slices_flag_small_groups_and_use_t_interval():
+    clips = clips_fixture(12, 3)
+    rows = score_rows({c.id: c for c in clips}, [
+        {"id": c.id, "hypothesis": c.text if i % 5 else "fout"} for i, c in enumerate(clips)
+    ])
+    table = slice_rows(rows, "accent", min_speakers=2)
+    assert any(row.get("note") == "small group" and row["wer_high"] > row["wer"]
+               for row in table)

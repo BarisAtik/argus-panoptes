@@ -199,3 +199,22 @@ def test_real_training_loop_learns_on_tiny_random_bert(tmp_path):
     assert accuracy > 0.8, "a planted-keyword task must be learnable"
     assert report["comparisons"][0]["a"] == "tfidf-logreg"
     assert (tmp_path / "run" / "checkpoint" / "train_history.json").exists()
+
+
+def test_dbrd_folder_layout(tmp_path):
+    from text_nl.data import load_dbrd_archive
+
+    for split in ("train", "test"):
+        for folder, text in (("neg", "saai boek"), ("pos", "mooi boek")):
+            target = tmp_path / "DBRD" / split / folder
+            target.mkdir(parents=True)
+            (target / "1_2.txt").write_text(f"{text}\n", encoding="utf-8")
+    data = load_dbrd_archive(tmp_path)
+    assert data["train"].labels == [0, 1] and data["test"].texts == ["saai boek", "mooi boek"]
+
+
+def test_dbrd_folder_missing_fails_loudly(tmp_path):
+    from text_nl.data import load_dbrd_archive
+
+    with pytest.raises(FileNotFoundError):
+        load_dbrd_archive(tmp_path)

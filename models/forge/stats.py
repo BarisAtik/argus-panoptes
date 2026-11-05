@@ -73,6 +73,33 @@ def ratio_ci(
     return Interval(float(num.sum() / den.sum()), float(low), float(high), k)
 
 
+def ratio_ci_t(
+    numerator: Sequence[float],
+    denominator: Sequence[float],
+    clusters: Sequence,
+    *,
+    alpha: float = 0.05,
+) -> Interval:
+    """Cluster-robust t interval for a ratio of sums (linearized, with a small-sample factor).
+
+    Meant for small groups, where a percentile bootstrap runs narrow: see
+    `docs/small_group_coverage.md`.
+    """
+    from scipy import stats as sps
+
+    num = np.asarray(numerator, dtype=float)
+    den = np.asarray(denominator, dtype=float)
+    pairs = _cluster_sums(np.column_stack([num, den]), clusters)
+    k = len(pairs)
+    if k < 2:
+        raise ValueError("need at least two clusters")
+    ratio = pairs[:, 0].sum() / pairs[:, 1].sum()
+    residuals = pairs[:, 0] - ratio * pairs[:, 1]
+    se = np.sqrt(k / (k - 1) * np.sum(residuals**2)) / pairs[:, 1].sum()
+    half = float(sps.t.ppf(1 - alpha / 2, k - 1) * se)
+    return Interval(float(ratio), float(ratio - half), float(ratio + half), k)
+
+
 def mean_ci(values: Sequence[float], clusters: Sequence | None = None, **kwargs) -> Interval:
     values = np.asarray(values, dtype=float)
     return ratio_ci(values, np.ones_like(values), clusters, **kwargs)

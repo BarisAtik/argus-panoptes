@@ -119,3 +119,21 @@ def test_smoke_reports_are_stamped(tmp_path):
 def test_markdown_table_escapes_and_formats():
     table = markdown_table([{"a": 0.5, "b": "x|y", "c": None}])
     assert "0.5000" in table and "x\\|y" in table and "–" in table
+
+
+def test_cluster_t_interval_is_wider_than_bootstrap_on_few_speakers():
+    from forge.stats import ratio_ci, ratio_ci_t
+
+    rng = np.random.default_rng(0)
+    speakers, errors, _, words = simulate_speakers(6, 5, 0.15, 0.7, rng)
+    t_interval = ratio_ci_t(errors, words, speakers)
+    boot = ratio_ci(errors, words, speakers)
+    assert t_interval.estimate == pytest.approx(boot.estimate)
+    assert t_interval.high - t_interval.low > boot.high - boot.low
+
+
+def test_cluster_t_needs_two_clusters():
+    from forge.stats import ratio_ci_t
+
+    with pytest.raises(ValueError):
+        ratio_ci_t([1.0, 2.0], [5.0, 5.0], ["a", "a"])

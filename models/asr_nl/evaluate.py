@@ -15,9 +15,10 @@ from asr_nl.normalize import normalize_dutch
 from asr_nl.run import read_predictions
 from forge.calibration import risk_at, risk_coverage
 from forge.report import markdown_table, run_metadata, write_report
-from forge.stats import holm, paired_ratio_difference, ratio_ci, wilson_interval
+from forge.stats import holm, paired_ratio_difference, ratio_ci, ratio_ci_t, wilson_interval
 
 SLICE_FIELDS = ("accent", "gender", "age")
+SMALL_GROUP_SPEAKERS = 20
 
 
 def score_rows(clips: dict[str, Clip], predictions: list[dict]) -> list[dict]:
@@ -77,7 +78,7 @@ def summarize(rows: list[dict], seed: int = 0) -> dict:
     }
 
 
-def slice_rows(rows: list[dict], field: str, min_speakers: int, seed: int = 0) -> list[dict]:
+def slice_rows(rows: list[dict], field: str, min_speakers: int) -> list[dict]:
     """Groups with too few speakers are shown as such, not given a false-precision number."""
     groups = defaultdict(list)
     for row in rows:
@@ -87,9 +88,12 @@ def slice_rows(rows: list[dict], field: str, min_speakers: int, seed: int = 0) -
         n_speakers = len({r["speaker"] for r in group})
         row = {"field": field, "group": value, "clips": len(group), "speakers": n_speakers}
         if n_speakers >= min_speakers:
-            interval = ratio_ci(_column(group, "errors"), _column(group, "words"),
-                                [r["speaker"] for r in group], seed=seed)
+            # A percentile bootstrap runs narrow on small groups: docs/small_group_coverage.md
+            interval = ratio_ci_t(_column(group, "errors"), _column(group, "words"),
+                                  [r["speaker"] for r in group])
             row.update(wer=interval.estimate, wer_low=interval.low, wer_high=interval.high)
+            if n_speakers < SMALL_GROUP_SPEAKERS:
+                row["note"] = "small group"
         else:
             row.update(wer=None, wer_low=None, wer_high=None, note="too few speakers")
         table.append(row)
@@ -211,7 +215,7 @@ def evaluate_run(
         pairs += pairwise(scored, condition)
 
     report = {
-        "meta": run_metadata(provenance, ["torch", "transformers", "faster-whisper"],
+        "meta": run_metadata(provenance, ["torch", "transformers", "faster-whisper", "sherpa-onnx"],
                              min_speakers=min_speakers),
         "sample_audit": audit(clips),
         "summary": summary, "slices": slices, "pairwise": pairs,

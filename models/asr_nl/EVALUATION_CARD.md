@@ -36,6 +36,9 @@ Known limits, before seeing any data:
 6. Differences between accent groups exceed the speaker-level interval for at least one group, if
    any group has enough speakers.
 
+7. On clean audio, Parakeet TDT 0.6b v3 (int8) does not beat `whisper-small` on Dutch. Added before
+   any Parakeet run. It covers 25 languages, and Dutch is not its focus.
+
 ## Planned design
 
 Test split only, at most 5 clips per speaker, 1000 to 2000 clips. Per the simulation, 500 clips
