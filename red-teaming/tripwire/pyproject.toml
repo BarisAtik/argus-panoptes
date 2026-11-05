@@ -1,0 +1,19 @@
+[project]
+name = "tripwire"
+version = "0.1.0"
+description = "A small PyTorch prompt-injection detector, built to measure how such detectors fail"
+requires-python = ">=3.11"
+dependencies = ["numpy", "pyyaml", "scikit-learn", "torch", "agentdojo==0.1.35"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

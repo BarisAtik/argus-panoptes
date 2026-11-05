@@ -324,6 +324,30 @@ class InjectionFilter(Defense):
                          for l in text.split("\n"))
 
 
+class Tripwire(Defense):
+    """Same job as injection_filter, with the trained detector from ../tripwire instead
+    of phrases. Needs that package and its weights, and fails loudly without them."""
+
+    name = "tripwire"
+    kind = "text"
+    _detector = None
+
+    @classmethod
+    def detector(cls):
+        if cls._detector is None:
+            from tripwire.infer import Detector  # optional dependency
+
+            cls._detector = Detector.load()
+        return cls._detector
+
+    def on_result(self, spec, text, ctx):
+        if "source:untrusted" not in spec.labels and "state" not in spec.labels:
+            return text
+        lines = text.split("\n")
+        flags = self.detector().flags(lines)
+        return "\n".join("[line removed by detector]" if f else l for f, l in zip(flags, lines))
+
+
 class Spotlight(Defense):
     """Datamarking (Hines et al., 2024): tell the model that marked text is data."""
 
@@ -349,7 +373,7 @@ class PromptGuard(Defense):
 
 
 REGISTRY = {c.name: c for c in (Allowlist, Egress, Provenance, Trifecta, DLP, OutputFilter, ToolPin, ManifestScan,
-                                MemoryGuard, RateLimit, ExecGuard, WriteScope, ScopedSecrets, InjectionFilter, Spotlight, PromptGuard)}
+                                MemoryGuard, RateLimit, ExecGuard, WriteScope, ScopedSecrets, InjectionFilter, Tripwire, Spotlight, PromptGuard)}
 
 PROFILES = {
     "none": [],

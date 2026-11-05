@@ -116,3 +116,20 @@ def test_ablations_cover_the_profile():
 def test_exec_shapes(cmd, ok):
     from gauntlet.defenses import _exec_shape_ok
     assert _exec_shape_ok(cmd) is ok
+
+
+def test_tripwire_removes_flagged_lines_only(monkeypatch):
+    from gauntlet.defenses import Ctx, Tripwire
+    from gauntlet.scenario import build_world
+    from gauntlet.world import ToolSpec
+
+    class Fake:
+        def flags(self, lines):
+            return ["BAD" in l for l in lines]
+
+    monkeypatch.setattr(Tripwire, "_detector", Fake())
+    d, sc = Tripwire(), BY["ipi-doc-polite"]
+    ctx = Ctx(sc, build_world(sc, "x"))
+    spec = ToolSpec("t", "", {}, frozenset({"source:untrusted"}))
+    assert d.on_result(spec, "ok\nBAD line", ctx) == "ok\n[line removed by detector]"
+    assert d.on_result(ToolSpec("t", "", {}), "BAD", ctx) == "BAD"

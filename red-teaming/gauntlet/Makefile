@@ -44,3 +44,7 @@ holdout-posthoc:
 	gauntlet report runs/holdout-posthoc.jsonl \
 	  --title "Blind holdout, post-hoc leave-one-out (not part of the registered scoring)" \
 	  --md reports/holdout-posthoc.md --json reports/holdout-posthoc.json
+
+# Predicted tool lists instead of gold ones. No model needed. About 3 minutes on two cores.
+router:
+	$(PY) -W ignore -m gauntlet.task_router
