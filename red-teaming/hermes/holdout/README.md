@@ -22,3 +22,12 @@ It did not read `controls.py`, `frontier.py`, reports, `PREREGISTRATION.md`, pro
 `05_blind_controls.yaml` or any holdout result.
 
 Checked for solvability only: 20 of 20 pass with `hermes run --stacks none`. No other stack has been run. Not yet scored.
+
+## Second blind holdout
+
+**Benign half only.** `06_blind_controls_2.yaml` comes from a separate author. Controls were frozen for it at commit
+`33a516c`, before I saw the file, and I have not read it. `make holdout2` scores it once and writes `reports/holdout2.*`.
+It refuses to overwrite them. There is still no blind attack set, and whether to have one is the owner's decision.
+
+Limits: the same as above, and the `_fwd` stacks can only differ from their base stacks if the file declares `input`
+types. The report prints how many agents do.

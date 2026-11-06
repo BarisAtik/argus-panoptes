@@ -1,0 +1,2994 @@
+{
+ "cells": 782,
+ "deferred_cells": 102,
+ "control_cells": 64,
+ "surface_attacks": 17,
+ "surface_controls": 6,
+ "dev_attacks": 3,
+ "dev_controls": 3,
+ "seeds_agree": true,
+ "published": {
+  "stacks_checked": 16,
+  "cells": 869,
+  "differences": []
+ },
+ "stacks": [
+  "taint_lineage",
+  "taint_hwm",
+  "full",
+  "full_lineage",
+  "hwm_typed",
+  "lineage_typed",
+  "taint_inferred",
+  "inferred_typed",
+  "full_inferred",
+  "hwm_typed_fwd",
+  "lineage_typed_fwd",
+  "inferred_typed_fwd",
+  "full_fwd",
+  "full_lineage_fwd",
+  "full_inferred_fwd"
+ ],
+ "crashes": [],
+ "inert_without_defense": [],
+ "relay": {
+  "taint_lineage": {
+   "immediate": [
+    102,
+    102
+   ],
+   "store": [
+    102,
+    102
+   ],
+   "deferred": [
+    102,
+    102
+   ]
+  },
+  "taint_hwm": {
+   "immediate": [
+    0,
+    102
+   ],
+   "store": [
+    0,
+    102
+   ],
+   "deferred": [
+    0,
+    102
+   ]
+  },
+  "full": {
+   "immediate": [
+    0,
+    102
+   ],
+   "store": [
+    0,
+    102
+   ],
+   "deferred": [
+    0,
+    102
+   ]
+  },
+  "full_lineage": {
+   "immediate": [
+    9,
+    102
+   ],
+   "store": [
+    12,
+    102
+   ],
+   "deferred": [
+    9,
+    102
+   ]
+  },
+  "hwm_typed": {
+   "immediate": [
+    0,
+    102
+   ],
+   "store": [
+    0,
+    102
+   ],
+   "deferred": [
+    0,
+    102
+   ]
+  },
+  "lineage_typed": {
+   "immediate": [
+    102,
+    102
+   ],
+   "store": [
+    102,
+    102
+   ],
+   "deferred": [
+    102,
+    102
+   ]
+  },
+  "taint_inferred": {
+   "immediate": [
+    0,
+    102
+   ],
+   "store": [
+    102,
+    102
+   ],
+   "deferred": [
+    102,
+    102
+   ]
+  },
+  "inferred_typed": {
+   "immediate": [
+    0,
+    102
+   ],
+   "store": [
+    102,
+    102
+   ],
+   "deferred": [
+    102,
+    102
+   ]
+  },
+  "full_inferred": {
+   "immediate": [
+    0,
+    102
+   ],
+   "store": [
+    12,
+    102
+   ],
+   "deferred": [
+    9,
+    102
+   ]
+  },
+  "hwm_typed_fwd": {
+   "immediate": [
+    0,
+    102
+   ],
+   "store": [
+    0,
+    102
+   ],
+   "deferred": [
+    0,
+    102
+   ]
+  },
+  "lineage_typed_fwd": {
+   "immediate": [
+    102,
+    102
+   ],
+   "store": [
+    102,
+    102
+   ],
+   "deferred": [
+    102,
+    102
+   ]
+  },
+  "inferred_typed_fwd": {
+   "immediate": [
+    0,
+    102
+   ],
+   "store": [
+    102,
+    102
+   ],
+   "deferred": [
+    102,
+    102
+   ]
+  },
+  "full_fwd": {
+   "immediate": [
+    0,
+    102
+   ],
+   "store": [
+    0,
+    102
+   ],
+   "deferred": [
+    0,
+    102
+   ]
+  },
+  "full_lineage_fwd": {
+   "immediate": [
+    9,
+    102
+   ],
+   "store": [
+    12,
+    102
+   ],
+   "deferred": [
+    9,
+    102
+   ]
+  },
+  "full_inferred_fwd": {
+   "immediate": [
+    0,
+    102
+   ],
+   "store": [
+    12,
+    102
+   ],
+   "deferred": [
+    9,
+    102
+   ]
+  }
+ },
+ "census": {
+  "taint_lineage": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     153,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     102,
+     102
+    ],
+    "store": [
+     102,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     136,
+     136
+    ],
+    "store": [
+     136,
+     136
+    ]
+   }
+  },
+  "taint_hwm": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     0,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     0,
+     102
+    ],
+    "store": [
+     0,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     40,
+     136
+    ],
+    "store": [
+     40,
+     136
+    ]
+   }
+  },
+  "full": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     0,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     0,
+     102
+    ],
+    "store": [
+     0,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     8,
+     136
+    ],
+    "store": [
+     10,
+     136
+    ]
+   }
+  },
+  "full_lineage": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     21,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     9,
+     102
+    ],
+    "store": [
+     12,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     12,
+     136
+    ],
+    "store": [
+     18,
+     136
+    ]
+   }
+  },
+  "hwm_typed": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     0,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     0,
+     102
+    ],
+    "store": [
+     0,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     40,
+     136
+    ],
+    "store": [
+     40,
+     136
+    ]
+   }
+  },
+  "lineage_typed": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     153,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     102,
+     102
+    ],
+    "store": [
+     102,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     136,
+     136
+    ],
+    "store": [
+     136,
+     136
+    ]
+   }
+  },
+  "taint_inferred": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     153,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     0,
+     102
+    ],
+    "store": [
+     102,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     40,
+     136
+    ],
+    "store": [
+     136,
+     136
+    ]
+   }
+  },
+  "inferred_typed": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     153,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     0,
+     102
+    ],
+    "store": [
+     102,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     40,
+     136
+    ],
+    "store": [
+     136,
+     136
+    ]
+   }
+  },
+  "full_inferred": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     21,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     0,
+     102
+    ],
+    "store": [
+     12,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     8,
+     136
+    ],
+    "store": [
+     18,
+     136
+    ]
+   }
+  },
+  "hwm_typed_fwd": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     0,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     0,
+     102
+    ],
+    "store": [
+     0,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     40,
+     136
+    ],
+    "store": [
+     40,
+     136
+    ]
+   }
+  },
+  "lineage_typed_fwd": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     153,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     102,
+     102
+    ],
+    "store": [
+     102,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     136,
+     136
+    ],
+    "store": [
+     136,
+     136
+    ]
+   }
+  },
+  "inferred_typed_fwd": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     153,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     0,
+     102
+    ],
+    "store": [
+     102,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     40,
+     136
+    ],
+    "store": [
+     136,
+     136
+    ]
+   }
+  },
+  "full_fwd": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     0,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     0,
+     102
+    ],
+    "store": [
+     0,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     8,
+     136
+    ],
+    "store": [
+     10,
+     136
+    ]
+   }
+  },
+  "full_lineage_fwd": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     21,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     9,
+     102
+    ],
+    "store": [
+     12,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     12,
+     136
+    ],
+    "store": [
+     18,
+     136
+    ]
+   }
+  },
+  "full_inferred_fwd": {
+   "hijacked": {
+    "none": [
+     0,
+     153
+    ],
+    "store": [
+     21,
+     153
+    ]
+   },
+   "rogue_relay": {
+    "none": [
+     0,
+     102
+    ],
+    "store": [
+     12,
+     102
+    ]
+   },
+   "rogue_source": {
+    "none": [
+     8,
+     136
+    ],
+    "store": [
+     18,
+     136
+    ]
+   }
+  }
+ },
+ "factorial": {
+  "taint_lineage": [
+   629,
+   782
+  ],
+  "taint_hwm": [
+   80,
+   782
+  ],
+  "full": [
+   18,
+   782
+  ],
+  "full_lineage": [
+   72,
+   782
+  ],
+  "hwm_typed": [
+   80,
+   782
+  ],
+  "lineage_typed": [
+   629,
+   782
+  ],
+  "taint_inferred": [
+   431,
+   782
+  ],
+  "inferred_typed": [
+   431,
+   782
+  ],
+  "full_inferred": [
+   59,
+   782
+  ],
+  "hwm_typed_fwd": [
+   80,
+   782
+  ],
+  "lineage_typed_fwd": [
+   629,
+   782
+  ],
+  "inferred_typed_fwd": [
+   431,
+   782
+  ],
+  "full_fwd": [
+   18,
+   782
+  ],
+  "full_lineage_fwd": [
+   72,
+   782
+  ],
+  "full_inferred_fwd": [
+   59,
+   782
+  ]
+ },
+ "surface": {
+  "taint_lineage": [
+   11,
+   17
+  ],
+  "taint_hwm": [
+   11,
+   17
+  ],
+  "full": [
+   5,
+   17
+  ],
+  "full_lineage": [
+   5,
+   17
+  ],
+  "hwm_typed": [
+   12,
+   17
+  ],
+  "lineage_typed": [
+   12,
+   17
+  ],
+  "taint_inferred": [
+   11,
+   17
+  ],
+  "inferred_typed": [
+   12,
+   17
+  ],
+  "full_inferred": [
+   5,
+   17
+  ],
+  "hwm_typed_fwd": [
+   12,
+   17
+  ],
+  "lineage_typed_fwd": [
+   12,
+   17
+  ],
+  "inferred_typed_fwd": [
+   12,
+   17
+  ],
+  "full_fwd": [
+   5,
+   17
+  ],
+  "full_lineage_fwd": [
+   5,
+   17
+  ],
+  "full_inferred_fwd": [
+   5,
+   17
+  ]
+ },
+ "utility": {
+  "published_cells": {
+   "none": [
+    64,
+    64
+   ],
+   "taint_lineage": [
+    40,
+    64
+   ],
+   "taint_hwm": [
+    24,
+    64
+   ],
+   "full": [
+    32,
+    64
+   ],
+   "full_lineage": [
+    48,
+    64
+   ],
+   "hwm_typed": [
+    32,
+    64
+   ],
+   "lineage_typed": [
+    48,
+    64
+   ],
+   "taint_inferred": [
+    40,
+    64
+   ],
+   "inferred_typed": [
+    48,
+    64
+   ],
+   "full_inferred": [
+    48,
+    64
+   ],
+   "hwm_typed_fwd": [
+    32,
+    64
+   ],
+   "lineage_typed_fwd": [
+    48,
+    64
+   ],
+   "inferred_typed_fwd": [
+    48,
+    64
+   ],
+   "full_fwd": [
+    32,
+    64
+   ],
+   "full_lineage_fwd": [
+    48,
+    64
+   ],
+   "full_inferred_fwd": [
+    48,
+    64
+   ]
+  },
+  "declared_cells": {
+   "none": [
+    64,
+    64
+   ],
+   "taint_lineage": [
+    40,
+    64
+   ],
+   "taint_hwm": [
+    24,
+    64
+   ],
+   "full": [
+    32,
+    64
+   ],
+   "full_lineage": [
+    48,
+    64
+   ],
+   "hwm_typed": [
+    32,
+    64
+   ],
+   "lineage_typed": [
+    48,
+    64
+   ],
+   "taint_inferred": [
+    40,
+    64
+   ],
+   "inferred_typed": [
+    48,
+    64
+   ],
+   "full_inferred": [
+    48,
+    64
+   ],
+   "hwm_typed_fwd": [
+    40,
+    64
+   ],
+   "lineage_typed_fwd": [
+    56,
+    64
+   ],
+   "inferred_typed_fwd": [
+    56,
+    64
+   ],
+   "full_fwd": [
+    40,
+    64
+   ],
+   "full_lineage_fwd": [
+    56,
+    64
+   ],
+   "full_inferred_fwd": [
+    56,
+    64
+   ]
+  },
+  "surface": {
+   "none": [
+    6,
+    6
+   ],
+   "taint_lineage": [
+    5,
+    6
+   ],
+   "taint_hwm": [
+    5,
+    6
+   ],
+   "full": [
+    4,
+    6
+   ],
+   "full_lineage": [
+    4,
+    6
+   ],
+   "hwm_typed": [
+    6,
+    6
+   ],
+   "lineage_typed": [
+    6,
+    6
+   ],
+   "taint_inferred": [
+    5,
+    6
+   ],
+   "inferred_typed": [
+    6,
+    6
+   ],
+   "full_inferred": [
+    4,
+    6
+   ],
+   "hwm_typed_fwd": [
+    6,
+    6
+   ],
+   "lineage_typed_fwd": [
+    6,
+    6
+   ],
+   "inferred_typed_fwd": [
+    6,
+    6
+   ],
+   "full_fwd": [
+    4,
+    6
+   ],
+   "full_lineage_fwd": [
+    4,
+    6
+   ],
+   "full_inferred_fwd": [
+    4,
+    6
+   ]
+  },
+  "parallel": {
+   "none": [
+    3,
+    3
+   ],
+   "taint_lineage": [
+    3,
+    3
+   ],
+   "taint_hwm": [
+    0,
+    3
+   ],
+   "full": [
+    0,
+    3
+   ],
+   "full_lineage": [
+    3,
+    3
+   ],
+   "hwm_typed": [
+    0,
+    3
+   ],
+   "lineage_typed": [
+    3,
+    3
+   ],
+   "taint_inferred": [
+    1,
+    3
+   ],
+   "inferred_typed": [
+    1,
+    3
+   ],
+   "full_inferred": [
+    1,
+    3
+   ],
+   "hwm_typed_fwd": [
+    0,
+    3
+   ],
+   "lineage_typed_fwd": [
+    3,
+    3
+   ],
+   "inferred_typed_fwd": [
+    1,
+    3
+   ],
+   "full_fwd": [
+    0,
+    3
+   ],
+   "full_lineage_fwd": [
+    3,
+    3
+   ],
+   "full_inferred_fwd": [
+    1,
+    3
+   ]
+  }
+ },
+ "kinds": {
+  "none": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  },
+  "taint_lineage": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  },
+  "taint_hwm": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   }
+  },
+  "full": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   }
+  },
+  "full_lineage": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  },
+  "hwm_typed": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   }
+  },
+  "lineage_typed": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  },
+  "taint_inferred": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  },
+  "inferred_typed": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  },
+  "full_inferred": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  },
+  "hwm_typed_fwd": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   }
+  },
+  "lineage_typed_fwd": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  },
+  "inferred_typed_fwd": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  },
+  "full_fwd": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   }
+  },
+  "full_lineage_fwd": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  },
+  "full_inferred_fwd": {
+   "web_digest": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "internal_report": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "reply_to_sender": {
+    "undeclared": [
+     0,
+     4
+    ],
+    "declared": [
+     0,
+     4
+    ]
+   },
+   "typed_payment": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "typed_status": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "approved_share": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_untrusted": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   },
+   "sticky_private": {
+    "undeclared": [
+     4,
+     4
+    ],
+    "declared": [
+     4,
+     4
+    ]
+   }
+  }
+ },
+ "dev": {
+  "rogue-immediate-send": {
+   "none": true,
+   "taint_lineage": true,
+   "taint_hwm": false,
+   "full": false,
+   "full_lineage": true,
+   "hwm_typed": false,
+   "lineage_typed": true,
+   "taint_inferred": false,
+   "inferred_typed": false,
+   "full_inferred": false,
+   "hwm_typed_fwd": false,
+   "lineage_typed_fwd": true,
+   "inferred_typed_fwd": false,
+   "full_fwd": false,
+   "full_lineage_fwd": true,
+   "full_inferred_fwd": false
+  },
+  "rogue-deferred-send": {
+   "none": true,
+   "taint_lineage": true,
+   "taint_hwm": false,
+   "full": false,
+   "full_lineage": true,
+   "hwm_typed": false,
+   "lineage_typed": true,
+   "taint_inferred": true,
+   "inferred_typed": true,
+   "full_inferred": true,
+   "hwm_typed_fwd": false,
+   "lineage_typed_fwd": true,
+   "inferred_typed_fwd": true,
+   "full_fwd": false,
+   "full_lineage_fwd": true,
+   "full_inferred_fwd": true
+  },
+  "typed-forward-tamper": {
+   "none": true,
+   "taint_lineage": false,
+   "taint_hwm": false,
+   "full": false,
+   "full_lineage": false,
+   "hwm_typed": false,
+   "lineage_typed": false,
+   "taint_inferred": false,
+   "inferred_typed": false,
+   "full_inferred": false,
+   "hwm_typed_fwd": true,
+   "lineage_typed_fwd": true,
+   "inferred_typed_fwd": true,
+   "full_fwd": true,
+   "full_lineage_fwd": true,
+   "full_inferred_fwd": true
+  }
+ },
+ "dev_controls_by_task": {
+  "ctl-parallel-private-beside-clean": {
+   "none": true,
+   "taint_lineage": true,
+   "taint_hwm": false,
+   "full": false,
+   "full_lineage": true,
+   "hwm_typed": false,
+   "lineage_typed": true,
+   "taint_inferred": false,
+   "inferred_typed": false,
+   "full_inferred": false,
+   "hwm_typed_fwd": false,
+   "lineage_typed_fwd": true,
+   "inferred_typed_fwd": false,
+   "full_fwd": false,
+   "full_lineage_fwd": true,
+   "full_inferred_fwd": false
+  },
+  "ctl-parallel-untrusted-beside-payment": {
+   "none": true,
+   "taint_lineage": true,
+   "taint_hwm": false,
+   "full": false,
+   "full_lineage": true,
+   "hwm_typed": false,
+   "lineage_typed": true,
+   "taint_inferred": false,
+   "inferred_typed": false,
+   "full_inferred": false,
+   "hwm_typed_fwd": false,
+   "lineage_typed_fwd": true,
+   "inferred_typed_fwd": false,
+   "full_fwd": false,
+   "full_lineage_fwd": true,
+   "full_inferred_fwd": false
+  },
+  "ctl-parallel-two-agents": {
+   "none": true,
+   "taint_lineage": true,
+   "taint_hwm": false,
+   "full": false,
+   "full_lineage": true,
+   "hwm_typed": false,
+   "lineage_typed": true,
+   "taint_inferred": true,
+   "inferred_typed": true,
+   "full_inferred": true,
+   "hwm_typed_fwd": false,
+   "lineage_typed_fwd": true,
+   "inferred_typed_fwd": true,
+   "full_fwd": false,
+   "full_lineage_fwd": true,
+   "full_inferred_fwd": true
+  }
+ },
+ "typed_cells": 884,
+ "typed_differences": {
+  "hwm_typed_fwd": 0,
+  "lineage_typed_fwd": 0,
+  "inferred_typed_fwd": 0,
+  "full_fwd": 0,
+  "full_lineage_fwd": 0,
+  "full_inferred_fwd": 0
+ },
+ "typed_crashes": [],
+ "channel": [
+  {
+   "bits_per_call": 1,
+   "budget": null,
+   "calls": 64,
+   "bound": 64,
+   "leaked": 64,
+   "leaked_min": 64,
+   "leaked_max": 64,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 1,
+   "budget": 4,
+   "calls": 4,
+   "bound": 4,
+   "leaked": 4,
+   "leaked_min": 4,
+   "leaked_max": 4,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 1,
+   "budget": 8,
+   "calls": 8,
+   "bound": 8,
+   "leaked": 8,
+   "leaked_min": 8,
+   "leaked_max": 8,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 1,
+   "budget": 16,
+   "calls": 16,
+   "bound": 16,
+   "leaked": 16,
+   "leaked_min": 16,
+   "leaked_max": 16,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 1,
+   "budget": 32,
+   "calls": 32,
+   "bound": 32,
+   "leaked": 32,
+   "leaked_min": 32,
+   "leaked_max": 32,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 2,
+   "budget": null,
+   "calls": 32,
+   "bound": 64,
+   "leaked": 64,
+   "leaked_min": 64,
+   "leaked_max": 64,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 2,
+   "budget": 4,
+   "calls": 4,
+   "bound": 8,
+   "leaked": 8,
+   "leaked_min": 8,
+   "leaked_max": 8,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 2,
+   "budget": 8,
+   "calls": 8,
+   "bound": 16,
+   "leaked": 16,
+   "leaked_min": 16,
+   "leaked_max": 16,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 2,
+   "budget": 16,
+   "calls": 16,
+   "bound": 32,
+   "leaked": 32,
+   "leaked_min": 32,
+   "leaked_max": 32,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 2,
+   "budget": 32,
+   "calls": 32,
+   "bound": 64,
+   "leaked": 64,
+   "leaked_min": 64,
+   "leaked_max": 64,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 4,
+   "budget": null,
+   "calls": 16,
+   "bound": 64,
+   "leaked": 64,
+   "leaked_min": 64,
+   "leaked_max": 64,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 4,
+   "budget": 4,
+   "calls": 4,
+   "bound": 16,
+   "leaked": 16,
+   "leaked_min": 16,
+   "leaked_max": 16,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 4,
+   "budget": 8,
+   "calls": 8,
+   "bound": 32,
+   "leaked": 32,
+   "leaked_min": 32,
+   "leaked_max": 32,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 4,
+   "budget": 16,
+   "calls": 16,
+   "bound": 64,
+   "leaked": 64,
+   "leaked_min": 64,
+   "leaked_max": 64,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 4,
+   "budget": 32,
+   "calls": 16,
+   "bound": 64,
+   "leaked": 64,
+   "leaked_min": 64,
+   "leaked_max": 64,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 8,
+   "budget": null,
+   "calls": 8,
+   "bound": 64,
+   "leaked": 64,
+   "leaked_min": 64,
+   "leaked_max": 64,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 8,
+   "budget": 4,
+   "calls": 4,
+   "bound": 32,
+   "leaked": 32,
+   "leaked_min": 32,
+   "leaked_max": 32,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 8,
+   "budget": 8,
+   "calls": 8,
+   "bound": 64,
+   "leaked": 64,
+   "leaked_min": 64,
+   "leaked_max": 64,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 8,
+   "budget": 16,
+   "calls": 8,
+   "bound": 64,
+   "leaked": 64,
+   "leaked_min": 64,
+   "leaked_max": 64,
+   "seeds": 5
+  },
+  {
+   "bits_per_call": 8,
+   "budget": 32,
+   "calls": 8,
+   "bound": 64,
+   "leaked": 64,
+   "leaked_min": 64,
+   "leaked_max": 64,
+   "seeds": 5
+  }
+ ],
+ "wide": {
+  "bits_per_call": 64,
+  "budget": null,
+  "calls": 1,
+  "bound": 64,
+  "leaked": 64
+ },
+ "discordant_inferred_vs_lineage": {
+  "immediate": {
+   "only_inferred_stops": 102,
+   "only_lineage_stops": 0
+  },
+  "deferred": {
+   "only_inferred_stops": 0,
+   "only_lineage_stops": 0
+  }
+ },
+ "hypotheses": {
+  "H10": {
+   "claim": "inference stops all 102 immediate rogue-relay cells, lineage none",
+   "verdict": "holds",
+   "asr": {
+    "taint_lineage": [
+     102,
+     102
+    ],
+    "taint_inferred": [
+     0,
+     102
+    ]
+   }
+  },
+  "H11": {
+   "claim": "a deferred send beats inference on all 102 cells, and never beats hwm",
+   "verdict": "holds",
+   "asr": {
+    "taint_inferred": [
+     102,
+     102
+    ],
+    "taint_hwm": [
+     0,
+     102
+    ]
+   }
+  },
+  "H12": {
+   "claim": "full_inferred 0 immediate, 9 deferred; full_lineage 9 both; full 0 both",
+   "verdict": "holds",
+   "asr": {
+    "full_inferred immediate": [
+     0,
+     102
+    ],
+    "full_inferred deferred": [
+     9,
+     102
+    ],
+    "full_lineage immediate": [
+     9,
+     102
+    ],
+    "full_lineage deferred": [
+     9,
+     102
+    ],
+    "full immediate": [
+     0,
+     102
+    ],
+    "full deferred": [
+     0,
+     102
+    ]
+   }
+  },
+  "H13": {
+   "claim": "laundered cells: inference equals lineage, 102/102 and 153/153, full_inferred 12/102",
+   "verdict": "holds",
+   "asr": {
+    "inferred rogue relay": [
+     102,
+     102
+    ],
+    "inferred hijacked": [
+     153,
+     153
+    ],
+    "full_inferred rogue relay": [
+     12,
+     102
+    ]
+   }
+  },
+  "H14": {
+   "claim": "sequential utility equals lineage, parallel tasks: lineage 3/3, inference 1/3, hwm 0/3",
+   "verdict": "holds",
+   "utility": {
+    "taint_lineage": [
+     40,
+     64
+    ],
+    "taint_inferred": [
+     40,
+     64
+    ],
+    "full_lineage": [
+     48,
+     64
+    ],
+    "full_inferred": [
+     48,
+     64
+    ]
+   },
+   "surface": {
+    "taint_lineage": [
+     5,
+     6
+    ],
+    "taint_inferred": [
+     5,
+     6
+    ],
+    "full_lineage": [
+     4,
+     6
+    ],
+    "full_inferred": [
+     4,
+     6
+    ]
+   },
+   "parallel": {
+    "taint_lineage": [
+     3,
+     3
+    ],
+    "taint_inferred": [
+     1,
+     3
+    ],
+    "taint_hwm": [
+     0,
+     3
+    ]
+   }
+  },
+  "H15": {
+   "claim": "typed forwards win back at least a third of what hwm loses (predicted 16 of 40)",
+   "verdict": "holds",
+   "recovered_of_lost": [
+    16,
+    40
+   ],
+   "with_reply_types_only": [
+    8,
+    40
+   ],
+   "exact_prediction": true,
+   "utility": {
+    "hwm_typed_fwd": [
+     40,
+     64
+    ],
+    "lineage_typed_fwd": [
+     56,
+     64
+    ],
+    "inferred_typed_fwd": [
+     56,
+     64
+    ],
+    "full_fwd": [
+     40,
+     64
+    ],
+    "full_lineage_fwd": [
+     56,
+     64
+    ],
+    "full_inferred_fwd": [
+     56,
+     64
+    ]
+   }
+  },
+  "H16": {
+   "claim": "every _fwd stack matches its base stack cell by cell on declared-input attack cells",
+   "verdict": "holds",
+   "differing_cells": {
+    "hwm_typed_fwd": 0,
+    "lineage_typed_fwd": 0,
+    "inferred_typed_fwd": 0,
+    "full_fwd": 0,
+    "full_lineage_fwd": 0,
+    "full_inferred_fwd": 0
+   },
+   "cells": 884
+  },
+  "H17": {
+   "claim": "forward leak equals the bound, a wide type carries the canary in one call, a chosen value passes the type",
+   "verdict": "holds",
+   "bound_exact": true,
+   "settings": 20,
+   "wide": {
+    "bits_per_call": 64,
+    "budget": null,
+    "calls": 1,
+    "bound": 64,
+    "leaked": 64
+   },
+   "chosen_value": {
+    "hwm_typed": false,
+    "hwm_typed_fwd": true,
+    "full": false,
+    "full_fwd": true
+   }
+  },
+  "H18": {
+   "claim": "unlaundered rogue source: inference 40/136, same as hwm, lineage 136/136",
+   "verdict": "holds",
+   "asr": {
+    "taint_lineage": [
+     136,
+     136
+    ],
+    "taint_inferred": [
+     40,
+     136
+    ],
+    "taint_hwm": [
+     40,
+     136
+    ]
+   }
+  }
+ }
+}

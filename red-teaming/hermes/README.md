@@ -13,7 +13,8 @@ They say nothing about how often a model obeys a relayed instruction.
 ## Results
 
 782 factorial attack cells, 64 benign cells, 17 protocol-surface attacks and 6 surface controls.
-[Full report](reports/experiment.md), [frontier](reports/frontier.md), [holdout](reports/holdout.md),
+[Full report](reports/experiment.md), [inference and typed forwards](reports/inference.md),
+[frontier](reports/frontier.md), [holdout](reports/holdout.md),
 [hypotheses, written first](PREREGISTRATION.md).
 
 | Stack | Factorial ASR | Surface attacks | Benign tasks, dev | Benign tasks, blind |
@@ -27,6 +28,15 @@ They say nothing about how often a model obeys a relayed instruction.
 | `taint_hwm` + types | 10.2% | 12/17 | 50.0% | 13/16 |
 | `full` | 2.3% | 5/17 | 50.0% | 7/16 |
 | `full_lineage` | 9.2% | 5/17 | 75.0% | 7/16 |
+| `taint_inferred` + types | 55.1% | 12/17 | 75.0% | not scored yet |
+| `full_inferred` | 7.5% | 5/17 | 75.0% | not scored yet |
+| `hwm_typed_fwd` | 10.2% | 12/17 | 62.5%* | not scored yet |
+| `full_fwd` | 2.3% | 5/17 | 62.5%* | not scored yet |
+| `full_inferred_fwd` | 7.5% | 5/17 | 87.5%* | not scored yet |
+
+\* The same 64 tasks with `input` types declared, so these rows are not on quite the same cells as the rest. The 782
+cells do not include the 102 deferred cells, which flatters the inferred rows. See finding 9 and
+[the inference report](reports/inference.md).
 
 Dev rates are exact counts over a space I designed, not estimates of anything in the wild. The factorial's ASR is
 weighted by that design, so compare stacks and do not quote it. The blind set has wide intervals: 7/16 is 23 to 67%.
@@ -54,6 +64,21 @@ weighted by that design, so compare stacks and do not quote it. The blind set ha
    from the org allowlist, which my dev tasks had quietly kept in step. So this measures allowlist upkeep as much as
    the control, and it is the cost a real team would pay if the two drift. The 25-point edge of lineage over high-water marks in `full` vanished too: both 7/16.
 
+9. **Inferring links beats a rogue relay until it learns to wait.** A gateway that links any send made while a request
+   is open stopped all 102 immediate rogue-relay cells that beat lineage. A relay that answers first and sends after the
+   request closes won all 102 back. High-water marks stopped both. In a full stack that is 0 of 102 immediate and 9 of 102
+   deferred, the same 9 as `full_lineage`. Inference also keeps the sticky tasks that high-water marks lose (40 of 64
+   against 24), and its own cost is a false link when requests overlap: it kept 1 of 3 parallel tasks to lineage's 3. It
+   does not reach the store.
+10. **Typed forwards pay for chains, and bring the type's weakness along.** With `input` types, `hwm_typed_fwd` wins back
+   16 of the 40 tasks `taint_hwm` loses, up from 8, which clears the bar H8 missed. But a value chosen inside the type
+   now beats `full_fwd` where `full` stopped it (`typed-forward-tamper`), a forward leaks exactly
+   `min(64, calls × log2|T|)` bits in all 20 settings, and a declared 64-bit `int` carries the whole canary in one call.
+   The gateway checks a value against a type. It does not judge the type.
+
+All nine predictions for these two findings (H10 to H18) held exactly. I made them by reading my own deterministic mesh,
+so that shows the code does what I reasoned, not that the design holds up.
+
 ## Nothing here stops
 
 `full` loses to five surface attacks, pinned by `_gap` tests: injection that leaks into a granted internal mailbox,
@@ -63,6 +88,8 @@ needs a human or a different architecture.
 
 ## Limits
 
+- **Blind results for the new stacks are pending.** Controls are frozen at `33a516c` for a second blind benign holdout,
+  which I have not read or scored. `make holdout2` scores it once. No blind attack set exists for them either.
 - **No blind attack set.** The separate author session was stopped by an automated safety check while writing the
   attacks, and I did not retry that content. Attack numbers are dev only. I wrote both the attacks and the controls.
 - Only the benign half was tested blind, by the same kind of system as me, which also chose its own grants.
@@ -75,10 +102,12 @@ needs a human or a different architecture.
 ## Run it
 
 ```bash
-pip install -e ".[dev]" && pytest      # 88 tests
+pip install -e ".[dev]" && pytest      # 155 tests
 make experiment                        # seconds
+make inference                         # seconds, H10 to H18
 make frontier                          # 4,096 stacks, about 8 minutes on two cores
 make wire                              # surface scenarios over real A2A on loopback
+make holdout2                          # once, when the second blind file is in place
 hermes lint card.json --sarif out.sarif
 hermes run --scenarios my.yaml --stacks none,full
 ```
