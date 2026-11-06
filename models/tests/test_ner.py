@@ -384,3 +384,23 @@ def test_deduce_adapter_maps_offsets_and_tags_to_tokens():
     tags = Deduce(Engine()).tag(["Dr", "Jan", "Peeters", "in", "Gent"])
     assert tags == ["O", "B-PER", "I-PER", "O", "B-LOC"]
     assert Deduce(Engine()).tag([]) == []
+
+
+def test_faker_pools_and_fold():
+    pytest.importorskip("faker")
+    from ner_nl.name_audit import faker_pool, fold, pools, recall_table, two_way_gap
+
+    assert fold("Yılmaz") == "Yilmaz" and fold("Łukasiewicz") == "Lukasiewicz"
+    polish = faker_pool("pl_PL")
+    assert len(polish["last"]) > 50 and faker_pool("pl_PL") == polish
+    assert set(pools()) >= {"dutch", "faker_polish_folded"}
+    rows = [
+        {"group": g, "name": n, "doc": d, "exact": e}
+        for g, base in (("a", 1), ("b", 0))
+        for n in ("x", "y", "z")
+        for d in ("d1", "d2", "d3")
+        for e in (base, base)
+    ]
+    assert recall_table(rows, "a")["x"] == [6, 6]
+    gap = two_way_gap(rows, "b", "a", n_boot=50)
+    assert gap["gap"] == pytest.approx(-1.0) and gap["low"] == pytest.approx(-1.0)

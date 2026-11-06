@@ -13,11 +13,9 @@ from __future__ import annotations
 import argparse
 import csv
 import importlib
-import json
 import random
 import unicodedata
 from collections import defaultdict
-from pathlib import Path
 
 import numpy as np
 from scipy import stats
@@ -51,8 +49,8 @@ def faker_pool(locale: str, size: int = LIST_SIZE, seed: int = 0) -> dict[str, l
         unique = sorted({n for n in names if n.isalpha() and n[0].isupper() and len(n) > 1})
         return rng.sample(unique, min(size, len(unique)))
 
-    # Polish tables split surnames by gender and leave `last_names` as a placeholder.
-    last = getattr(provider, "last_names_male", None) or provider.last_names
+    # Polish tables leave `last_names` as a one-entry placeholder.
+    last = getattr(provider, "male_last_names", None) or provider.last_names
     return {"first": pick(provider.first_names), "last": pick(last)}
 
 
@@ -181,6 +179,15 @@ def stage_report(args) -> None:
             recall.append(hits / total)
     rho = stats.spearmanr(freq, recall)
 
+    within = {}
+    for group in hand:  # post hoc: pooled lists mix tradition with frequency
+        rows_here = [
+            (zipf_frequency(name.lower(), "nl"), hits / total)
+            for name, (hits, total) in tables[group].items()
+        ]
+        result = stats.spearmanr(*zip(*rows_here))
+        within[group] = {"spearman": float(result.statistic), "p": float(result.pvalue)}
+
     gaps, leave_out = [], []
     pairs = [(g, "dutch") for g in hand if g != "dutch"]
     pairs += [
@@ -213,6 +220,7 @@ def stage_report(args) -> None:
         "leave_out": leave_out,
         "zipf_vs_recall": {"spearman": float(rho.statistic), "p": float(rho.pvalue),
                            "names": len(freq)},
+        "zipf_vs_recall_within_list_post_hoc": within,
         "worst_names": worst,
     }
     md = [
@@ -224,6 +232,8 @@ def stage_report(args) -> None:
         "## Leave out the three worst names\n", markdown_table(leave_out),
         f"Spearman of Dutch word frequency and recall, hand lists: {rho.statistic:.2f} "
         f"(p {rho.pvalue:.3g}, {len(freq)} names).\n",
+        "Post hoc, inside each list: "
+        + ", ".join(f"{g} {v['spearman']:.2f}" for g, v in within.items()) + ".\n",
     ]
     write_report(OUT / "report_name_audit", report, "\n".join(md))
     print("\n".join(md))
