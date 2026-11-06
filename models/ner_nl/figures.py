@@ -34,7 +34,8 @@ def transcript_figure(report: dict, path: Path) -> None:
         (aug, "Own, augmented"),
     ]
     fig, ax = plt.subplots(figsize=(7.2, 3.6), dpi=200)
-    height, series = 0.34, (("clean", "Clean text", BLUE), ("transcript", "Transcript style", ORANGE))
+    height = 0.34
+    series = (("clean", "Clean text", BLUE), ("transcript", "Transcript style", ORANGE))
     for i, (key, _) in enumerate(names[::-1]):
         for j, (condition, label, color) in enumerate(series):
             y = i + (height / 2 + 0.02) * (1 if j == 0 else -1)
@@ -48,7 +49,7 @@ def transcript_figure(report: dict, path: Path) -> None:
         "Lowercase, unpunctuated text breaks every tagger not trained on it",
         loc="left", fontsize=10.5, color=INK,
     )
-    ax.legend(frameon=False, loc="lower right", fontsize=8.5)
+    ax.legend(frameon=False, loc="upper right", fontsize=8.5)
     _style(fig, ax)
     fig.tight_layout()
     fig.savefig(path, facecolor=SURFACE)

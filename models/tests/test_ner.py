@@ -7,7 +7,7 @@ import pytest
 
 from ner_nl import audit, perturb
 from ner_nl.backends import Gazetteer
-from ner_nl.data import Sentence, parse_conll2002
+from ner_nl.data import Sentence, load_split, parse_conll2002
 from ner_nl.label_map import SPACY_TO_CONLL
 from ner_nl.metrics import entity_ece, missed_tokens, paired_f1_difference, recall_by_seen
 from ner_nl.names import NAMES, swap_names
@@ -45,6 +45,26 @@ def test_parse_keeps_articles_and_tags():
 def test_parse_rejects_wrong_column_count():
     with pytest.raises(ValueError):
         parse_conll2002(["word O"])
+
+
+def test_load_split_reads_the_utf8_file_nltk_ships(tmp_path):
+    # Real shape: read as Latin-1, the second byte of `à` is a no-break space and splits the line.
+    for name in ("ned.train", "ned.testa", "ned.testb"):
+        (tmp_path / name).write_text("dàt V O\nJan N B-PER\n", encoding="utf-8")
+    sentences = load_split("test", tmp_path)
+    assert sentences[0].tokens == ("dàt", "Jan")
+
+
+def test_spacy_backend_survives_sentences_emptied_by_transcript_style():
+    spacy = pytest.importorskip("spacy")
+    from ner_nl.backends import SpacyNER
+
+    nlp = spacy.blank("nl")
+    nlp.add_pipe("ner").add_label("PERSON")
+    nlp.initialize()
+    data = [Sentence((), (), "a"), Sentence(("Jan",), ("O",), "a")]
+    out = SpacyNER("blank", nlp=nlp)(data)
+    assert out[0] == [] and len(out[1]) == 1
 
 
 def test_bio_spans_round_trip_and_stray_inside_tag():
