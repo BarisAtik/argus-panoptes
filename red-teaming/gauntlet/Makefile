@@ -41,6 +41,14 @@ holdout-run:
 	gauntlet report runs/holdout.jsonl --title "Blind holdout, worst-case agent" \
 	  --md reports/holdout.md --json reports/holdout.json
 
+# Second blind set: ordinary benign work only. Score once, see holdout/README.md.
+ordinary-run:
+	gauntlet run --agent benign --seeds 1 --scenarios holdout_ordinary \
+	  --defenses none,injection_filter,egress,dlp,provenance,layered,strict,provenance+scoped_secrets,provenance+exec_guard+scoped_secrets \
+	  --out runs/ordinary.jsonl
+	gauntlet report runs/ordinary.jsonl --title "Ordinary benign blind set, benign agent" \
+	  --md reports/ordinary.md --json reports/ordinary.json
+
 # Decomposition of the frozen stack on the holdout. Descriptive only.
 holdout-posthoc:
 	gauntlet run --agent compromised --seeds 1 --scenarios holdout --defenses layered --ablate layered \

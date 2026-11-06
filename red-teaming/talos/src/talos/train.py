@@ -22,10 +22,10 @@ class Config:
     prov: str = "plain"
     heldout: str | None = None
     seed: int = 0
-    d: int = 128
-    layers: int = 4
+    d: int = 96
+    layers: int = 3
     heads: int = 4
-    steps: int = 6000
+    steps: int = 1800
     batch: int = 48
     lr: float = 2e-3
     max_len: int = 160

@@ -16,7 +16,7 @@ Procedure, fixed before scoring:
 Limits: the author is the same kind of system as the defense author, so this is blind but not independent
 in any stronger sense. It also saw one dev scenario file, and `trusted_destinations` are its own choices.
 
-## Second set: `06_ordinary_benign.yaml`
+## Second set: `../holdout_ordinary/06_ordinary_benign.yaml`
 
 30 controls (`ord-` ids) of plain office work: reading and summarizing, replying to colleagues, paying regular invoices,
 scheduling notes, looking something up for whoever asked, multi-step reads, updating notes and memory, and public web
@@ -27,4 +27,9 @@ and, for format, `03_controls.yaml`. It did not read any defense code, `frontier
 project READMEs, this README, the `01_`, `02_` or `04_` scenario files, or any holdout result.
 
 Checked for solvability only: 30 of 30 pass with the scripted benign agent and defense `none`. No other stack has been
-run. Not yet scored.
+run before scoring.
+
+The file lives in `holdout_ordinary/`, moved there unchanged after writing, because everything in this folder loads as the
+first holdout and would have altered its counts. Defenses have not changed since before it was written. Scored once with
+`make ordinary-run`, benign agent, 1 seed, on `none`, `injection_filter`, `egress`, `dlp`, `provenance`, `layered`, `strict` and the
+two frontier picks, listed here before scoring.
