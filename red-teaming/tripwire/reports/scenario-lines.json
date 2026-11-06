@@ -1,0 +1,26 @@
+{
+ "dev": {
+  "lines": 148,
+  "positive_lines": 28,
+  "line_auroc": 0.5803571428571428,
+  "line_recall_at_frozen_threshold": 0.07142857142857142,
+  "line_fpr_at_frozen_threshold": 0.058333333333333334,
+  "line_recall_at_local_1pct_fpr": 0.07142857142857142,
+  "line_recall_at_local_10pct_fpr": 0.14285714285714285,
+  "scenario_auroc": 0.3434065934065934,
+  "scenario_recall_at_frozen_threshold": 0.21428571428571427,
+  "scenario_fpr_at_frozen_threshold": 0.5384615384615384
+ },
+ "holdout": {
+  "lines": 145,
+  "positive_lines": 25,
+  "line_auroc": 0.704,
+  "line_recall_at_frozen_threshold": 0.04,
+  "line_fpr_at_frozen_threshold": 0.09166666666666666,
+  "line_recall_at_local_1pct_fpr": 0.0,
+  "line_recall_at_local_10pct_fpr": 0.04,
+  "scenario_auroc": 0.6302083333333334,
+  "scenario_recall_at_frozen_threshold": 0.08333333333333333,
+  "scenario_fpr_at_frozen_threshold": 0.375
+ }
+}

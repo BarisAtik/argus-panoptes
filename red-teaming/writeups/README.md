@@ -10,10 +10,10 @@ Agentic Applications 2026.
 | --- | --- | --- | --- |
 | [Indirect prompt injection](#indirect-prompt-injection) | LLM01, ASI01 | egress, dlp, provenance | no |
 | [Data exfiltration](#data-exfiltration) | LLM02 | egress + dlp + output filter | **yes**, 1 of 6 |
-| [Tool misuse](#tool-misuse) | LLM06, ASI02 | provenance | **yes**, 2 of 3 |
+| [Tool misuse](#tool-misuse) | LLM06, ASI02 | provenance | **yes**, 1 of 3 |
 | [Privilege abuse](#privilege-abuse) | LLM06, ASI03 | scoped secrets | no |
 | [Supply chain and tool poisoning](#supply-chain-and-tool-poisoning) | LLM03, ASI04 | pinning, egress | no |
-| [Code execution](#code-execution) | LLM05, ASI05 | exec guard, partly | **yes**, 1 of 2 |
+| [Code execution](#code-execution) | LLM05, ASI05 | exec guard, write scope | no, after both were added |
 | [Memory poisoning](#memory-poisoning) | LLM04, ASI06 | memory guard, egress | no |
 | [Inter-agent trust](#inter-agent-trust) | ASI07 | egress, provenance | no |
 | [Resource abuse](#resource-abuse) | LLM10, ASI08 | rate limit | no |
@@ -21,7 +21,9 @@ Agentic Applications 2026.
 
 The main lesson runs through all of them: a filter on text is a weak control, and a rule on what
 may happen is a strong one. `injection_filter` stopped 2 of 28 scenarios, and the Dutch one walks
-straight past it. Egress rules stopped 15 whatever the wording.
+straight past it. Egress rules stopped 15 whatever the wording. A trained detector did no better: see
+[Tripwire](../tripwire/). For the cost side, and which defenses earn their place, see
+[frontier.md](../gauntlet/reports/frontier.md) and the longer read in [dev-scores.md](dev-scores.md).
 
 ## Indirect prompt injection
 

@@ -32,22 +32,37 @@ tasks and scoring.
 No language model has been run yet, because the machine that built this had no model access.
 Everything below is the worst-case agent. See [`reports/`](reports/).
 
-**On this repo's 28 attack and 11 control scenarios**
+**On this repo's 28 attack and 13 control scenarios**
 ([worst-case.md](reports/worst-case.md)), 3 seeds:
 
 | Stack | Attack success (95% cluster CI) | Attack-free controls still passing |
 | --- | ---: | ---: |
 | no defense | 100% | 100% |
-| injection filter only | 93% (82–100) | 91% |
+| injection filter only | 93% (82–100) | 92% |
+| trained detector only ([Tripwire](../tripwire/)) | 93% (82–100) | 100% |
 | tool allowlist only | 61% (43–79) | 100% |
-| layered policies | 18% (4–32) | 27% |
+| layered policies | 11% (0–21) | 23% |
 
-Controls are hard negatives built to trip one defense each, so 27% overstates the everyday cost.
-The per-defense rows are the useful part. Leave-one-out runs show `allowlist`, `trifecta`,
-`tool_pin`, `manifest_scan` and `memory_guard` add nothing to attack success once the rest of
-the stack is present on this sample, while removing `egress` nearly doubles it. The five scenarios
-that beat `layered` are in [the write-ups](../writeups/README.md): each is an allowed tool, an
-allowed destination, or a harm that lives in plain text.
+Controls are hard negatives built to trip one defense each, so 23% overstates the everyday cost, but it
+is still a real warning. The [blind holdout](holdout/README.md) of 24 attacks and 8 controls gave 8% (0–21)
+and 25% for `layered` ([holdout.md](reports/holdout.md)), so the attack score held up on scenarios
+its author wrote without seeing the defenses. Three dev scenarios beat `layered`, covered in
+[the write-ups](../writeups/README.md).
+
+**Which defenses are worth it?** ([frontier.md](reports/frontier.md)) All 8,192 subsets of 13 hard
+defenses, run through `python -m gauntlet.frontier`, with exact Shapley values. Stacks were picked by rules
+fixed in advance using dev rates only, then scored on the holdout:
+
+| Stack | Defenses | Dev attack success | Dev controls passing | Holdout attack success | Holdout controls passing |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| layered | 12 | 10.7% | 23.1% | 8.3% | 25.0% |
+| lowest ASR with controls ≥ 90% | 2 | 28.6% | 92.3% | 41.7% | 87.5% |
+| lowest ASR with controls ≥ 75% | 3 | 21.4% | 76.9% | 29.2% | 62.5% |
+
+Two defenses (`provenance`, `scoped_secrets`) reach most of what twelve do at a fraction of the cost.
+Selection is flattering: the picked stacks lost 8 to 13 points of attack success and 5 to 14 of control
+utility on the holdout. `exec_guard` is the most expensive defense by Shapley value, at 7 points of
+ASR for 15 points of control failure. The set has few controls, so these estimates are coarse.
 
 **On AgentDojo** ([agentdojo-worst-case.md](reports/agentdojo-worst-case.md)), 566 live
 (user task, injection task) pairs across its four suites, scored by its own checkers:
@@ -62,8 +77,9 @@ allowed destination, or a harm that lives in plain text.
 | allowlist + contact book | **4.4%** | **96.9%** |
 
 The combination beats the strictest single rule on both axes. Three caveats keep this honest. The
-allowlist uses each task's gold tool list, so it is an upper bound on what a task router would
-achieve. The contact book is built from the benchmark's clean environment, so it may contain more
+allowlist uses each task's gold tool list, an upper bound. [A real router from tool docs and
+history](reports/agentdojo-router.md) reaches 11.3% attack success at 93.8% benign utility with the
+contact book, against 4.4% and 96.9% for the gold list. The contact book is built from the benchmark's clean environment, so it may contain more
 than a real one would. And the 566 pairs leave out 340 whose injection task has no reference solution
 to replay and 43 where the reference solution did not succeed even with no policy. These numbers are a different
 experiment from the model results in the AgentDojo paper and cannot be compared to them.
@@ -110,7 +126,8 @@ python -m gauntlet.agentdojo_bridge --model qwen2.5:7b --limit 20  # real model 
 | --- | --- |
 | `src/gauntlet/world.py` | Mock tools with capability labels (`source:untrusted`, `sink:external`, ...) |
 | `src/gauntlet/scenarios/` | YAML scenarios: task, world, payload, oracles, OWASP mapping |
-| `src/gauntlet/defenses.py` | 14 defenses plus profiles; each says whether it is hard or soft |
+| `src/gauntlet/defenses.py` | Defenses plus profiles; each says whether it is hard or soft |
+| `src/gauntlet/frontier.py` | Exhaustive stack search, Pareto frontier, exact Shapley values |
 | `src/gauntlet/agents.py` | Scripted agents, OpenAI-compatible and Hugging Face backends, local-only guard |
 | `src/gauntlet/oracle.py` | Canary detection through encodings and chunking; naive oracle kept for comparison |
 | `src/gauntlet/stats.py` | Wilson, exact McNemar, cluster bootstrap, power simulation, reproducibility |

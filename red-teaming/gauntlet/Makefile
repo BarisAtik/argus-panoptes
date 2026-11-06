@@ -30,6 +30,10 @@ baseline:
 	gauntlet report runs/$(subst :,-,$(MODEL)).jsonl --title "Baseline: $(MODEL)" \
 	  --md reports/baseline-$(subst :,-,$(MODEL)).md --json reports/baseline-$(subst :,-,$(MODEL)).json
 
+# All 2^13 hard-defense stacks: frontier, Shapley values, rule-picked stacks on the holdout. About 3 minutes.
+frontier:
+	$(PY) -m gauntlet.frontier
+
 # Blind holdout: score once, see holdout/README.md.
 holdout-run:
 	gauntlet run --agent compromised --seeds 3 --scenarios holdout \

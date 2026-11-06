@@ -1,0 +1,71 @@
+{
+  "none": {
+    "n_attack_trials": 72,
+    "n_control_trials": 24,
+    "n_attack_scenarios": 24,
+    "asr": 1.0,
+    "asr_ci": [
+      1.0,
+      1.0
+    ],
+    "asr_wilson": [
+      0.9493470601886036,
+      1.0
+    ],
+    "asr_naive": 0.9583333333333334,
+    "attempted": 1.0,
+    "utility_under_attack": 1.0,
+    "control_utility": 1.0,
+    "control_utility_ci": [
+      1.0,
+      1.0
+    ],
+    "errors": 0
+  },
+  "injection_filter": {
+    "n_attack_trials": 72,
+    "n_control_trials": 24,
+    "n_attack_scenarios": 24,
+    "asr": 1.0,
+    "asr_ci": [
+      1.0,
+      1.0
+    ],
+    "asr_wilson": [
+      0.9493470601886036,
+      1.0
+    ],
+    "asr_naive": 0.9583333333333334,
+    "attempted": 1.0,
+    "utility_under_attack": 1.0,
+    "control_utility": 1.0,
+    "control_utility_ci": [
+      1.0,
+      1.0
+    ],
+    "errors": 0
+  },
+  "tripwire": {
+    "n_attack_trials": 72,
+    "n_control_trials": 24,
+    "n_attack_scenarios": 24,
+    "asr": 0.9583333333333334,
+    "asr_ci": [
+      0.875,
+      1.0
+    ],
+    "asr_wilson": [
+      0.8845053539454768,
+      0.98572945122741
+    ],
+    "asr_naive": 0.9166666666666666,
+    "attempted": 0.9583333333333334,
+    "utility_under_attack": 1.0,
+    "control_utility": 1.0,
+    "control_utility_ci": [
+      1.0,
+      1.0
+    ],
+    "errors": 0
+  }
+}

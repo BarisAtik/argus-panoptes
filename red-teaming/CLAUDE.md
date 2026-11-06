@@ -3,6 +3,10 @@
 A hobby lab on AI agent security. Stay inside this folder. Other folders in the repo are handled
 separately, so never edit them and never rewrite history.
 
+**Work autonomously.** Do not stop to ask questions: make a sensible choice, note it in `PROGRESS.md` and keep
+going. The exceptions are steps that need Baris's own accounts, money or competition submissions. Prepare those and
+list them under "Needs Baris".
+
 ## Ground rules
 
 - Everything runs locally against mocks or against models run on this machine. The harness refuses
@@ -31,6 +35,10 @@ These are what make the work worth anything.
 - `gauntlet/`: `pip install -e ".[dev,llm,agentdojo]"`, then `pytest`. Next is a real model run: `make baseline`.
   After changing a scenario or defense, rerun `make worst-case` and check that the numbers quoted in
   `gauntlet/README.md` and `writeups/README.md` still hold.
+- `gauntlet/`, stack search: `make frontier`. Rerun it after changing a hard defense or a scenario, and update
+  the numbers in `gauntlet/README.md`, `README.md` and `writeups/dev-scores.md`.
+- `tripwire/`: `make test`, then `make fetch experiment robustness final external`. Never train or tune on Gauntlet or
+  mcp-lens data. They are the outside test. Report recall and FPR under the same rewrite, together.
 - `mcp-lens/`: `pip install -e ".[dev]"`, then `pytest`. Do not add regexes to chase a holdout. Next
   is a semantic review step using a local model, evaluated on a fresh holdout.
 - `writeups/`: one section per weakness. Each claim must trace to a report or a test.
@@ -42,6 +50,11 @@ These are what make the work worth anything.
   was available there, so model runs need Baris's machine or a sandbox with those allowed.
 - Starting third-party npm or PyPI MCP servers was refused in that sandbox, so `mcp-lens/scripts/harvest.py`
   has not been run. Reading installed packages is fine.
-- `apt-get update` is needed before `apt-get install r-base-core r-cran-lme4 r-cran-jsonlite`.
+- PyPI's torch is a huge GPU build and very slow here. `conda.anaconda.org` is fast: fetch `micromamba` from conda-forge,
+  then `micromamba create -n rt -c conda-forge python=3.12 "pytorch=*=cpu_generic*" pip scikit-learn` and
+  `-n r r-base r-lme4 r-jsonlite`. Then `pip install -e` the three projects inside `rt`.
+- Host denials from the sandbox proxy are policy. Report them in `PROGRESS.md`, do not route around them, and do not fetch
+  blocked model weights from re-uploads on package registries.
+- Background jobs survive within a run. Two cores: a full `make experiment` plus `make robustness` takes about 30 minutes.
 
 Update `PROGRESS.md` at the end of each session.

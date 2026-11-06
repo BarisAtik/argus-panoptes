@@ -2,7 +2,8 @@
 
 The Gauntlet scenarios and the mcp-lens corpora are never training data, so they
 stay outside tests. Weights go under data/ and are not committed; `make final`
-rebuilds them in about a minute.
+rebuilds them in about a minute. Text is canonicalised before scoring, the variant the
+rewriting experiment favoured, and that choice was made on third-party data only.
 """
 
 from __future__ import annotations
@@ -17,6 +18,7 @@ import torch
 
 from . import metrics as M
 from .dataset import MAX_CHARS, build, split_groups, split_list
+from .evasion import canon
 from .experiment import TARGET_FPR
 from .model import ByteCNN, fit, fit_temperature, logits
 from .sources import collect
@@ -40,6 +42,7 @@ class Detector:
         windows, owner = [], []
         for i, t in enumerate(texts):
             step = MAX_CHARS // 2
+            t = canon(t)
             for s in range(0, max(1, len(t) - step), step):
                 windows.append(t[s : s + MAX_CHARS])
                 owner.append(i)
@@ -62,8 +65,8 @@ def main(argv: list[str] | None = None) -> int:
     ptr, pva = split_groups(pos, 0.15, rng)
     ntr, nva = split_list(neg, 0.15, rng)
     train, val = build(ptr, ntr, a.n, rng), build(pva, nva, a.n // 4, rng)
-    model = fit([d.text for d in train], [d.label for d in train], seed=0)
-    z = logits(model, [d.text for d in val])
+    model = fit([canon(d.text) for d in train], [d.label for d in train], seed=0)
+    z = logits(model, [canon(d.text) for d in val])
     y = np.array([d.label for d in val])
     blob = {"state": model.state_dict(), "temperature": fit_temperature(z, y),
             "threshold": M.threshold_at_fpr(z[y == 0], TARGET_FPR)}

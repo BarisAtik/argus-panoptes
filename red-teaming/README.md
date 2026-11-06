@@ -11,24 +11,31 @@ Anything a platform asks to keep private stays private.
 
 | Project | What it is | Status |
 | --- | --- | --- |
-| [`gauntlet/`](gauntlet/) | Evaluation harness: 39 scenarios, 14 defenses, MCP transport, AgentDojo bridge, statistics, reports | Working, tested. Worst-case runs done; real model run still to do |
+| [`gauntlet/`](gauntlet/) | Evaluation harness: 41 scenarios plus a blind holdout of 32, 17 defenses, MCP transport, AgentDojo bridge, task router, exhaustive stack search, statistics, reports | Working, tested. Worst-case runs done; real model run still to do |
 | [`mcp-lens/`](mcp-lens/) | Static scanner for MCP tool manifests, with SARIF output and pinning | Working, tested. Evaluation shows its limits; semantic review to do |
-| [`writeups/`](writeups/README.md) | What each weakness class is and how to mitigate it, tied to evidence | First version done |
+| [`tripwire/`](tripwire/) | PyTorch prompt-injection detector, built to measure how such detectors fail: source shift, rewriting, calibration | Working, tested, full results in |
+| [`writeups/`](writeups/README.md) | What each weakness class is and how to mitigate it, tied to evidence, plus a [blog-style post](writeups/dev-scores.md) | Updated, post ready to publish |
 | [`arena-notebook/`](arena-notebook/) | Template and rules for competition notes | Ready, no entries yet |
-| [`programs.md`](programs.md) | Current competitions and bounties, with a note on how realistic each is | Checked Nov 2026 |
+| [`programs.md`](programs.md) | Current competitions and bounties, with a note on how realistic each is | Checked 6 Nov 2026 |
 
-## Three findings so far
+## Four findings so far
 
 1. **Rules on actions beat filters on text.** With an agent assumed fully hijacked, a phrase filter stops
-   2 of 28 scenarios, an egress allowlist stops 15 and layered policies stop 23. On the independent
-   AgentDojo benchmark, a tool allowlist plus a contact-book check takes attack success from 100% to
-   4.4% and keeps 96.9% of benign tasks. No language model was involved in either figure, which is the
-   point: these controls hold whatever the model does.
-2. **A scanner's dev score means little.** mcp-lens scored 100% on dev and 5–8% on fresh, adversarial
-   holdouts, twice in a row, after improvements that looked successful.
-3. **Evaluators have bugs too.** A naive canary check would have called 6 of 84 successful attacks
+   2 of 28 scenarios, an egress allowlist stops 15 and layered policies stop 25. A blind holdout agreed:
+   22 of 24. On the independent AgentDojo benchmark, a gold tool list plus a contact-book check takes
+   attack success from 100% to 4.4% and keeps 96.9% of benign tasks. A realistic task router gets 11.3%
+   and 93.8%. No language model was involved in any of these, which is the point: these controls hold
+   whatever the model does.
+2. **Security has a bill.** That same layered stack passes only 23% of the hard control tasks. Running all
+   8,192 defense subsets showed two defenses reach 29% attack success with 92% of controls passing. Stacks
+   picked on dev then lost up to 13 points on the holdout.
+3. **A detector's score depends on who wrote the test.** Tripwire gets 93% recall at 1% FPR on held-out
+   templates, 58% at 11% FPR on a held-out publisher, and stops 2 of 28 scenarios in the Gauntlet, no better
+   than the regex. mcp-lens scored 100% on dev and 5–8% on fresh, adversarial holdouts, twice.
+4. **Evaluators have bugs too.** A naive canary check would have called 6 of 84 successful attacks
    stopped, and a benchmark's trace-based checks counted blocked calls as successes until that was
-   handled. Neither shows up unless you test the evaluation itself.
+   handled. Recall under rewriting also misled: a detector "caught" 74% of base64 payloads and flagged 87%
+   of base64 benign text.
 
 ## Challenges
 

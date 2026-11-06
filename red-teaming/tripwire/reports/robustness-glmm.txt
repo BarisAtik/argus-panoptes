@@ -1,0 +1,38 @@
+Recall pooled over templates (documents weighted equally)
+                              clean  seen unseen
+byte_cnn augmented            0.777 0.997  0.515
+byte_cnn augmented+normalised 0.868 0.908  0.626
+byte_cnn canonical            0.924 0.923  0.589
+byte_cnn normalised           0.931 0.924  0.683
+byte_cnn plain                0.929 0.723  0.562
+tfidf_lr augmented            0.944 0.969  0.232
+tfidf_lr augmented+normalised 0.929 0.928  0.436
+tfidf_lr canonical            0.927 0.927  0.436
+tfidf_lr normalised           0.927 0.927  0.436
+tfidf_lr plain                0.928 0.590  0.214
+
+glmer: caught ~ detector + variant * kind + (1 | template) + (1 | transform)
+                                       Estimate Std. Error odds_ratio     p
+(Intercept)                               2.799      1.125     16.425 0.013
+detectortfidf_lr                         -1.172      0.018      0.310 0.000
+variantnormalised                         0.015      0.120      1.015 0.904
+variantcanonical                         -0.064      0.119      0.938 0.592
+variantaugmented                         -1.063      0.105      0.345 0.000
+variantaugmented+normalised              -0.553      0.111      0.575 0.000
+kindseen                                 -2.608      1.263      0.074 0.039
+kindunseen                               -4.173      1.222      0.015 0.001
+variantnormalised:kindseen                2.709      0.133     15.018 0.000
+variantcanonical:kindseen                 2.773      0.132     16.013 0.000
+variantaugmented:kindseen                 5.959      0.149    387.118 0.000
+variantaugmented+normalised:kindseen      3.127      0.124     22.802 0.000
+variantnormalised:kindunseen              1.098      0.125      2.999 0.000
+variantcanonical:kindunseen               0.877      0.123      2.404 0.000
+variantaugmented:kindunseen               0.962      0.111      2.616 0.000
+variantaugmented+normalised:kindunseen    1.484      0.116      4.412 0.000
+
+Random-effect SDs on the logit scale
+ template transform 
+     1.93      1.11 
+
+Terms are not corrected for multiple comparisons, and with only four unseen rewrites the
+transform effect is poorly estimated. Treat the sign and rough size as the finding.
