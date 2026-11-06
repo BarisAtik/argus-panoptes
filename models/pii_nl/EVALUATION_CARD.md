@@ -30,7 +30,7 @@ that passes a format check can coincide with a real one by chance.
 | `spacy_sm`, `spacy_md`, `spacy_lg` | Patterns plus the spaCy Dutch pipeline |
 | `deduce` | DEDUCE 3, all annotations |
 | `rules` | Tuned on dev: extended patterns and context rules, no statistical model |
-| `rules_lg` | `rules` plus `spacy_lg` |
+| `rules_lg` | `rules` plus `spacy_lg`, with names propagated through the document |
 
 ## Metrics, fixed in advance
 
@@ -61,3 +61,26 @@ that passes a format check can coincide with a real one by chance.
 - Both template authors are language models, so the register styles are imitations.
 - Name lists are short and hand-written, shared with `ner_nl`.
 - Transcript style here is simulated, with idealised spelled-out digits.
+
+## Results, first scoring of test (2026-11-06)
+
+Rules were frozen in commit `cf0404a` before test was read or scored. Full tables:
+[test](../results/pii_nl/test.md), [dev](../results/pii_nl/dev.md). 36 templates, 5 traditions, 8
+repeats, 6120 values. Intervals are 95% cluster t over templates.
+
+| # | Prediction | Outcome | Verdict |
+| --- | --- | --- | --- |
+| 1 | `spacy_lg` leaks at least 15% of persons | 30.4% (21.7 to 39.1) | Confirmed |
+| 2 | Transcript at least twice brief | 64.8% against 16.7%, 3.9 times | Confirmed |
+| 3 | At least 80% of spoken phone numbers and BSNs leak | 100% of 80 values | Confirmed, but only 2 templates hold such values |
+| 4 | A tradition at least 5 points above Dutch | Hindustani +31.1 (23.2 to 39.0), Turkish +24.7, Moroccan +16.9, Polish +7.9 | Confirmed |
+| 5 | DEDUCE wins in `brief`, `beschikking`; loses in `chat`, `transcript` | Wins 10.4 against 16.7 and 5.8 against 16.3, loses transcript 100 against 64.8, **wins chat** 46.3 against 54.1 | Half right: chat prediction wrong |
+| 6 | `rules_lg` halves all-kinds leak, ordinary masking up by at most 2 points | 34.8% to 7.5%; masking 1.2% to 3.1% | Confirmed, the masking limit only just |
+| 7 | Test leak at least 1.5 times dev | 7.5% against 3.2%, 2.3 times | Confirmed |
+| 8 | Template interval at least 1.5 times document interval | 17.4 against 4.1 points, 4.3 times | Confirmed |
+
+**Reading this honestly.** `rules_lg` still leaks 12.9% of persons (3.9 to 21.8), and 32.5% in chat
+and 41.1% in transcripts, which is not good enough to run unreviewed. Nearly all of that is
+lowercase text, where neither casing cues nor the news model help. The tradition gap shrinks with
+rules (Hindustani +10.9, interval -0.5 to 22.2) but this does not show it is gone. Rate estimates
+describe this template set, not any real archive.

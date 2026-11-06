@@ -1,0 +1,275 @@
+{
+  "meta": {
+    "provenance": "real",
+    "created_utc": "2026-11-06T03:12:00+00:00",
+    "git_sha": "cf0404a",
+    "python": "3.13.18",
+    "platform": "Linux-6.18.44-fc-v242-x86_64-with-glibc2.39",
+    "packages": {
+      "spacy": "3.8.18",
+      "deduce": "3.0.6",
+      "nl_core_news_lg": "3.8.0"
+    },
+    "split": "test"
+  },
+  "overall": [
+    {
+      "system": "deduce",
+      "all personal data": "0.276 (0.171 to 0.382)",
+      "persons": "0.285 (0.165 to 0.405)",
+      "ordinary words masked": "0.005 (0.001 to 0.008)",
+      "distractors masked": "0.391 (0.321 to 0.462)"
+    },
+    {
+      "system": "patterns",
+      "all personal data": "0.745 (0.686 to 0.804)",
+      "persons": "1.000 (1.000 to 1.000)",
+      "ordinary words masked": "0.000 (0.000 to 0.000)",
+      "distractors masked": "0.000 (0.000 to 0.000)"
+    },
+    {
+      "system": "rules",
+      "all personal data": "0.132 (0.050 to 0.213)",
+      "persons": "0.244 (0.096 to 0.392)",
+      "ordinary words masked": "0.023 (0.010 to 0.035)",
+      "distractors masked": "0.079 (0.049 to 0.110)"
+    },
+    {
+      "system": "rules_lg",
+      "all personal data": "0.075 (0.025 to 0.124)",
+      "persons": "0.129 (0.039 to 0.218)",
+      "ordinary words masked": "0.031 (0.018 to 0.043)",
+      "distractors masked": "0.111 (0.076 to 0.146)"
+    },
+    {
+      "system": "spacy_lg",
+      "all personal data": "0.348 (0.263 to 0.433)",
+      "persons": "0.304 (0.217 to 0.391)",
+      "ordinary words masked": "0.012 (0.006 to 0.018)",
+      "distractors masked": "0.043 (0.026 to 0.061)"
+    },
+    {
+      "system": "spacy_md",
+      "all personal data": "0.374 (0.291 to 0.458)",
+      "persons": "0.350 (0.272 to 0.428)",
+      "ordinary words masked": "0.024 (0.011 to 0.036)",
+      "distractors masked": "0.094 (0.070 to 0.118)"
+    },
+    {
+      "system": "spacy_sm",
+      "all personal data": "0.500 (0.414 to 0.586)",
+      "persons": "0.523 (0.426 to 0.620)",
+      "ordinary words masked": "0.025 (0.007 to 0.042)",
+      "distractors masked": "0.020 (0.007 to 0.033)"
+    }
+  ],
+  "by_kind": [
+    {
+      "system": "deduce",
+      "PERSOON": "0.285 (0.165 to 0.405)",
+      "ADRES": "0.176 (0.000 to 0.358)",
+      "POSTCODE": "0.250 (0.000 to 1.000)",
+      "TELEFOON": "0.385 (0.218 to 0.553)",
+      "E-MAIL": "0.083 (0.000 to 0.267)",
+      "IBAN": "0.167 (0.000 to 0.414)",
+      "BSN": "0.200 (0.000 to 0.755)",
+      "GEBOORTEDATUM": "0.000 (0.000 to 0.000)",
+      "KENTEKEN": "1.000 (1.000 to 1.000)"
+    },
+    {
+      "system": "patterns",
+      "PERSOON": "1.000 (1.000 to 1.000)",
+      "ADRES": "1.000 (1.000 to 1.000)",
+      "POSTCODE": "0.250 (0.000 to 1.000)",
+      "TELEFOON": "0.083 (0.000 to 0.267)",
+      "E-MAIL": "0.083 (0.000 to 0.267)",
+      "IBAN": "0.167 (0.000 to 0.414)",
+      "BSN": "0.200 (0.000 to 0.755)",
+      "GEBOORTEDATUM": "1.000 (1.000 to 1.000)",
+      "KENTEKEN": "1.000 (1.000 to 1.000)"
+    },
+    {
+      "system": "rules",
+      "PERSOON": "0.244 (0.096 to 0.392)",
+      "ADRES": "0.000 (0.000 to 0.000)",
+      "POSTCODE": "0.000 (0.000 to 0.000)",
+      "TELEFOON": "0.000 (0.000 to 0.000)",
+      "E-MAIL": "0.000 (0.000 to 0.000)",
+      "IBAN": "0.000 (0.000 to 0.000)",
+      "BSN": "0.000 (0.000 to 0.000)",
+      "GEBOORTEDATUM": "0.000 (0.000 to 0.000)",
+      "KENTEKEN": "0.203 (0.000 to 0.519)"
+    },
+    {
+      "system": "rules_lg",
+      "PERSOON": "0.129 (0.039 to 0.218)",
+      "ADRES": "0.000 (0.000 to 0.000)",
+      "POSTCODE": "0.000 (0.000 to 0.000)",
+      "TELEFOON": "0.000 (0.000 to 0.000)",
+      "E-MAIL": "0.000 (0.000 to 0.000)",
+      "IBAN": "0.000 (0.000 to 0.000)",
+      "BSN": "0.000 (0.000 to 0.000)",
+      "GEBOORTEDATUM": "0.000 (0.000 to 0.000)",
+      "KENTEKEN": "0.203 (0.000 to 0.519)"
+    },
+    {
+      "system": "spacy_lg",
+      "PERSOON": "0.304 (0.217 to 0.391)",
+      "ADRES": "0.594 (0.443 to 0.745)",
+      "POSTCODE": "0.250 (0.000 to 1.000)",
+      "TELEFOON": "0.083 (0.000 to 0.267)",
+      "E-MAIL": "0.083 (0.000 to 0.267)",
+      "IBAN": "0.167 (0.000 to 0.414)",
+      "BSN": "0.200 (0.000 to 0.755)",
+      "GEBOORTEDATUM": "0.986 (0.951 to 1.000)",
+      "KENTEKEN": "0.891 (0.760 to 1.000)"
+    },
+    {
+      "system": "spacy_md",
+      "PERSOON": "0.350 (0.272 to 0.428)",
+      "ADRES": "0.653 (0.530 to 0.776)",
+      "POSTCODE": "0.250 (0.000 to 1.000)",
+      "TELEFOON": "0.083 (0.000 to 0.267)",
+      "E-MAIL": "0.083 (0.000 to 0.267)",
+      "IBAN": "0.167 (0.000 to 0.414)",
+      "BSN": "0.200 (0.000 to 0.755)",
+      "GEBOORTEDATUM": "0.975 (0.931 to 1.000)",
+      "KENTEKEN": "0.844 (0.688 to 0.999)"
+    },
+    {
+      "system": "spacy_sm",
+      "PERSOON": "0.523 (0.426 to 0.620)",
+      "ADRES": "0.956 (0.911 to 1.000)",
+      "POSTCODE": "0.250 (0.000 to 1.000)",
+      "TELEFOON": "0.083 (0.000 to 0.267)",
+      "E-MAIL": "0.083 (0.000 to 0.267)",
+      "IBAN": "0.167 (0.000 to 0.414)",
+      "BSN": "0.200 (0.000 to 0.755)",
+      "GEBOORTEDATUM": "0.982 (0.938 to 1.000)",
+      "KENTEKEN": "0.953 (0.875 to 1.000)"
+    }
+  ],
+  "person_by_register": [
+    {
+      "system": "deduce",
+      "brief": "0.104 (0.000 to 0.246)",
+      "mail": "0.060 (0.000 to 0.150)",
+      "chat": "0.463 (0.363 to 0.562)",
+      "transcript": "1.000 (1.000 to 1.000)",
+      "beschikking": "0.058 (0.000 to 0.163)",
+      "notitie": "0.110 (0.015 to 0.206)"
+    },
+    {
+      "system": "patterns",
+      "brief": "1.000 (1.000 to 1.000)",
+      "mail": "1.000 (1.000 to 1.000)",
+      "chat": "1.000 (1.000 to 1.000)",
+      "transcript": "1.000 (1.000 to 1.000)",
+      "beschikking": "1.000 (1.000 to 1.000)",
+      "notitie": "1.000 (1.000 to 1.000)"
+    },
+    {
+      "system": "rules",
+      "brief": "0.015 (0.000 to 0.031)",
+      "mail": "0.062 (0.000 to 0.211)",
+      "chat": "0.525 (0.020 to 1.000)",
+      "transcript": "0.736 (0.344 to 1.000)",
+      "beschikking": "0.128 (0.000 to 0.339)",
+      "notitie": "0.048 (0.018 to 0.078)"
+    },
+    {
+      "system": "rules_lg",
+      "brief": "0.002 (0.000 to 0.007)",
+      "mail": "0.018 (0.000 to 0.063)",
+      "chat": "0.325 (0.001 to 0.649)",
+      "transcript": "0.411 (0.180 to 0.643)",
+      "beschikking": "0.018 (0.000 to 0.048)",
+      "notitie": "0.017 (0.000 to 0.041)"
+    },
+    {
+      "system": "spacy_lg",
+      "brief": "0.167 (0.086 to 0.247)",
+      "mail": "0.181 (0.111 to 0.251)",
+      "chat": "0.541 (0.352 to 0.730)",
+      "transcript": "0.648 (0.507 to 0.788)",
+      "beschikking": "0.163 (0.077 to 0.248)",
+      "notitie": "0.144 (0.085 to 0.202)"
+    },
+    {
+      "system": "spacy_md",
+      "brief": "0.281 (0.133 to 0.430)",
+      "mail": "0.241 (0.144 to 0.338)",
+      "chat": "0.466 (0.352 to 0.580)",
+      "transcript": "0.782 (0.692 to 0.871)",
+      "beschikking": "0.188 (0.059 to 0.316)",
+      "notitie": "0.177 (0.104 to 0.250)"
+    },
+    {
+      "system": "spacy_sm",
+      "brief": "0.465 (0.312 to 0.617)",
+      "mail": "0.393 (0.291 to 0.494)",
+      "chat": "0.729 (0.575 to 0.882)",
+      "transcript": "0.939 (0.834 to 1.000)",
+      "beschikking": "0.343 (0.188 to 0.497)",
+      "notitie": "0.296 (0.165 to 0.427)"
+    }
+  ],
+  "person_by_tradition": [
+    {
+      "system": "deduce",
+      "dutch": "0.230 (0.105 to 0.355)",
+      "turkish": "0.262 (0.136 to 0.387)",
+      "moroccan": "0.273 (0.149 to 0.397)",
+      "polish": "0.396 (0.274 to 0.519)",
+      "hindustani": "0.263 (0.144 to 0.383)"
+    },
+    {
+      "system": "patterns",
+      "dutch": "1.000 (1.000 to 1.000)",
+      "turkish": "1.000 (1.000 to 1.000)",
+      "moroccan": "1.000 (1.000 to 1.000)",
+      "polish": "1.000 (1.000 to 1.000)",
+      "hindustani": "1.000 (1.000 to 1.000)"
+    },
+    {
+      "system": "rules",
+      "dutch": "0.317 (0.180 to 0.455)",
+      "turkish": "0.225 (0.074 to 0.377)",
+      "moroccan": "0.225 (0.074 to 0.377)",
+      "polish": "0.225 (0.074 to 0.377)",
+      "hindustani": "0.225 (0.074 to 0.377)"
+    },
+    {
+      "system": "rules_lg",
+      "dutch": "0.067 (0.031 to 0.103)",
+      "turkish": "0.156 (0.040 to 0.272)",
+      "moroccan": "0.140 (0.022 to 0.257)",
+      "polish": "0.104 (0.029 to 0.178)",
+      "hindustani": "0.176 (0.047 to 0.305)"
+    },
+    {
+      "system": "spacy_lg",
+      "dutch": "0.143 (0.079 to 0.207)",
+      "turkish": "0.390 (0.290 to 0.490)",
+      "moroccan": "0.312 (0.203 to 0.422)",
+      "polish": "0.222 (0.122 to 0.322)",
+      "hindustani": "0.454 (0.354 to 0.554)"
+    },
+    {
+      "system": "spacy_md",
+      "dutch": "0.229 (0.142 to 0.315)",
+      "turkish": "0.446 (0.358 to 0.534)",
+      "moroccan": "0.306 (0.209 to 0.403)",
+      "polish": "0.293 (0.210 to 0.376)",
+      "hindustani": "0.477 (0.395 to 0.559)"
+    },
+    {
+      "system": "spacy_sm",
+      "dutch": "0.528 (0.439 to 0.617)",
+      "turkish": "0.513 (0.403 to 0.624)",
+      "moroccan": "0.497 (0.387 to 0.607)",
+      "polish": "0.536 (0.432 to 0.640)",
+      "hindustani": "0.541 (0.440 to 0.642)"
+    }
+  ]
+}
