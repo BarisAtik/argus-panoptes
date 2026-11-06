@@ -29,6 +29,8 @@ def main(argv: list[str] | None = None) -> int:
     h = sub.add_parser("holdout", help="score the blind holdout. Once.")
     h.add_argument("--path", default="holdout/05_blind.yaml")
     h.add_argument("--out", default="reports")
+    inf = sub.add_parser("inference", help="gateway inference and typed forwards, H10 to H18")
+    inf.add_argument("--out", default="reports")
     li = sub.add_parser("lint", help="check Agent Card JSON files")
     li.add_argument("files", nargs="+")
     li.add_argument("--sarif")
@@ -62,6 +64,10 @@ def main(argv: list[str] | None = None) -> int:
     elif a.cmd == "holdout":
         from .holdout import score
         print(score(Path(a.path), Path(a.out)))
+    elif a.cmd == "inference":
+        from .inference import run as go
+        s = go(Path(a.out))
+        print(json.dumps({k: v["verdict"] for k, v in s["hypotheses"].items()}, indent=1))
     elif a.cmd == "lint":
         from .lint import lint_file, sarif
         code = 0

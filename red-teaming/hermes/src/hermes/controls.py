@@ -140,11 +140,26 @@ class TypedDeclass(Control):
         return {U, P} if schema.get("declass_private") else {U}
 
 
+class TypedForward(Control):
+    """The same for forwards: a message matching the receiver's declared input type may drop labels. Types the
+    gateway has registered, so a sender cannot claim one. A message that does not match keeps its labels."""
+    name = "typed_forward"
+
+    @staticmethod
+    def drops(msg: Msg, m: Mesh) -> set[str]:
+        schema = m.sc.agents[msg.receiver].inputs.get(msg.skill)
+        if not schema or not _schema_ok(schema, msg.text):
+            return set()
+        return {U, P} if schema.get("declass_private") else {U}
+
+
 class Taint(Control):
-    """Labels and one sink rule. The three versions differ only in who holds the labels.
+    """Labels and one sink rule. The versions differ only in who holds the labels.
 
     inband   in A2A message metadata, attached by each runtime. A rogue peer simply omits them.
     lineage  at the gateway, per context, following parent links. A rogue peer can break the links.
+    inferred as lineage, plus: anything an agent sends while requests to it are open takes the labels of all of them.
+             That needs only the sender's identity. A rogue peer can wait until its request has closed.
     hwm      at the gateway, per agent and per stored key, for the whole session. Links do not matter.
     """
 
@@ -154,7 +169,7 @@ class Taint(Control):
     def _get(self, run: Run, m: Mesh) -> set[str]:
         if self.mode == "inband":
             return run.labels
-        if self.mode == "lineage":
+        if self.mode in ("lineage", "inferred"):
             return m.ctx_labels.setdefault(run.msg.context, set())
         return m.agent_labels.setdefault(run.agent, set())
 
@@ -173,10 +188,19 @@ class Taint(Control):
                 labels |= m.store_labels.get(key, set())
 
     def on_send(self, run, msg, m):
+        drop = set()
+        if any(isinstance(c, TypedForward) for c in m.controls):
+            drop = TypedForward.drops(msg, m)
         if self.mode == "inband" and not run.rogue:
-            msg.meta["labels"] = sorted(run.labels)
+            msg.meta["labels"] = sorted(run.labels - drop)
         elif self.mode == "hwm":
-            m.agent_labels.setdefault(msg.receiver, set()).update(m.agent_labels.get(msg.sender, set()))
+            m.agent_labels.setdefault(msg.receiver, set()).update(m.agent_labels.get(msg.sender, set()) - drop)
+        elif self.mode in ("lineage", "inferred"):
+            labels = m.ctx_labels.setdefault(msg.context, set())
+            if self.mode == "inferred":
+                for ctx in m.open_requests.get(msg.sender, []):
+                    labels |= m.ctx_labels.get(ctx, set())
+            labels -= drop
         return None
 
     def on_outgoing_reply(self, run, reply, m):
@@ -189,7 +213,7 @@ class Taint(Control):
             drop = TypedDeclass.drops(msg, reply, m)
         if self.mode == "inband":
             run.labels |= set(reply.meta.get("labels", [])) - drop
-        elif self.mode == "lineage":
+        elif self.mode in ("lineage", "inferred"):
             self._get(run, m).update(m.ctx_labels.get(msg.context, set()) - drop)
         else:
             self._get(run, m).update(m.agent_labels.get(msg.receiver, set()) - drop)
@@ -245,7 +269,8 @@ SINGLE = {
     "agent_egress": AgentEgress, "agent_dlp": AgentDLP, "agent_trifecta": AgentTrifecta,
     "trifecta_strict": TrifectaStrict, "peer_acl": PeerACL, "caps": Caps, "typed_declass": TypedDeclass,
     "taint_inband": lambda: Taint("inband"), "taint_lineage": lambda: Taint("lineage"),
-    "taint_hwm": lambda: Taint("hwm"), "card_sig": CardSig, "card_pin": CardPin,
+    "taint_hwm": lambda: Taint("hwm"), "taint_inferred": lambda: Taint("inferred"),
+    "typed_forward": TypedForward, "card_sig": CardSig, "card_pin": CardPin,
     "human_gate": HumanGate, "push_guard": PushGuard,
 }
 STACKS: dict[str, list[str]] = {
@@ -258,8 +283,15 @@ STACKS: dict[str, list[str]] = {
              "taint_hwm", "typed_declass"],
     "full_lineage": ["agent_egress", "agent_dlp", "peer_acl", "caps", "card_sig", "card_pin", "push_guard",
                      "human_gate", "taint_lineage", "typed_declass"],
+    "inferred_typed": ["taint_inferred", "typed_declass"],
+    "full_inferred": ["agent_egress", "agent_dlp", "peer_acl", "caps", "card_sig", "card_pin", "push_guard",
+                      "human_gate", "taint_inferred", "typed_declass"],
     **{k: [k] for k in SINGLE},
 }
+for _base, _name in (("hwm_typed", "hwm_typed_fwd"), ("lineage_typed", "lineage_typed_fwd"),
+                     ("inferred_typed", "inferred_typed_fwd"), ("full", "full_fwd"),
+                     ("full_lineage", "full_lineage_fwd"), ("full_inferred", "full_inferred_fwd")):
+    STACKS[_name] = [*STACKS[_base], "typed_forward"]
 
 
 def build(name: str) -> list[Control]:

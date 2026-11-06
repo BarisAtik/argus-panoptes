@@ -21,7 +21,7 @@ hermes = "hermes.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-hermes = ["scenarios/*.yaml"]
+hermes = ["scenarios/*.yaml", "scenarios_inference/*.yaml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

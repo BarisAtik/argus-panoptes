@@ -11,6 +11,7 @@ Trust model, which is the point of the experiment:
 
 from __future__ import annotations
 
+import asyncio
 import itertools
 import random
 import secrets
@@ -68,6 +69,9 @@ class Mesh:
         self.ctx_labels: dict[str, set[str]] = {}
         self.agent_labels: dict[str, set[str]] = {}
         self.store_labels: dict[str, set[str]] = {}
+        self.open_requests: dict[str, list[str]] = {}  # agent -> contexts of requests to it with no reply yet
+        self.deferred: list[tuple[Run, list[dict]]] = []  # a rogue's steps, due once its request has closed
+        self.overlapping = 0  # above zero, requests take turns step by step, so they are open at the same time
         self.asks = 0
         self.fired: set[tuple[int, str]] = set()
         self.discoveries: dict[str, int] = {}
@@ -116,6 +120,7 @@ class Mesh:
         for c in self.controls:
             c.on_task(self, meta)
         reply = await self.transport.deliver(Msg("user", t.entry, t.skill, t.input or t.text, ctx, meta))
+        await self._drain()
         self.finals.append(reply.text)
         return reply.text
 
@@ -133,10 +138,16 @@ class Mesh:
         queue = [dict(s) for s in a.skills[msg.skill]]
         self._see(run, queue, msg.text)
         guard = 0
-        while queue and guard < 5000:
-            guard += 1
-            step = queue.pop(0)
-            await self._step(run, step, queue)
+        self.open_requests.setdefault(msg.receiver, []).append(msg.context)
+        try:
+            while queue and guard < 5000:
+                guard += 1
+                if self.overlapping:
+                    await asyncio.sleep(0)
+                step = queue.pop(0)
+                await self._step(run, step, queue)
+        finally:
+            self.open_requests[msg.receiver].remove(msg.context)
         reply = Reply(run.final)
         if not rogue:
             for c in self.controls:
@@ -145,6 +156,13 @@ class Mesh:
         if push:
             await self._tool(run, "push_notify", {"url": push, "body": reply.text}, None, queue)
         return reply
+
+    async def _drain(self) -> None:
+        """Run what a rogue put off. Only called once its request has closed."""
+        while self.deferred:
+            run, queue = self.deferred.pop(0)
+            while queue:
+                await self._step(run, queue.pop(0), queue)
 
     def _see(self, run: Run, queue: list[dict], text: str) -> None:
         marker = self.sc.marker
@@ -175,6 +193,18 @@ class Mesh:
                 queue.clear()
         elif "let" in step:
             run.env[step["as"]] = render(step["let"], run.env)
+        elif "defer" in step:
+            steps = [dict(s) for s in step["defer"]]
+            if run.rogue:
+                self.deferred.append((run, steps))
+            else:  # an honest runtime has no timers
+                queue[:0] = steps
+        elif "parallel" in step:
+            self.overlapping += 1
+            try:
+                await asyncio.gather(*(self._step(run, dict(s), queue) for s in step["parallel"]))
+            finally:
+                self.overlapping -= 1
         elif "prompt_user" in step:
             text = render(step["prompt_user"], run.env)
             verdict = next((r for c in self.controls if (r := c.on_prompt(run, text, self))), None)
@@ -239,6 +269,7 @@ class Mesh:
             reply = await self.transport.deliver(msg)
             for c in self.controls:
                 reply = c.on_reply(run, msg, reply, self) or reply
+            await self._drain()
             out = reply.text
         if var:
             run.env[var] = out

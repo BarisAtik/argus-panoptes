@@ -11,7 +11,16 @@ import yaml
 
 from .core import TOOLS
 
-STEP_KINDS = {"call", "ask", "reply", "discover", "prompt_user", "let"}
+STEP_KINDS = {"call", "ask", "reply", "discover", "prompt_user", "let", "defer", "parallel"}
+
+
+def flat(steps: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Steps, with those nested in `defer` and `parallel` spelled out."""
+    out = []
+    for st in steps:
+        out.append(st)
+        out += flat(st.get("defer") or st.get("parallel") or [])
+    return out
 
 
 @dataclass
@@ -29,6 +38,7 @@ class AgentDef:
     tools: list[str] = field(default_factory=list)
     skills: dict[str, list[dict[str, Any]]] = field(default_factory=dict)
     outputs: dict[str, dict[str, Any]] = field(default_factory=dict)
+    inputs: dict[str, dict[str, Any]] = field(default_factory=dict)
     runtime: str = "honest"  # honest | rogue
 
 
@@ -58,7 +68,7 @@ class Scenario:
         edges = set()
         for a in self.agents.values():
             for steps in a.skills.values():
-                for st in steps:
+                for st in flat(steps):
                     if "ask" in st:
                         edges.add((a.name, st["ask"], st.get("skill", "work")))
                     if "discover" in st:  # a routed call is declared only towards registered agents
@@ -74,7 +84,7 @@ class Scenario:
             plans = (self.attack or {}).get("plans", {})
             mine = [p for k, p in plans.items() if k.split("@")[0] == a.name]
             for steps in [*a.skills.values(), *mine]:
-                for st in steps:
+                for st in flat(steps):
                     if not STEP_KINDS & set(st):
                         raise ValueError(f"{self.id}: bad step {st}")
                     peer = st.get("ask")
@@ -90,15 +100,17 @@ class Scenario:
 
 
 def _agent(name: str, raw: dict[str, Any]) -> AgentDef:
-    skills, outputs = {}, {}
+    skills, outputs, inputs = {}, {}, {}
     for skill, body in (raw.get("skills") or {}).items():
         if isinstance(body, dict):
             skills[skill] = body.get("steps") or []
             if body.get("output"):
                 outputs[skill] = body["output"]
+            if body.get("input"):
+                inputs[skill] = body["input"]
         else:
             skills[skill] = body or []
-    return AgentDef(name, raw.get("tools") or [], skills, outputs, raw.get("runtime", "honest"))
+    return AgentDef(name, raw.get("tools") or [], skills, outputs, inputs, raw.get("runtime", "honest"))
 
 
 def parse(raw: dict[str, Any]) -> Scenario:

@@ -40,6 +40,9 @@ Everything is local: tools are in-memory mocks, secrets are fake canaries, and a
         amount:                   # long form: a declared output type
           output: {int: [1, 500]} # or {enum: [green, red]}. Add declass_private: true if the value may be public
           steps: [{reply: "120"}]
+        pay:                      # `input` declares the type of incoming text, same form as `output`
+          input: {int: [1, 500]}
+          steps: [{call: transfer, args: {account: ACCT-ACME, amount: "{{input}}", memo: invoice}}]
   cards:                          # optional, used by `discover`
     - {agent: mailer, capability: email, description: Sends mail., pinned: true, priority: 1}
   tasks:                          # one session, run in order. Each task starts a new context
@@ -64,6 +67,8 @@ Everything is local: tools are in-memory mocks, secrets are fake canaries, and a
 | `{reply: text, stop: true}` | Set the reply. `stop` ends the skill now |
 | `{let: text, as: var}` | Set a variable |
 | `{prompt_user: text}` | A remote agent asks the human something, as A2A `input-required` does |
+| `{defer: [steps]}` | Rogue runtimes only: run these right after the current request has closed, in the same task. An honest runtime has no timers and runs them in line |
+| `{parallel: [steps]}` | Run these at the same time. Requests take turns step by step, so they are open together. Direct transport only |
 
 Templates use `{{var}}` with filters: `b64`, `rot13`, `words` (hex digits as tree names), `head`, `tail`,
 `after:TAG` (text after TAG). `input` holds the incoming text and `out` starts equal to it.
