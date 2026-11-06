@@ -14,11 +14,12 @@ Anything a platform asks to keep private stays private.
 | [`gauntlet/`](gauntlet/) | Evaluation harness: 41 scenarios plus a blind holdout of 32, 17 defenses, MCP transport, AgentDojo bridge, task router, exhaustive stack search, statistics, reports | Working, tested. Worst-case runs done; real model run still to do |
 | [`mcp-lens/`](mcp-lens/) | Static scanner for MCP tool manifests, with SARIF output and pinning | Working, tested. Evaluation shows its limits; semantic review to do |
 | [`tripwire/`](tripwire/) | PyTorch prompt-injection detector, built to measure how such detectors fail: source shift, rewriting, calibration | Working, tested, full results in |
-| [`writeups/`](writeups/README.md) | What each weakness class is and how to mitigate it, tied to evidence, plus a [blog-style post](writeups/dev-scores.md) | Updated, post ready to publish |
+| [`hermes/`](hermes/) | A2A trust lab: real SDK transport, 782-cell factorial, 17 protocol-surface attacks, capabilities, three label schemes, 4,096-stack frontier, card linter | Working, tested. Pre-registered, benign holdout scored; attack holdout not done, no model yet |
+| [`writeups/`](writeups/README.md) | What each weakness class is and how to mitigate it, tied to evidence, plus posts on [dev scores](writeups/dev-scores.md) and the [split trifecta](writeups/split-trifecta.md) | Updated, posts ready to read |
 | [`arena-notebook/`](arena-notebook/) | Template and rules for competition notes | Ready, no entries yet |
 | [`programs.md`](programs.md) | Current competitions and bounties, with a note on how realistic each is | Checked 6 Nov 2026 |
 
-## Four findings so far
+## Five findings so far
 
 1. **Rules on actions beat filters on text.** With an agent assumed fully hijacked, a phrase filter stops
    2 of 28 scenarios, an egress allowlist stops 15 and layered policies stop 25. A blind holdout agreed:
@@ -36,6 +37,11 @@ Anything a platform asks to keep private stays private.
    stopped, and a benchmark's trace-based checks counted blocked calls as successes until that was
    handled. Recall under rewriting also misled: a detector "caught" 74% of base64 payloads and flagged 87%
    of base64 benign text.
+
+5. **Single-agent rules stop at the first hop.** A trifecta rule stops every direct one-agent exfiltration and none of 748
+   cells once the legs sit in different agents. One rogue relay beats labels in metadata and gateway context links,
+   102 of 102. Per-agent marks hold, and cost most of the ordinary work. On tasks a separate session wrote blind, a stack
+   that kept 98.6% of my own tasks passed 9 of 16.
 
 ## Challenges
 

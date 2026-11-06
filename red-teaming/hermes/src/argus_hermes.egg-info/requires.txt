@@ -1,9 +1,0 @@
-pyyaml>=6
-a2a-sdk[http-server]<2,>=1.3
-cryptography>=43
-pyjwt>=2.9
-httpx>=0.27
-uvicorn>=0.30
-
-[dev]
-pytest>=8

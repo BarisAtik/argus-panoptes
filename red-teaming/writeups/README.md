@@ -105,6 +105,9 @@ approved this" cross agent boundaries with no evidence attached.
 - **Evidence:** both scenarios fall to `egress` and to `provenance`, neither of which cares who said what.
 - **Mitigate:** authenticate agents, pass signed capabilities instead of claims, and never let
   authorisation travel as text.
+- **Measured in [Hermes](../hermes/README.md):** a per-agent trifecta rule stops 0 of 748 attack cells once the three legs
+  sit in different agents. Labels in metadata or gateway context links fail all 102 rogue-relay cells; per-agent
+  marks hold them, at a heavy cost in ordinary work. See also [the post](split-trifecta.md).
 
 ## Resource abuse
 
@@ -137,6 +140,22 @@ passed `contacts` and `provenance` until the tool allowlist removed them. See
 There is a methodology lesson there too. Some of AgentDojo's checks read the call trace, which is sound
 in its own setup, but behind a policy a blocked call then looks like a successful attack. The first run
 reported 8.1% instead of 4.4%. An evaluator has to know the difference between requested and executed.
+
+## Protocol surface (A2A)
+
+The discovery and delegation features themselves. All from [Hermes](../hermes/README.md), scripted worst case, dev set.
+
+- **Card poisoning and shadowing:** a signature proves who wrote a card. `card_sig` passes a signed liar. Pinning stops it,
+  and blocks honest updates and new agents too. **Mitigate:** a registered capability map, card text treated as data.
+- **Session smuggling:** a peer turns hostile on a later turn. Only destination controls caught it, since the
+  message itself looks normal. **Mitigate:** capabilities bound to the task.
+- **Confused deputy:** a peer map stops lateral requests. Along a declared edge, on a task that really pays, only labels help.
+- **Push callbacks:** a caller can choose where results go. **Mitigate:** callback URLs must come from the user.
+- **`input-required`:** a remote agent can speak to the human. **Mitigate:** quote and attribute it, never present it as
+  the assistant's own words. This changes what a person sees, so it needs a real user study to measure.
+- **Typed declassification:** types cap a leak at `calls × log2|T|` bits, and budgets cap the calls. Types do not
+  check meaning: an attacker can pick any value in range.
+- **Unstopped by `full`:** see the [list](../hermes/README.md#nothing-here-stops).
 
 ## Sources
 

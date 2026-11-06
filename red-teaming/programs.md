@@ -1,6 +1,7 @@
 # 💰 Paid programs and competitions
 
-Checked on 6 November 2026. Rules and dates change, so read the official page before acting.
+Checked on 6 November 2026. A later run the same day found nothing new by search and could not re-read the Arena page.
+Rules and dates change, so read the official page before acting.
 Nothing here has been entered; see "Needs Baris" in [PROGRESS.md](PROGRESS.md).
 
 ## Competitions

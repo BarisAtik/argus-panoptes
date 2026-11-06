@@ -41,6 +41,9 @@ These are what make the work worth anything.
   mcp-lens data. They are the outside test. Report recall and FPR under the same rewrite, together.
 - `mcp-lens/`: `pip install -e ".[dev]"`, then `pytest`. Do not add regexes to chase a holdout. Next
   is a semantic review step using a local model, evaluated on a fresh holdout.
+- `hermes/`: `make install test experiment`, `make frontier` after changing a control or scenario. Controls are frozen at
+  `535f33d` for the benign holdout, which is now spent. `PREREGISTRATION.md` is never edited, only added to. The first
+  blind attack-set author was stopped by a safety check: do not retry, reword or re-delegate that content. Baris decides.
 - `writeups/`: one section per weakness. Each claim must trace to a report or a test.
 - `programs.md`: re-verify dates before relying on them. Sources go in line.
 
@@ -56,5 +59,8 @@ These are what make the work worth anything.
 - Host denials from the sandbox proxy are policy. Report them in `PROGRESS.md`, do not route around them, and do not fetch
   blocked model weights from re-uploads on package registries.
 - Background jobs survive within a run. Two cores: a full `make experiment` plus `make robustness` takes about 30 minutes.
+
+- `artifacts.elastic.co`, `repo1.maven.org` and `docker.elastic.co` are denied too, and there is no Docker daemon, so
+  Elasticsearch cannot run here.
 
 Update `PROGRESS.md` at the end of each session.
