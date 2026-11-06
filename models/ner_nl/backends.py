@@ -61,18 +61,16 @@ class SpacyNER:
     def __call__(self, sentences: Sequence[Sentence]) -> list[list[str]]:
         from spacy.tokens import Doc
 
-        docs = [Doc(self.nlp.vocab, words=list(s.tokens) or [""]) for s in sentences]
-        out = []
-        for s, doc in zip(sentences, self.nlp.pipe(docs, disable=self.disable, batch_size=256)):
-            if not s.tokens:
-                out.append([])
-                continue
+        filled = [i for i, s in enumerate(sentences) if s.tokens]
+        docs = [Doc(self.nlp.vocab, words=list(sentences[i].tokens)) for i in filled]
+        out: list[list[str]] = [[] for _ in sentences]
+        for i, doc in zip(filled, self.nlp.pipe(docs, disable=self.disable, batch_size=256)):
             spans = [
                 (e.start, e.end, SPACY_TO_CONLL[e.label_])
                 for e in doc.ents
                 if e.label_ in SPACY_TO_CONLL
             ]
-            out.append(spans_to_bio(spans, len(s.tokens)))
+            out[i] = spans_to_bio(spans, len(sentences[i].tokens))
         return out
 
 
@@ -91,6 +89,7 @@ class Deduce:
         "ziekenhuis": "ORG",
         "instelling": "ORG",
         "zorginstelling": "ORG",
+        "straat": "LOC",
     }
 
     def __init__(self, engine=None):

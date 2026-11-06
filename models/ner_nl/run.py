@@ -4,6 +4,8 @@
     python -m ner_nl.run train --seed 0 [--augment 0.5]
     python -m ner_nl.run evaluate
     python -m ner_nl.run names
+    python -m ner_nl.run names_why
+    python -m ner_nl.run baseline_person
     python -m ner_nl.run calibrate
     python -m ner_nl.run review
     python -m ner_nl.run report
@@ -210,6 +212,57 @@ def stage_names(args) -> None:
         writer.writerows(rows)
 
 
+def stage_names_why(args) -> None:
+    """Post hoc: what does spaCy call the names it no longer tags PER, and do they stay hidden?"""
+    from collections import Counter
+
+    from spacy.tokens import Doc
+
+    from .label_map import SPACY_TO_CONLL
+
+    data = splits(args.data_dir)
+    masking = {k for k, v in SPACY_TO_CONLL.items() if v in ("PER", "LOC", "ORG")}
+    rows = []
+    for model in SPACY_MODELS[1:]:
+        ner = SpacyNER(model)
+        for group in NAMES:
+            labels, hidden, total = Counter(), 0, 0
+            for repeat in range(args.repeats):
+                sentences, mentions = swap_names(data["test"], group, seed=repeat)
+                wanted = sorted({m.sentence for m in mentions})
+                docs = {i: Doc(ner.nlp.vocab, words=list(sentences[i].tokens)) for i in wanted}
+                parsed = dict(
+                    zip(wanted, ner.nlp.pipe(docs.values(), disable=ner.disable, batch_size=256))
+                )
+                for m in mentions:
+                    found = parsed[m.sentence].ents
+                    ents = [e for e in found if e.start < m.end and m.start < e.end]
+                    total += 1
+                    hidden += all(
+                        any(e.start <= k < e.end and e.label_ in masking for e in ents)
+                        for k in range(m.start, m.end)
+                    )
+                    labels[ents[0].label_ if ents else "none"] += 1
+            row = {"model": model, "group": group, "fully_masked": hidden / total}
+            top = labels.most_common(4)
+            row["top_labels"] = ", ".join(f"{k} {v / total:.2f}" for k, v in top)
+            rows.append(row)
+            print(row, flush=True)
+    (OUT / "names_why.json").write_text(json.dumps(rows, indent=2))
+
+
+def stage_baseline_person(args) -> None:
+    """Exact PER recall on the original names, as a reference point for the swap."""
+    data = splits(args.data_dir)
+    stored = pickle.loads((OUT / "predictions.pkl").read_bytes())
+    rows = []
+    for name in (*SPACY_MODELS, "deduce", best_seed("own"), best_seed("own_aug")):
+        counted = count_by_doc(data["test"], stored[(name, "test", "clean")], ("PER",))[0]
+        rows.append({"model": name, "original_person_recall": prf(counted)["recall"]})
+    (OUT / "person_baseline.json").write_text(json.dumps(rows, indent=2))
+    print(rows)
+
+
 def _span_records(sentences, confidence):
     conf, correct = [], []
     for s, spans in zip(sentences, confidence):
@@ -299,6 +352,11 @@ def stage_review(args) -> None:
         )
     )
     print(len(items), "candidates")
+
+
+def _maybe(name: str):
+    path = OUT / name
+    return json.loads(path.read_text()) if path.exists() else None
 
 
 def _find(rows, **keys):
@@ -409,6 +467,11 @@ def stage_report(args) -> None:
         ),
         "audit": audit,
         "tables": {s: table(s) for s in ("all", "shared")},
+        "evaluate_rows": [
+            {k: r[k] for k in ("model", "condition", "f1", "precision", "recall")}
+            for r in rows
+            if r["split"] == "test" and r["scope"] == "shared"
+        ],
         "comparisons": comparisons,
         "robustness": robust,
         "recall_by_seen": seen,
@@ -416,6 +479,9 @@ def stage_report(args) -> None:
         "interval_width": width,
         "seed_f1": seeds,
         "names": names_summary,
+        "names_mixed_model": _maybe("names_mixed.json"),
+        "names_why": _maybe("names_why.json"),
+        "person_baseline": _maybe("person_baseline.json"),
         "calibration": calibration,
     }
     compare_rows = [{"comparison": k, **v} for k, v in comparisons.items()]
@@ -440,6 +506,10 @@ def stage_report(args) -> None:
         markdown_table(calibration),
         "## Name swap\n",
         markdown_table(names_summary) if names_summary else "_not run_\n",
+        "## Why names get lost (post hoc)\n",
+        markdown_table(_maybe("names_why.json") or []),
+        "## Original person names, for reference\n",
+        markdown_table(_maybe("person_baseline.json") or []),
     ]
     write_report(OUT / "report", report, "\n".join(md))
     print((OUT / "report/report.md").read_text())
@@ -449,7 +519,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "stage",
-        choices=["audit", "train", "evaluate", "names", "calibrate", "review", "report"],
+        choices=[
+            "audit",
+            "train",
+            "evaluate",
+            "names",
+            "names_why",
+            "baseline_person",
+            "calibrate",
+            "review",
+            "report",
+        ],
     )
     parser.add_argument("--data-dir", default=None)
     parser.add_argument("--seed", type=int, default=0)

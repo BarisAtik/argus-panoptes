@@ -1,0 +1,25 @@
+# Everything for the NER study comes from conda-forge, no other download needed:
+#   micromamba create -n forge-ner -f ner_nl/environment.yml
+#   chmod -R go-w "$CONDA_PREFIX/lib/nltk_data"   # NLTK refuses group-writable data
+#   pip install "deduce>=3"
+name: forge-ner
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pytorch=*=cpu*        # drop the build string on a GPU machine
+  - spacy=3.8
+  - spacy-model-nl_core_news_sm
+  - spacy-model-nl_core_news_md
+  - spacy-model-nl_core_news_lg
+  - nltk
+  - nltk_data             # 450 MB, holds the CoNLL-2002 files
+  - scipy
+  - scikit-learn
+  - pyyaml
+  - pytest
+  - ruff
+  - matplotlib-base
+  - r-base
+  - r-lme4
+  - r-jsonlite
