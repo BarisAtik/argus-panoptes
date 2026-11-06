@@ -135,9 +135,20 @@ def genre(grid, args) -> dict:
             classes = np.array(sorted(train[LABEL].unique()))
             tuned = cached(args.cache_dir / f"genre{seed}_{src}.npz", tuned_proba, args.model, tok,
                            train, [same, other], classes)
-            rows.append({"seed": seed, "train": src,
-                         "same_genre": score(same[LABEL], tuned[0], classes),
-                         "other_genre": score(other[LABEL], tuned[1], classes)})
+            row = {"seed": seed, "train": src,
+                   "same_genre": score(same[LABEL], tuned[0], classes),
+                   "other_genre": score(other[LABEL], tuned[1], classes)}
+            # Follow-up added after the planned result, so the comparison uses the same seeds.
+            for i, part in enumerate(("same", "other")):
+                frame = (same, other)[i]
+                sparse = blend([holdout_proba(n, train, frame, classes) for n in SPARSE])
+                row[f"{part}_sparse_blend"] = score(frame[LABEL], sparse, classes)
+                row[f"{part}_tuned_plus_sparse"] = score(
+                    frame[LABEL], blend([tuned[i], *[holdout_proba(n, train, frame, classes)
+                                                     for n in SPARSE]]), classes)
+                row[f"{part}_tfidf"] = score(frame[LABEL],
+                                             holdout_proba("tfidf_lr", train, frame, classes), classes)
+            rows.append(row)
             print(rows[-1], flush=True)
     return {"settings": SETTINGS, "runs": rows}
 

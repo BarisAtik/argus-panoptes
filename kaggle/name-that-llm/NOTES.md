@@ -194,6 +194,74 @@ changed by −0.002 on average.
 Public-minus-private gap: SD 0.028, 95th percentile 0.057, at the proxy's 150 prompts and 7 authors.
 That is about twice the fake data's value. Real test has more prompts, so recompute it there.
 
+## Part 1b: the first real transformer
+
+Until now every proxy result came from sparse linear models. This is RoBERTa from spaCy's wheel
+(`ntl.local_roberta`), on CPU, on two fresh splits, with the plan committed before any result
+(`reports/proxy/transformer_plan.md`). The weights were fine-tuned by spaCy for parsing, so they
+aren't stock roberta-base. 192 tokens, 3 epochs, one fit per split.
+
+| Candidate | Split 100 | Split 101 | Gap to sparse blend, 95% CI: 100 | 101 | Right family, mean |
+| --- | --- | --- | --- | --- | --- |
+| TF-IDF + masked (kernel default) | 0.501 | 0.521 | | | 0.895 |
+| TF-IDF | 0.497 | 0.503 | −0.004 (−0.025, 0.014) | −0.018 (−0.039, 0.001) | 0.879 |
+| Masked | 0.460 | 0.474 | −0.042 (−0.056, −0.027) | −0.047 (−0.063, −0.032) | 0.870 |
+| Frozen embeddings + LR | 0.471 | 0.451 | −0.030 (−0.056, −0.003) | −0.070 (−0.094, −0.045) | 0.865 |
+| Tuned RoBERTa | 0.482 | 0.427 | −0.019 (−0.047, 0.006) | −0.093 (−0.119, −0.066) | 0.874 |
+| Tuned + TF-IDF + masked | **0.543** | **0.536** | +0.042 (0.026, 0.056) | +0.015 (0.000, 0.030) | 0.932 |
+
+Against the predictions:
+
+1. **Tuned beats the sparse blend: wrong.** It lost on both splits, clearly on one, and moved by
+   0.055 between them. On this data a small encoder with 1,050 passages is not a replacement.
+2. **Frozen embeddings lose: right.**
+3. **Tuned + sparse beats tuned alone: right**, by 0.06 and 0.11.
+
+**The blend did not meet the bar I set.** It needed a CI clear of zero on every split, and split 101
+sits on zero (0.000, and −0.0006 with more resamples). Every other sign is good: higher on both
+splits, right-family accuracy up by 0.032 to 0.042, and R's mixed model over both splits gives a
+log-odds gain of 0.145 (SE 0.057). That model wasn't in the plan, so it can't rescue the verdict. Call
+it promising, not shown. Adding a split after seeing this would be moving the goalposts, so the next
+one must be declared first.
+
+Why it might work: the two err on different passages. The correlation of being right is only 0.26 to 0.37, and
+in 31–37% of passages exactly one is right. RoBERTa had far better recall on `gpt` (0.63 against
+0.29) and `gpt_prompt2` (0.61 against 0.35), the sibling problem that sparse models fail, and far worse
+recall on Claude and human text. It nearly gave up on `gpt_writing` (0.05) on both splits, so that is not a one-fit
+accident, and I don't know the cause. The blend still reaches 0.33 there, thanks to the sparse side.
+Averaging seeds or folds is untested.
+
+R recomputed all of these from raw predictions and matched to three places
+(`R/05_transformer_audit.R`).
+
+This sits awkwardly with Part 0, where LLM fine-tunes beat classical models by a wide margin. The
+gap could be real differences (larger models, GPUs, 18 authors, far more text) or something about this
+proxy, whose five GPT folders are variants of one model. I can't separate those here. It says not to
+assume that a fine-tune wins alone, and to measure the blend on real OOF files.
+
+### Genre change with a real encoder
+
+One seed, train on 150 prompts of one genre. Tuned rows were planned, with the prediction that it
+would fall about as hard as TF-IDF. Sparse and blend rows were added afterwards, so that the seeds
+match.
+
+| Train | Candidate | Same genre | Other genre |
+| --- | --- | --- | --- |
+| Stories | Tuned RoBERTa | 0.557 | 0.216 |
+| Stories | TF-IDF | 0.551 | 0.251 |
+| Stories | TF-IDF + masked | 0.553 | 0.258 |
+| Stories | Tuned + sparse | 0.584 | 0.260 |
+| Essays | Tuned RoBERTa | 0.450 | 0.236 |
+| Essays | TF-IDF | 0.550 | 0.171 |
+| Essays | TF-IDF + masked | 0.546 | 0.200 |
+| Essays | Tuned + sparse | 0.545 | 0.249 |
+
+**Prediction right.** A learned encoder doesn't escape the shift: it kept 39% and 52% of its score,
+TF-IDF 46% and 31%. So the warning in Part 1 applies to transformers as well, and Kaggle's adversarial
+AUC check stays the first thing to read. The blend was never worse on the shifted genre, and
+noticeably better in one direction (0.249 against 0.200). With one seed and no CIs, that's only a
+hint. The 0.450 on essays against 0.557 on stories is the same instability seen in the holdouts.
+
 ## Part 2: fake-data reasoning
 
 Numbers here are from `ntl.synth` (seed 7, 2,699 train rows). They show how the machinery behaves,
@@ -317,7 +385,8 @@ built into the generator, but it's the first thing to check on real data, along 
   fails loudly if columns differ.
 - `style_lr` and R's style features overlap but are not identical, so compare metrics across
   languages, not feature values.
-- `hf_train.py` has only been run on a tiny random model. It has never trained a real transformer,
-  so every Part 1 result is about sparse linear models. A transformer may change the rankings.
+- `hf_train.py` has trained one real encoder on CPU (Part 1b). LoRA has only run on a tiny random
+  model, and nothing has run on a GPU or on Kaggle. The LoRA settings in `kernel/train_gpu_kernel.py`
+  are untuned starting values.
 - Part 1's holdouts were looked at more than once, so treat the small gaps there as rough.
 - Blend weights are equal. Learn them only with nested CV, or the score will be inflated.

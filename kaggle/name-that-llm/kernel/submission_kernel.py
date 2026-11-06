@@ -16,7 +16,7 @@ USE_BALANCE = False  # Turn on only if the adversarial AUC in the log shows shif
 # transformer inference has to happen here, offline, within the time limit.
 FOLDS_DIR = None  # "/kaggle/input/ntl-folds"
 BASE_MODEL = None  # "/kaggle/input/your-base-model"; only LoRA folds need it
-TRANSFORMER_WEIGHT = 0.5  # Take this from nested CV on OOF files, not from the leaderboard.
+TRANSFORMER_WEIGHT = 1 / 3  # Equal thirds is what the proxy tested. Change only by nested CV.
 MAX_LENGTH, BATCH_SIZE = 384, 8
 
 hits = glob("/kaggle/input/**/ntl/__init__.py", recursive=True)

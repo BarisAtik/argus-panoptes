@@ -1,5 +1,88 @@
 # Progress log
 
+## 2026-11-06: third run
+
+### Done
+
+- **First real transformer.** Hugging Face is blocked here, but spaCy's official wheel holds real
+  RoBERTa weights, vocabulary and merges. `ntl.local_roberta` rebuilds it, and the plan and
+  predictions were committed before any result. See "Results" below.
+- **Competitors' public write-ups** finally gave facts about the real competition, listed as
+  unverified leads in `name-that-llm/NOTES.md` Part 0.
+- **Reproduced a reported failure:** on prompts with 1–3 of 7 authors, assignment lost 0.007 and
+  perfect clustering would gain only 0.010, against 0.078 on a full grid.
+- **GPU path built:** LoRA option, saved folds, `kernel/train_gpu_kernel.py`, and transformer
+  inference inside the submission kernel, where the hidden test actually appears.
+- Filled in the 18 real model names, and right-lab accuracy in the failure report.
+- **Big Data Bowl:** `combinelink.public_proxy` and an R mixed model, on fake tables only (below).
+- New R audit, `R/05_transformer_audit.R`. Fixed a downloader that could leave a partial cache.
+
+### Results
+
+- **A real transformer did not win alone.** Tuned RoBERTa lost to the sparse blend on both splits:
+  0.482 and 0.427 against 0.501 and 0.521. I predicted the opposite.
+- **The blend looks better, but missed the bar I set.** Tuned + sparse scored 0.543 and 0.536, with
+  right-family accuracy up to 0.93 from 0.895. The gain's CI cleared zero on one split and sat on it
+  on the other (+0.015, lower bound 0.000), so it's promising, not shown. The two kinds of model fail
+  on different passages, and RoBERTa is about twice as good on the sibling GPT authors it does catch.
+- **Genre change hurts it too.** RoBERTa kept 39–52% of its score on the other genre, so adversarial
+  AUC stays the first check. One seed, so no firm ranking.
+
+- **Public reports move the goalposts.** Linear models reportedly stall near 0.35. Fine-tuned LLMs
+  reach 0.54–0.66, and rank 10 was reported at 0.692. If that holds, the current kernel is nowhere
+  near a prize.
+- The proxy prediction that random folds under-report now has outside support: about 0.21 random
+  against 0.36–0.38 grouped, public about 0.35.
+
+### What was actually verified
+
+| Thing | Status |
+| --- | --- |
+| Name That LLM tests | 63 pass with torch and peft, Python 3.13. Clean CI-style install: 57 pass, 2 skipped |
+| NFL tests | 25 pass, also from a clean install |
+| Lint | `ruff` clean on both projects |
+| RoBERTa rebuild | "Hello world" gives the known ids `[0, 31414, 232, 2]`. Q/K/V order read from curated-transformers 0.1 source. **No output comparison against stock roberta-base** |
+| Fine-tuning a real encoder | Ran on CPU through `hf_train.train_one` |
+| LoRA | Tiny random model only, CPU |
+| Kernels | Baseline and transformer paths both ran in a simulated `/kaggle` layout, on fake data with a tiny random fold model. GPU kernel **never run** |
+| R | New audit ran on real proxy predictions and matched Python. NFL script ran on fake tables only |
+| Python/R agreement | All six candidates matched to three places on two splits |
+| Dockerfile | **Not built.** The daemon doesn't run in this sandbox |
+| `ci/kaggle-tests.yml`, Kaggle CLI scripts | **Never run** |
+| Real competition data | **Never seen** |
+
+### Decisions made while you slept
+
+- **Downloaded nflverse tables, then deleted them unused.** I fetched them to profile columns and row
+  counts, then read that the data "belong to their respective owners" with no data licence. This
+  run's rule is public, properly licensed data, so I analysed nothing, and no outcome was seen. The
+  code is ready if you decide its terms are fine. Note that I should have read the terms first.
+- Read competitors' public READMEs for facts only, with no code copied.
+- Used spaCy's wheel from GitHub releases as the model source. It's an MIT-licensed official package,
+  not a mirror of anything. Weights are not committed.
+- Declined to add a third split after split 101 narrowly missed the bar. It goes on the TODO, declared
+  in advance.
+- Set the kernel's transformer share to 1/3, the equal blend the proxy actually tested.
+- Kept competition choices as they are. I found no open image, audio or video contest with a later
+  deadline, though Kaggle's live list still can't be read from here.
+
+### Prioritised TODO
+
+1. **Read the rules** (below). Everything else assumes the public repo is acceptable.
+2. **Name That LLM on real data:** `ntl.cv --compare-random --topic-folds`, read the leakage report and
+   adversarial AUC, and compare with Part 0. Does test really hold 1–8 passages per prompt?
+3. **Train a transformer on Kaggle GPU**, grouped folds, OOF saved. Start with whatever small
+   open-licence model the rules allow, then a LoRA fine-tune. This is the largest untested idea.
+4. **Blend on real OOF.** Is the proxy's complementary-errors pattern real? Fit weights by nested CV.
+5. Run the transformer `cv` stage on the proxy (five fits, about 4 hours on 2 CPUs), or skip to 3.
+6. Declare a third proxy split in advance, then rerun the blend comparison.
+7. Find out why RoBERTa collapsed on `gpt_writing` on both splits.
+8. External text pools: find source, labels and licence, and ask the forum whether they're allowed.
+   Competitors credit them, but nobody states where they came from.
+9. **Big Data Bowl:** fix `schema.py`, run `--by-drill`, fill in `WRITEUP.md`. Due 6 Jan. Decide how
+   to handle linemen and defensive backs, since separation doesn't fit them.
+10. If there's time for only one: Name That LLM suits this lab better, Big Data Bowl has the better prize odds.
+
 ## 2026-11-06: second run
 
 ### Done
@@ -55,7 +138,7 @@
 - `USE_BALANCE` and `USE_ASSIGNMENT` stay off. The kernel default stays TF-IDF + masked.
 - Considered adding Google's quantum circuit competition, and skipped it as a third project (below).
 
-### Prioritised TODO
+### Prioritised TODO (superseded by the third run)
 
 1. **Read the adversarial AUC first** on the real data. This is now the top check, because a genre
    gap is what would hurt most, and CV can't see it.
@@ -112,7 +195,7 @@ count and entry date also matched by a digg.com summary. **Check them on the com
 | Competition | Prize | Entry deadline | Final deadline | Data |
 | --- | --- | --- | --- | --- |
 | [Name That LLM](https://www.kaggle.com/competitions/name-that-llm) | $50,000: ten prizes of $5,000 for places 1–10 | 6 Jan 2027 | 13 Jan 2027, 23:59 UTC (overview countdown reportedly shows 14 Jan; plan for the 13th) | Text |
-| [NFL Big Data Bowl 2027](https://www.kaggle.com/competitions/nfl-big-data-bowl-2027) | $100,000: Open Track $45k (3 × $10k, 3 × $5k), University Track $45k (undergraduates only), Grand Prize $10k | 6 Jan 2027 | 6 Jan 2027, 23:59 UTC | Tracking, write-up |
+| [NFL Big Data Bowl 2027](https://www.kaggle.com/competitions/nfl-big-data-bowl-2027) | $100,000: Open Track $45k (3 × $10k, 3 × $5k), student track $45k, Grand Prize $10k (the split is from a third-party guide; the NFL's site confirms $100,000 and two tracks) | 6 Jan 2027 | 6 Jan 2027, 23:59 UTC | Tracking, write-up |
 
 Considered and skipped:
 
@@ -145,14 +228,21 @@ search can't see Kaggle's live list, so one may exist. Worth a two-minute look.
 - [ ] Run `name-that-llm/scripts/package_source.sh YOUR_KAGGLE_USERNAME` and the printed commands.
 - [ ] Submit by hand from the competition page, and pick final submissions yourself.
 - [ ] To turn on CI, copy `ci/kaggle-tests.yml` to `.github/workflows/`.
-- [ ] Choose Big Data Bowl's Open Track. University Track is for undergraduates only.
+- [ ] Choose Big Data Bowl's Open Track. The NFL's page calls the other one the Undergraduate/Graduate
+  Track, for current students only. My earlier note said undergraduates only; go by the rules page.
+- [ ] Decide whether nflverse's terms are fine for you. If so, run
+  `nfl-big-data-bowl-2027/scripts/download_public.sh`, and also check the competition's rules on
+  external data. If not, delete `public_proxy.py`.
+- [ ] Attach a base model and run `kernel/train_gpu_kernel.py` on Kaggle GPU (30 free hours a week).
+  Check the model's licence: rules reportedly require OSI-approved licences for code you use.
+- [ ] Generated-data question: as of the last report the forum had no host answer. Read the thread.
 
 ### Earning money: honest odds
 
 | Idea | Realistic? | Notes |
 | --- | --- | --- |
-| Name That LLM prize | Low | $5k for each of the top 10, so a solo first-timer's odds are small, though the flat payout helps. The value is mostly the write-up and possibly a medal. |
-| Big Data Bowl prize | Low to modest | No leaderboard, and judges reward clarity, so careful statistics can beat raw compute. Still six paid finalist slots in the Open Track worldwide. |
+| Name That LLM prize | Very low | Lower than I said before. Rank 10 was reported at 0.692, and experienced teams have GPU ensembles and external pools at about 0.66. A top-10 from a standing start with two months left isn't a plan. Real value: the write-up, and possibly a medal. |
+| Big Data Bowl prize | Low to modest, now the better bet | No leaderboard, and judges reward clarity, so careful statistics can beat raw compute. Still six paid finalist slots in the Open Track worldwide. If money is the goal, put the effort here. |
 | Model-attribution audit tool | Speculative, now weaker | Proxy accuracy was 0.88 for model family but 0.49 for the exact author, and a genre change halved it. So "which vendor" might be sellable, "which exact model" isn't yet. Model churn and misuse risk are real too. Test demand first. Ghostbuster's CC BY 3.0 allows commercial use with credit; check the competition data's licence separately. |
 | Small validation consulting | Modest, slow | "I find leakage in your ML pipeline" is a real service, and there is now a demo on public data: random CV off by 0.146, grouped CV by 0.010. Finding clients is the hard part. |
 | Google quantum compilation prize | Unknown, probably low | $150k pool, ends 20 Jan 2027. The verifier gives an automatic score, which suits agent search, but specialist teams will enter. Spend an evening before committing. |

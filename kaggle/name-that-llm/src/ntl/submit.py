@@ -30,7 +30,7 @@ def align(proba: np.ndarray, source: list[str], classes: np.ndarray) -> np.ndarr
 def predict_test(train: pd.DataFrame, test: pd.DataFrame, names: list[str],
                  assign: bool = False, threshold: float = 0.9, balance: bool = False,
                  extra: tuple[np.ndarray, list[str]] | None = None,
-                 extra_weight: float = 0.5) -> pd.DataFrame:
+                 extra_weight: float = 1 / 3) -> pd.DataFrame:
     """`extra` is (proba, classes) from `hf_train.predict_folds`. `extra_weight` is its share of the
     final blend, which should come from nested CV on OOF files, not from the leaderboard."""
     classes = np.array(sorted(train[LABEL].unique()))

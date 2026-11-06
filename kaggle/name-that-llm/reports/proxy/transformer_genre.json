@@ -1,0 +1,35 @@
+{
+ "settings": {
+  "epochs": 3,
+  "batch_size": 8,
+  "max_length": 192,
+  "lr": 2e-05,
+  "label_smoothing": 0.05
+ },
+ "runs": [
+  {
+   "seed": 100,
+   "train": "wp",
+   "same_genre": 0.557142857142857,
+   "other_genre": 0.21558441558441557,
+   "same_sparse_blend": 0.5525974025974026,
+   "same_tuned_plus_sparse": 0.5844155844155844,
+   "same_tfidf": 0.5512987012987013,
+   "other_sparse_blend": 0.2577922077922078,
+   "other_tuned_plus_sparse": 0.2603896103896104,
+   "other_tfidf": 0.2512987012987013
+  },
+  {
+   "seed": 100,
+   "train": "essay",
+   "same_genre": 0.45000000000000007,
+   "other_genre": 0.2363636363636364,
+   "same_sparse_blend": 0.5461038961038961,
+   "same_tuned_plus_sparse": 0.5454545454545455,
+   "same_tfidf": 0.5499999999999999,
+   "other_sparse_blend": 0.2,
+   "other_tuned_plus_sparse": 0.24935064935064938,
+   "other_tfidf": 0.17142857142857146
+  }
+ ]
+}
