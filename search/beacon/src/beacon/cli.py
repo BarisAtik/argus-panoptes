@@ -12,10 +12,11 @@ from pathlib import Path
 from . import evaluate as ev
 from . import quality
 from .backends import Backend, get_backend
-from .chunking import chunk_document
+from .chunking import DEFAULT_MAX_WORDS, DEFAULT_OVERLAP_WORDS, chunk_document
+from .compounds import Decompounder, build_vocabulary
 from .config import Settings, load_dotenv
 from .embeddings import Embedder, get_embedder
-from .models import Chunk, Document, Filters, read_corpus
+from .models import Chunk, Document, Filters, read_corpus, read_jsonl
 from .rag import answer, get_generator
 from .retrieval import Retriever
 
@@ -42,12 +43,21 @@ def index_documents(
     documents: list[Document],
     recreate: bool = False,
     include_summary: bool = True,
+    max_words: int = DEFAULT_MAX_WORDS,
+    overlap_words: int = DEFAULT_OVERLAP_WORDS,
+    title_prefix: bool = False,
 ) -> int:
     backend.create(embedder.dims, recreate=recreate)
     chunks = [
         chunk
         for document in documents
-        for chunk in chunk_document(document, include_summary=include_summary)
+        for chunk in chunk_document(
+            document,
+            max_words=max_words,
+            overlap_words=overlap_words,
+            include_summary=include_summary,
+            title_prefix=title_prefix,
+        )
     ]
     embed_and_add(backend, embedder, chunks)
     return len(chunks)
@@ -55,7 +65,8 @@ def index_documents(
 
 def add_stack_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--backend", choices=["elastic", "local"], help="default: BEACON_BACKEND")
-    parser.add_argument("--embedder", help="st:<model>, spacy:<model> or hash[:dims]")
+    parser.add_argument("--embedder", help="st:<model>, onnx:<dir>, spacy:<model> or hash[:dims]")
+    parser.add_argument("--embedding-cache", help="directory that keeps passage vectors on disk")
     parser.add_argument("--corpus", help="JSONL corpus; the local backend loads it at start")
     parser.add_argument("--demo", action="store_true", help="use the synthetic demo corpus")
 
@@ -63,15 +74,27 @@ def add_stack_arguments(parser: argparse.ArgumentParser) -> None:
 def build_stack(args, include_summary: bool = True) -> tuple[Retriever, list[Document]]:
     settings = Settings.from_env()
     backend_name = "local" if args.demo else (args.backend or settings.backend)
-    embedder = get_embedder(args.embedder or settings.embedder)
+    embedder = get_embedder(args.embedder or settings.embedder, args.embedding_cache)
     backend = get_backend(backend_name, settings)
     corpus = demo_path("corpus.jsonl") if args.demo else args.corpus
     documents = read_corpus(corpus) if corpus else []
     if backend_name == "local":
         if not documents:
             sys.exit("the local backend needs --corpus or --demo")
+        if getattr(args, "compounds", False):
+            backend.decompounder = Decompounder(build_vocabulary(d.text for d in documents))
         index_documents(backend, embedder, documents, include_summary=include_summary)
-    return Retriever(backend, embedder), documents
+    return Retriever(backend, embedder, groups=groups_from(args, settings)), documents
+
+
+def groups_from(args, settings: Settings) -> frozenset[str] | None:
+    """Access groups of the caller, set by whoever starts the process, never by the agent."""
+    value = getattr(args, "groups", None)
+    if value is None:
+        value = settings.groups
+    if value is None:
+        return None
+    return frozenset(g.strip() for g in value.split(",") if g.strip())
 
 
 def add_filter_arguments(parser: argparse.ArgumentParser) -> None:
@@ -82,6 +105,20 @@ def add_filter_arguments(parser: argparse.ArgumentParser) -> None:
 def filters_from(args) -> Filters | None:
     filters = Filters(args.court, args.subject, args.doc_type, args.date_from, args.date_to)
     return None if filters == Filters() else filters
+
+
+def cmd_fetch_ak(args) -> None:
+    from .sources import algoritmekader as ak
+
+    checkout = Path(args.checkout)
+    commit = ak.clone(checkout, args.ref or ak.PINNED_COMMIT)
+    print(json.dumps(ak.build(checkout, Path(args.output), commit), indent=2))
+
+
+def cmd_fetch_model(args) -> None:
+    from .model_fetch import fetch
+
+    print(f"model ready in {fetch(args.directory)}")
 
 
 def cmd_fetch(args) -> None:
@@ -98,9 +135,11 @@ def cmd_ingest(args) -> None:
     settings = Settings.from_env()
     if (args.backend or settings.backend) == "local":
         sys.exit("the local backend is in memory; it loads --corpus on each command")
-    embedder = get_embedder(args.embedder or settings.embedder)
+    embedder = get_embedder(args.embedder or settings.embedder, args.embedding_cache)
     backend = get_backend(args.backend or settings.backend, settings)
     documents = read_corpus(args.corpus)
+    if args.compounds:
+        backend.compound_words = list(build_vocabulary(d.text for d in documents))[:10_000]
     count = index_documents(
         backend, embedder, documents, args.recreate, include_summary=not args.no_summaries
     )
@@ -130,8 +169,8 @@ def cmd_ask(args) -> None:
         print(f"[{number}] {hit.chunk.doc_id}: {hit.chunk.title}")
 
 
-def ranker(retriever: Retriever, mode: str, k: int = 10):
-    return lambda query: [h.chunk.doc_id for h in retriever.search(query, mode, k)]
+def ranker(retriever: Retriever, mode: str, k: int = 10, filters: Filters | None = None):
+    return lambda query: [h.chunk.doc_id for h in retriever.search(query, mode, k, filters)]
 
 
 def cmd_eval(args) -> None:
@@ -153,6 +192,10 @@ def cmd_eval(args) -> None:
         if not path:
             sys.exit("give --queries, --demo or --known-item")
         queries = [q for q in ev.load_queries(path) if q.relevant]
+        if args.split:
+            queries = [q for q in queries if q.split == args.split]
+        if not queries:
+            sys.exit("no labelled queries selected")
         if documents:
             broken = ev.check_labels(queries, {d.id for d in documents})
             if broken:
@@ -167,13 +210,17 @@ def cmd_eval(args) -> None:
             "Its dense and hybrid rows are no evidence about embedding models."
         )
 
+    filters = Filters(doc_type=args.doc_type) if args.doc_type else None
+    if filters:
+        notes.append(f"Only documents of type {args.doc_type} are ranked.")
     runs = [
-        ev.evaluate_run(mode, ranker(retriever, mode), queries)
+        ev.evaluate_run(mode, ranker(retriever, mode, filters=filters), queries)
         for mode in ("bm25", "dense", "rrf")
     ]
 
     def make_linear(alpha: float):
-        return ranker(Retriever(retriever.backend, retriever.embedder, alpha=alpha), "linear")
+        tuned = Retriever(retriever.backend, retriever.embedder, alpha=alpha)
+        return ranker(tuned, "linear", filters=filters)
 
     linear, alphas = ev.tune_alpha_cv(make_linear, queries)
     runs.append(linear)
@@ -227,6 +274,56 @@ def cmd_eval_rag(args) -> None:
         Path(args.out).write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
+def cmd_pool(args) -> None:
+    from .labelling import save_pool
+
+    retriever, _ = build_stack(args)
+    filters = Filters(doc_type=args.doc_type) if args.doc_type else None
+    rows = []
+    for query in ev.load_queries(args.queries):
+        rankings = {
+            mode: ranker(retriever, mode, args.depth, filters)(query.text)
+            for mode in ("bm25", "dense", "rrf")
+        }
+        rows.append(
+            {
+                "id": query.id,
+                "query": query.text,
+                "kind": query.kind,
+                "pool": ev.pool(rankings, args.depth),
+            }
+        )
+    save_pool(args.out, rows)
+    print(f"pooled {sum(len(r['pool']) for r in rows)} judgements for {len(rows)} queries")
+
+
+def cmd_label(args) -> None:
+    from .labelling import label_pool
+
+    documents = {d.id: d for d in read_corpus(args.corpus)}
+    added = label_pool(list(read_jsonl(args.pool)), documents, args.out)
+    print(f"added {added} judgements to {args.out}")
+
+
+def cmd_inject_eval(args) -> None:
+    from .injection import evaluate_injection, to_markdown
+
+    settings = Settings.from_env()
+    embedder = get_embedder(args.embedder or settings.embedder, args.embedding_cache)
+    documents = read_corpus(args.corpus)
+    report = evaluate_injection(
+        documents, embedder, get_generator(args.generator), k=args.k, mode=args.mode
+    )
+    markdown = to_markdown(report)
+    print(markdown)
+    if args.out:
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out).write_text(markdown, encoding="utf-8")
+        Path(args.out).with_suffix(".json").write_text(
+            json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+
+
 def cmd_quality(args) -> None:
     path = demo_path("corpus.jsonl") if args.demo else args.corpus
     if not path:
@@ -260,8 +357,23 @@ def build_parser() -> argparse.ArgumentParser:
     fetch.add_argument("--cache", default="data/raw")
     fetch.set_defaults(handler=cmd_fetch)
 
+    fetch_ak = commands.add_parser(
+        "fetch-ak", help="download the Algoritmekader with its audit and requirement labels"
+    )
+    fetch_ak.add_argument("--ref", default=None, help="commit or branch; default: pinned commit")
+    fetch_ak.add_argument("--checkout", default="data/ak-source")
+    fetch_ak.add_argument("--output", default="data/ak")
+    fetch_ak.set_defaults(handler=cmd_fetch_ak)
+
+    fetch_model = commands.add_parser(
+        "fetch-model", help="download multilingual-e5-small as ONNX, without torch"
+    )
+    fetch_model.add_argument("--directory", default="data/models/multilingual-e5-small")
+    fetch_model.set_defaults(handler=cmd_fetch_model)
+
     ingest = commands.add_parser("ingest", help="chunk, embed and index a corpus")
     add_stack_arguments(ingest)
+    ingest.add_argument("--compounds", action="store_true", help="split Dutch compounds")
     ingest.add_argument("--recreate", action="store_true", help="drop the index first")
     ingest.add_argument("--no-summaries", action="store_true", help="for known-item evaluation")
     ingest.set_defaults(handler=cmd_ingest)
@@ -270,6 +382,7 @@ def build_parser() -> argparse.ArgumentParser:
     search.add_argument("query")
     add_stack_arguments(search)
     add_filter_arguments(search)
+    search.add_argument("--compounds", action="store_true", help="local backend only")
     search.add_argument("--mode", default="rrf", choices=["bm25", "dense", "rrf", "linear"])
     search.add_argument("-k", type=int, default=5)
     search.set_defaults(handler=cmd_search)
@@ -291,6 +404,9 @@ def build_parser() -> argparse.ArgumentParser:
     evaluation.add_argument(
         "--keep-summaries", action="store_true", help="index summaries anyway, to show the leak"
     )
+    evaluation.add_argument("--split", help="only queries from this split, such as dev")
+    evaluation.add_argument("--doc-type", help="rank only documents of this type")
+    evaluation.add_argument("--compounds", action="store_true", help="local backend only")
     evaluation.add_argument("--baseline", default="bm25", help="run to compare the others against")
     evaluation.add_argument("--title", default="Retrieval evaluation")
     evaluation.add_argument("--out", help="write .md and .json here")
@@ -305,6 +421,28 @@ def build_parser() -> argparse.ArgumentParser:
     rag.add_argument("--out")
     rag.set_defaults(handler=cmd_eval_rag)
 
+    pool = commands.add_parser("pool", help="collect top results of each run for labelling")
+    add_stack_arguments(pool)
+    pool.add_argument("--queries", required=True)
+    pool.add_argument("--doc-type")
+    pool.add_argument("--depth", type=int, default=10)
+    pool.add_argument("--out", required=True)
+    pool.set_defaults(handler=cmd_pool)
+
+    label = commands.add_parser("label", help="judge pooled results by hand")
+    label.add_argument("--corpus", required=True)
+    label.add_argument("--pool", required=True)
+    label.add_argument("--out", required=True)
+    label.set_defaults(handler=cmd_label)
+
+    inject = commands.add_parser("inject-eval", help="measure prompt injection through documents")
+    add_stack_arguments(inject)
+    inject.add_argument("--generator", default="extractive")
+    inject.add_argument("--mode", default="rrf", choices=["bm25", "dense", "rrf", "linear"])
+    inject.add_argument("-k", type=int, default=5)
+    inject.add_argument("--out")
+    inject.set_defaults(handler=cmd_inject_eval)
+
     quality_parser = commands.add_parser("quality", help="data quality report")
     quality_parser.add_argument("--corpus")
     quality_parser.add_argument("--demo", action="store_true")
@@ -314,6 +452,7 @@ def build_parser() -> argparse.ArgumentParser:
     mcp = commands.add_parser("mcp", help="run the MCP server over stdio")
     add_stack_arguments(mcp)
     mcp.add_argument("--generator", default="extractive")
+    mcp.add_argument("--groups", help="comma-separated access groups for this server process")
     mcp.set_defaults(handler=cmd_mcp)
     return parser
 

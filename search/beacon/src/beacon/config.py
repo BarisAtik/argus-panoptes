@@ -28,6 +28,7 @@ class Settings:
     index: str = "beacon-chunks"
     backend: str = "elastic"
     embedder: str = "st:intfloat/multilingual-e5-small"
+    groups: str | None = None  # comma-separated; unset means no access control
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -38,4 +39,5 @@ class Settings:
             index=os.getenv("BEACON_INDEX", cls.index),
             backend=os.getenv("BEACON_BACKEND", cls.backend),
             embedder=os.getenv("BEACON_EMBEDDER", cls.embedder),
+            groups=os.getenv("BEACON_GROUPS"),
         )

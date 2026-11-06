@@ -59,3 +59,32 @@ def test_e5_gets_its_query_and_passage_prefixes(monkeypatch):
     seen.clear()
     get_embedder("st:other/model").embed_query("vraag")
     assert seen == ["vraag"]
+
+
+def test_cache_reuses_vectors_and_keeps_order(tmp_path):
+    from beacon.embeddings import CachedEmbedder, HashingEmbedder
+
+    class Counting(HashingEmbedder):
+        calls = 0
+
+        def embed_passages(self, texts):
+            Counting.calls += len(texts)
+            return super().embed_passages(texts)
+
+    plain = HashingEmbedder(32)
+    cached = CachedEmbedder(Counting(32), tmp_path)
+    first = cached.embed_passages(["a b c", "d e f", "a b c"])
+    assert Counting.calls == 2
+    again = CachedEmbedder(Counting(32), tmp_path).embed_passages(["d e f", "a b c"])
+    assert Counting.calls == 2
+    assert np.allclose(first[0], plain.embed_passages(["a b c"])[0])
+    assert np.allclose(again[0], first[1])
+    assert cached.embed_passages([]).shape == (0, 32)
+
+
+def test_onnx_spec_reports_a_missing_model(tmp_path):
+    import pytest
+
+    pytest.importorskip("onnxruntime")
+    with pytest.raises(FileNotFoundError):
+        get_embedder(f"onnx:{tmp_path}")

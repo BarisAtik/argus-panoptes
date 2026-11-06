@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import os
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Protocol
 
@@ -160,6 +161,7 @@ class Answer:
     cited_documents: list[str] = field(default_factory=list)
     invalid_citations: list[int] = field(default_factory=list)
     generator: str = ""
+    quarantined: int = 0  # passages the guard kept away from the model
 
 
 def answer(
@@ -169,10 +171,17 @@ def answer(
     k: int = 5,
     mode: str = "rrf",
     filters: Filters | None = None,
+    guard: Callable[[Hit], bool] | None = None,
 ) -> Answer:
-    contexts = collapse(retriever.chunks(question, mode, filters), k)
+    """Answer from the top passages. A guard may veto passages before the model sees them."""
+    hits = retriever.chunks(question, mode, filters)
+    allowed = [hit for hit in hits if guard is None or guard(hit)]
+    contexts = collapse(allowed, k)
+    quarantined = len(hits) - len(allowed)
     if not contexts:
-        return Answer(question, ABSTAIN, [], True, True, generator=generator.name)
+        return Answer(
+            question, ABSTAIN, [], True, True, generator=generator.name, quarantined=quarantined
+        )
     text = generator.generate(question, contexts)
     abstained = ABSTAIN.lower() in text.lower()
     valid, invalid = check_citations(text, len(contexts))
@@ -186,4 +195,5 @@ def answer(
         cited_documents=list(dict.fromkeys(contexts[n - 1].chunk.doc_id for n in valid)),
         invalid_citations=invalid,
         generator=generator.name,
+        quarantined=quarantined,
     )

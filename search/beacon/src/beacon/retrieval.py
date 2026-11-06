@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from .backends import Backend
 from .embeddings import Embedder
@@ -79,6 +79,14 @@ class Retriever:
     candidates: int = 100
     rrf_k: int = 60
     alpha: float = 0.5
+    # When set, every path below is limited to documents these groups may read. It lives here
+    # and not in a tool argument, so that an agent cannot widen its own access.
+    groups: frozenset[str] | None = None
+
+    def _scoped(self, filters: Filters | None) -> Filters | None:
+        if self.groups is None:
+            return filters
+        return replace(filters or Filters(), groups=self.groups)
 
     def chunks(
         self, query: str, mode: str = "rrf", filters: Filters | None = None
@@ -88,6 +96,7 @@ class Retriever:
             raise ValueError(f"unknown mode {mode!r}; expected one of {MODES}")
         if not query.strip():
             return []
+        filters = self._scoped(filters)
         lexical: list[Hit] = []
         dense: list[Hit] = []
         if mode != "dense":
@@ -113,6 +122,7 @@ class Retriever:
         return collapse(self.chunks(query, mode, filters), k)
 
     def _exact(self, query: str, filters: Filters | None) -> list[Hit]:
+        filters = self._scoped(filters)
         hits: list[Hit] = []
         for match in ECLI.findall(query):
             chunks = self.backend.document_chunks(match.upper())
@@ -121,4 +131,7 @@ class Retriever:
         return hits
 
     def document(self, doc_id: str) -> list[Chunk]:
-        return self.backend.document_chunks(doc_id)
+        """All chunks of a document. A forbidden document looks exactly like a missing one."""
+        chunks = self.backend.document_chunks(doc_id)
+        scope = self._scoped(None)
+        return [chunk for chunk in chunks if scope is None or scope.matches(chunk)]

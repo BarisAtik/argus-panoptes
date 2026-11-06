@@ -11,21 +11,25 @@ from collections import Counter, defaultdict
 
 import numpy as np
 
+from ..compounds import Decompounder
 from ..models import Chunk, Filters, Hit
 from ..text import tokens
 
 
 class LocalBackend:
-    def __init__(self, k1: float = 1.2, b: float = 0.75):
+    def __init__(
+        self, k1: float = 1.2, b: float = 0.75, decompounder: Decompounder | None = None
+    ):
         self.k1 = k1
         self.b = b
+        self.decompounder = decompounder
         self.chunks: list[Chunk] = []
         self.vectors: np.ndarray | None = None
         self.postings: dict[str, list[tuple[int, int]]] = defaultdict(list)
         self.lengths: list[int] = []
 
     def create(self, dims: int, recreate: bool = False) -> None:
-        self.__init__(self.k1, self.b)
+        self.__init__(self.k1, self.b, self.decompounder)
         self.vectors = np.zeros((0, dims), dtype=np.float32)
 
     def add(self, chunks: list[Chunk], vectors: np.ndarray) -> None:
@@ -36,7 +40,7 @@ class LocalBackend:
         for chunk in chunks:
             index = len(self.chunks)
             self.chunks.append(chunk)
-            terms = Counter(tokens(chunk.text))
+            terms = Counter(tokens(chunk.text, self.decompounder))
             self.lengths.append(sum(terms.values()))
             for term, frequency in terms.items():
                 self.postings[term].append((index, frequency))
@@ -54,7 +58,7 @@ class LocalBackend:
         total = len(self.chunks)
         average = sum(self.lengths) / total or 1.0
         scores: dict[int, float] = defaultdict(float)
-        for term in set(tokens(query)):
+        for term in set(tokens(query, self.decompounder)):
             postings = self.postings.get(term, [])
             if not postings:
                 continue

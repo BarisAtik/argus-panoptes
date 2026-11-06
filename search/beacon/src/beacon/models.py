@@ -7,6 +7,8 @@ from collections.abc import Iterable, Iterator
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+PUBLIC = "public"
+
 
 @dataclass
 class Section:
@@ -28,6 +30,7 @@ class Document:
     summary: str = ""
     url: str = ""
     sections: list[Section] = field(default_factory=list)
+    acl: list[str] = field(default_factory=lambda: [PUBLIC])
 
     @property
     def text(self) -> str:
@@ -53,6 +56,7 @@ class Chunk:
     doc_type: str = ""
     subjects: list[str] = field(default_factory=list)
     url: str = ""
+    acl: list[str] = field(default_factory=list)
 
     def source(self) -> dict:
         return asdict(self)
@@ -65,8 +69,12 @@ class Filters:
     doc_type: str | None = None
     date_from: str | None = None
     date_to: str | None = None
+    # None means no access control, for a trusted operator. An empty set matches nothing.
+    groups: frozenset[str] | None = None
 
     def matches(self, chunk: Chunk) -> bool:
+        if self.groups is not None and not self.groups.intersection(chunk.acl):
+            return False
         if self.court and chunk.court != self.court:
             return False
         if self.subject and self.subject not in chunk.subjects:

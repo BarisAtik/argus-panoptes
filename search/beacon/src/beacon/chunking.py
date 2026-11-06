@@ -52,6 +52,7 @@ def _chunk(doc: Document, position: int, section: str, text: str) -> Chunk:
         doc_type=doc.doc_type,
         subjects=list(doc.subjects),
         url=doc.url,
+        acl=list(doc.acl),
     )
 
 
@@ -60,11 +61,15 @@ def chunk_document(
     max_words: int = DEFAULT_MAX_WORDS,
     overlap_words: int = DEFAULT_OVERLAP_WORDS,
     include_summary: bool = True,
+    title_prefix: bool = False,
 ) -> list[Chunk]:
     """Chunk one document.
 
     Set include_summary=False for known-item evaluation. Otherwise the summary that
     serves as the query is also in the index and every score is inflated.
+
+    Set title_prefix=True to repeat the title in every chunk, so that a passage deep in a
+    document still says what it is about.
     """
     if overlap_words >= max_words:
         raise ValueError("overlap_words must be smaller than max_words")
@@ -97,4 +102,7 @@ def chunk_document(
                         carried = 0
                 buffer.extend(words)
         flush()
+    if title_prefix:
+        for chunk in chunks:
+            chunk.text = f"{doc.title}. {chunk.text}"
     return chunks

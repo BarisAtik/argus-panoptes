@@ -15,13 +15,45 @@ from ..models import Chunk, Filters, Hit
 
 SOURCE_FIELDS = [
     "id", "doc_id", "position", "section", "text", "title",
-    "court", "date", "doc_type", "subjects", "url",
+    "court", "date", "doc_type", "subjects", "url", "acl",
 ]  # fmt: skip
 
 
-def index_body(dims: int) -> dict:
+def analysis_settings(compound_words: list[str]) -> dict:
+    """The built-in `dutch` analyzer rebuilt by hand, plus Lucene's dictionary decompounder.
+
+    The decompounder runs before stemming, because its word list holds unstemmed words.
+    """
     return {
-        "settings": {"number_of_shards": 1, "number_of_replicas": 0},
+        "analysis": {
+            "filter": {
+                "dutch_stop": {"type": "stop", "stopwords": "_dutch_"},
+                "dutch_stemmer": {"type": "stemmer", "language": "dutch"},
+                "dutch_compounds": {
+                    "type": "dictionary_decompounder",
+                    "word_list": compound_words,
+                    "min_word_size": 9,
+                    "min_subword_size": 4,
+                    "only_longest_match": True,
+                },
+            },
+            "analyzer": {
+                "dutch_compound": {
+                    "tokenizer": "standard",
+                    "filter": ["lowercase", "dutch_stop", "dutch_compounds", "dutch_stemmer"],
+                }
+            },
+        }
+    }
+
+
+def index_body(dims: int, compound_words: list[str] | None = None) -> dict:
+    analyzer = "dutch_compound" if compound_words else "dutch"
+    settings: dict = {"number_of_shards": 1, "number_of_replicas": 0}
+    if compound_words:
+        settings |= analysis_settings(compound_words)
+    return {
+        "settings": settings,
         "mappings": {
             "dynamic": "strict",
             # Vectors stay out of _source: they would double the disk use, and the corpus
@@ -34,7 +66,7 @@ def index_body(dims: int) -> dict:
                 "section": {"type": "keyword"},
                 "text": {
                     "type": "text",
-                    "analyzer": "dutch",
+                    "analyzer": analyzer,
                     "fields": {"plain": {"type": "text", "analyzer": "standard"}},
                 },
                 "title": {"type": "text", "analyzer": "dutch"},
@@ -42,6 +74,7 @@ def index_body(dims: int) -> dict:
                 "date": {"type": "date", "format": "strict_date"},
                 "doc_type": {"type": "keyword"},
                 "subjects": {"type": "keyword"},
+                "acl": {"type": "keyword"},
                 "url": {"type": "keyword", "index": False},
                 "embedding": {
                     "type": "dense_vector",
@@ -61,6 +94,9 @@ def filter_clauses(filters: Filters | None) -> list[dict]:
     if filters is None:
         return []
     clauses: list[dict] = []
+    if filters.groups is not None:
+        # An empty `terms` list matches nothing, which is the safe outcome for no groups.
+        clauses.append({"terms": {"acl": sorted(filters.groups)}})
     if filters.court:
         clauses.append({"term": {"court": filters.court}})
     if filters.subject:
@@ -100,9 +136,12 @@ def knn_clause(vector: np.ndarray, k: int, filters: Filters | None) -> dict:
 
 
 class ElasticBackend:
-    def __init__(self, client: Elasticsearch, index: str):
+    def __init__(
+        self, client: Elasticsearch, index: str, compound_words: list[str] | None = None
+    ):
         self.client = client
         self.index = index
+        self.compound_words = compound_words
 
     @classmethod
     def from_settings(cls, settings: Settings) -> ElasticBackend:
@@ -115,7 +154,9 @@ class ElasticBackend:
             self.client.indices.delete(index=self.index)
             exists = False
         if not exists:
-            self.client.indices.create(index=self.index, **index_body(dims))
+            self.client.indices.create(
+                index=self.index, **index_body(dims, self.compound_words)
+            )
 
     def add(self, chunks: list[Chunk], vectors: np.ndarray) -> None:
         if len(chunks) != len(vectors):
@@ -185,7 +226,7 @@ class ElasticBackend:
 
 
 def _default(key: str):
-    if key == "subjects":
+    if key in ("subjects", "acl"):
         return []
     if key == "position":
         return 0

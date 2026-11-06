@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import math
 import random
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -26,12 +26,13 @@ class Query:
     text: str
     relevant: dict[str, int]  # document id -> grade; 2 = answers it, 1 = related
     kind: str = "general"
+    split: str = ""
 
 
 def load_queries(path: str | Path) -> list[Query]:
     queries = [
         Query(row["id"], row["query"], {k: int(v) for k, v in row["relevant"].items()},
-              row.get("kind", "general"))
+              row.get("kind", "general"), row.get("split", ""))
         for row in read_jsonl(path)
     ]
     ids = [q.id for q in queries]
@@ -252,6 +253,19 @@ def summarise(
                 }
             )
     return summary
+
+
+def pool(rankings: Mapping[str, Sequence[str]], depth: int = 10) -> list[str]:
+    """Union of the top results of each run, in order of best rank.
+
+    Judging only this pool keeps labelling affordable, and it treats the runs alike. Documents
+    outside it count as not relevant, which can penalise a run that was not in the pool.
+    """
+    order: dict[str, int] = {}
+    for ranked in rankings.values():
+        for rank, doc_id in enumerate(ranked[:depth]):
+            order[doc_id] = min(order.get(doc_id, rank), rank)
+    return sorted(order, key=lambda doc_id: (order[doc_id], doc_id))
 
 
 def to_markdown(summary: dict, title: str, notes: Sequence[str] = ()) -> str:

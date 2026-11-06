@@ -25,9 +25,15 @@ def _stem(word: str) -> str:
     return _STEMMER.stemWord(word)
 
 
-def tokens(text: str) -> list[str]:
-    """Lowercase, drop stop words, stem. Close to Elasticsearch's `dutch` analyzer, not equal."""
-    return [_stem(t) for t in _TOKEN.findall(text.lower()) if t not in STOPWORDS]
+def tokens(text: str, decompounder=None) -> list[str]:
+    """Lowercase, drop stop words, stem. Close to Elasticsearch's `dutch` analyzer, not equal.
+
+    A decompounder adds the parts of each compound after the compound itself.
+    """
+    words = [t for t in _TOKEN.findall(text.lower()) if t not in STOPWORDS]
+    if decompounder is not None:
+        words = decompounder.expand(words)
+    return [_stem(t) for t in words]
 
 
 def sentences(text: str) -> list[str]:
