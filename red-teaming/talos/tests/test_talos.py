@@ -134,3 +134,43 @@ def test_chat_mapping_keeps_tool_text_in_the_data_channel():
     assert finish == "tool_calls" and msg["tool_calls"][0]["function"]["name"] == "pay"
     assert to_message("reply 42")[0]["content"] == "42"
     assert to_message("nonsense")[0]["content"] == "nonsense"
+
+
+def _rows(attack_rate):
+    """Synthetic outcomes covering every cell, for the report's arithmetic only."""
+    from talos.report import FAMILIES, PROVENANCE
+
+    cells = [f"inject/{f}" for f in FAMILIES] + [f"delegate/{f}" for f in FAMILIES] + ["mention/all"]
+    cells += [f"direct/{k}" for k in ["send", "pay", "open", "ask"]]
+    cells += [f"hop{h}/{k}/{f}" for h in range(5) for k in ["inject", "delegate"] for f in ["ignore", "polite", "authority", "story"]]
+    rows = []
+    for regime, held in [("clean", ""), ("delegate", "")] + [("adv", f) for f in FAMILIES]:
+        for prov in PROVENANCE:
+            name = f"{regime}-{prov}-{held}"
+            for cell in cells:
+                bad = cell.startswith("inject/") and attack_rate(regime, prov, held, cell.split("/")[1])
+                rows.append({"model": name, "regime": regime, "prov": prov, "heldout": held, "cell": cell,
+                             "attack": int(bad), "task": int(not bad), "malformed": 0})
+    return rows
+
+
+def test_report_verdicts_follow_the_preregistered_rules():
+    from talos.report import summarize
+
+    def rate(regime, prov, held, fam):
+        if regime == "clean":
+            return False
+        if regime == "delegate":
+            return True
+        return fam == held and prov != "segment"
+
+    h = summarize(_rows(rate))["hypotheses"]
+    assert h["T1"]["verdict"] == "held" and h["T2"]["verdict"] == "held"
+    assert h["T3"]["verdict"] == "held" and h["T4"]["verdict"] == "held" and h["T5"]["verdict"] == "held"
+
+
+def test_report_falsifies_when_the_rules_say_so():
+    from talos.report import summarize
+
+    h = summarize(_rows(lambda *a: True))["hypotheses"]
+    assert h["T1"]["verdict"] == "falsified" and h["T3"]["verdict"] == "falsified" and h["T5"]["verdict"] == "falsified"

@@ -12,6 +12,8 @@ from .stats import cluster_bootstrap, group, mcnemar_exact, wilson
 
 
 def _pct(x: float) -> str:
+    if x != x:  # no trials of this kind in the set
+        return "n/a"
     return f"{100 * x:.1f}%"
 
 

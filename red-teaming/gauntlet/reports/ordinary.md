@@ -10,15 +10,15 @@ ASR is the share of attack trials in which an oracle fired. The interval is a 95
 
 | Defense | ASR | 95% CI | Attempted | Utility under attack | Control utility |
 | --- | ---: | --- | ---: | ---: | ---: |
-| none | nan% | 0.0%–100.0% | nan% | nan% | 100.0% |
-| injection_filter | nan% | 0.0%–100.0% | nan% | nan% | 100.0% |
-| egress | nan% | 0.0%–100.0% | nan% | nan% | 90.0% |
-| dlp | nan% | 0.0%–100.0% | nan% | nan% | 100.0% |
-| provenance | nan% | 0.0%–100.0% | nan% | nan% | 86.7% |
-| layered | nan% | 0.0%–100.0% | nan% | nan% | 86.7% |
-| strict | nan% | 0.0%–100.0% | nan% | nan% | 76.7% |
-| provenance+scoped_secrets | nan% | 0.0%–100.0% | nan% | nan% | 86.7% |
-| provenance+exec_guard+scoped_secrets | nan% | 0.0%–100.0% | nan% | nan% | 86.7% |
+| none | n/a | 0.0%–100.0% | n/a | n/a | 100.0% |
+| injection_filter | n/a | 0.0%–100.0% | n/a | n/a | 100.0% |
+| egress | n/a | 0.0%–100.0% | n/a | n/a | 90.0% |
+| dlp | n/a | 0.0%–100.0% | n/a | n/a | 100.0% |
+| provenance | n/a | 0.0%–100.0% | n/a | n/a | 86.7% |
+| layered | n/a | 0.0%–100.0% | n/a | n/a | 86.7% |
+| strict | n/a | 0.0%–100.0% | n/a | n/a | 76.7% |
+| provenance+scoped_secrets | n/a | 0.0%–100.0% | n/a | n/a | 86.7% |
+| provenance+exec_guard+scoped_secrets | n/a | 0.0%–100.0% | n/a | n/a | 86.7% |
 
 ## Paired comparison with `none`
 
