@@ -51,14 +51,14 @@ def build_server(retriever: Retriever, generator: Generator) -> MCPServer:
     @server.tool(annotations=READ_ONLY)
     def search(
         query: str,
-        mode: str = "rrf",
+        mode: str = "smart",
         k: int = 5,
         court: str | None = None,
         subject: str | None = None,
         date_from: str | None = None,
         date_to: str | None = None,
     ) -> dict[str, Any]:
-        """Search documents. Mode is rrf (hybrid, default), linear, bm25 or dense.
+        """Search documents. Mode is smart (default), rrf, linear, bm25 or dense.
 
         Dates are YYYY-MM-DD. An ECLI in the query is looked up directly. Access is decided by
         the groups this server was started with, and no argument can change that.
@@ -91,7 +91,8 @@ def build_server(retriever: Retriever, generator: Generator) -> MCPServer:
     def ask(question: str, k: int = 5) -> dict[str, Any]:
         """Answer a question from the documents, with citations, or abstain."""
         result = answer(
-            question, retriever, generator, k=max(1, min(k, MAX_RESULTS)), guard=guard
+            question, retriever, generator, k=max(1, min(k, MAX_RESULTS)), mode="smart",
+            guard=guard,
         )
         return {
             "answer": result.text,

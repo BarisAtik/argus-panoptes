@@ -18,7 +18,7 @@ from .config import Settings, load_dotenv
 from .embeddings import Embedder, get_embedder
 from .models import Chunk, Document, Filters, read_corpus, read_jsonl
 from .rag import answer, get_generator
-from .retrieval import Retriever
+from .retrieval import MODES, Retriever
 
 BATCH = 64
 DEMO_WARNING = (
@@ -89,8 +89,9 @@ def build_stack(args, include_summary: bool = True) -> tuple[Retriever, list[Doc
             title_prefix=getattr(args, "title_prefix", False),
         )  # fmt: skip
     retriever = Retriever(
-        backend, embedder, rrf_k=settings.rrf_k, groups=groups_from(args, settings)
-    )
+        backend, embedder, rrf_k=settings.rrf_k, groups=groups_from(args, settings),
+        routing=settings.routing, synonyms=True, refs=True,
+    )  # fmt: skip
     return retriever, documents
 
 
@@ -392,7 +393,7 @@ def build_parser() -> argparse.ArgumentParser:
     add_stack_arguments(search)
     add_filter_arguments(search)
     search.add_argument("--compounds", action="store_true", help="local backend only")
-    search.add_argument("--mode", default="rrf", choices=["bm25", "dense", "rrf", "linear"])
+    search.add_argument("--mode", default="smart", choices=MODES)
     search.add_argument("-k", type=int, default=5)
     search.set_defaults(handler=cmd_search)
 
@@ -401,7 +402,7 @@ def build_parser() -> argparse.ArgumentParser:
     add_stack_arguments(ask)
     add_filter_arguments(ask)
     ask.add_argument("--generator", default="extractive", help="extractive, ollama[:model], ...")
-    ask.add_argument("--mode", default="rrf", choices=["bm25", "dense", "rrf", "linear"])
+    ask.add_argument("--mode", default="smart", choices=MODES)
     ask.add_argument("-k", type=int, default=5)
     ask.set_defaults(handler=cmd_ask)
 

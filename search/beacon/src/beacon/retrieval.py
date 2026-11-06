@@ -94,7 +94,7 @@ class Retriever:
     # When set, every path below is limited to documents these groups may read. It lives here
     # and not in a tool argument, so that an agent cannot widen its own access.
     groups: frozenset[str] | None = None
-    # Only used by mode "smart". The defaults are what the third evaluation froze.
+    # Only used by mode "smart". The CLI turns all of them on, see reports/ak-routing.md.
     routing: str = "none"
     routing_power: float = 1.0
     synonyms: bool = False

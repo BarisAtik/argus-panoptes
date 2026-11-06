@@ -34,7 +34,10 @@ def lexical_weight(
     if method == "none":
         return 1.0
     if method == "lang":
-        return 1.0 if detect_dutch(query) else 0.0
+        try:
+            return 1.0 if detect_dutch(query) else 0.0
+        except ImportError:  # wordfreq is optional, and coverage needs nothing
+            return coverage(query) ** 4
     if method == "coverage":
         return coverage(query) ** power
     raise ValueError(f"unknown routing method {method!r}")

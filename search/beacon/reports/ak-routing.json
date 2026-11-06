@@ -1,0 +1,165 @@
+{
+  "frozen": "lang",
+  "power": 1,
+  "tests": {
+    "h1_router_foreign": {
+      "n": 29,
+      "better": 0.793,
+      "baseline": 0.548,
+      "difference": 0.245,
+      "ci95": [
+        0.158,
+        0.336
+      ],
+      "p_one_sided": 0.0,
+      "p_holm": 0.0
+    },
+    "h2_router_dutch": {
+      "n": 23,
+      "better": 0.746,
+      "baseline": 0.746,
+      "difference": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "p_one_sided": 0.5
+    },
+    "h3_synonyms_abbr": {
+      "n": 10,
+      "better": 0.764,
+      "baseline": 0.761,
+      "difference": 0.003,
+      "ci95": [
+        -0.089,
+        0.073
+      ],
+      "p_one_sided": 0.4961,
+      "p_holm": 0.4961
+    },
+    "h4_refs_statute": {
+      "n": 128,
+      "better": 0.393,
+      "baseline": 0.244,
+      "difference": 0.149,
+      "ci95": [
+        0.111,
+        0.189
+      ],
+      "p_one_sided": 0.0,
+      "p_holm": 0.0
+    }
+  },
+  "table": {
+    "rrf": {
+      "all": 0.656,
+      "recall@10": 0.778,
+      "en": 0.482,
+      "other": 0.801,
+      "nl": 0.746,
+      "abbr": 0.761
+    },
+    "routed": {
+      "all": 0.775,
+      "recall@10": 0.849,
+      "en": 0.784,
+      "other": 0.827,
+      "nl": 0.746,
+      "abbr": 0.791
+    },
+    "synonyms": {
+      "all": 0.656,
+      "recall@10": 0.781,
+      "en": 0.482,
+      "other": 0.801,
+      "nl": 0.746,
+      "abbr": 0.764
+    },
+    "refs": {
+      "all": 0.656,
+      "recall@10": 0.778,
+      "en": 0.482,
+      "other": 0.801,
+      "nl": 0.746,
+      "abbr": 0.761
+    },
+    "all": {
+      "all": 0.781,
+      "recall@10": 0.854,
+      "en": 0.784,
+      "other": 0.827,
+      "nl": 0.746,
+      "abbr": 0.825
+    },
+    "bm25": {
+      "all": 0.434,
+      "recall@10": 0.515,
+      "en": 0.223,
+      "other": 0.189,
+      "nl": 0.632,
+      "abbr": 0.615
+    },
+    "dense": {
+      "all": 0.789,
+      "recall@10": 0.828,
+      "en": 0.784,
+      "other": 0.827,
+      "nl": 0.766,
+      "abbr": 0.827
+    }
+  },
+  "statute": {
+    "rrf": {
+      "nl": 0.262,
+      "abbr": 0.229,
+      "en": 0.251,
+      "rev": 0.233
+    },
+    "refs": {
+      "nl": 0.362,
+      "abbr": 0.301,
+      "en": 0.574,
+      "rev": 0.333
+    }
+  },
+  "statute_queries": 128,
+  "agreement": {
+    "pairs": 337,
+    "kappa": 0.485
+  },
+  "second_annotator": {
+    "h1_router_foreign": {
+      "n": 29,
+      "better": 0.797,
+      "baseline": 0.553,
+      "difference": 0.244,
+      "ci95": [
+        0.149,
+        0.34
+      ],
+      "p_one_sided": 0.0
+    },
+    "h2_router_dutch": {
+      "n": 23,
+      "better": 0.733,
+      "baseline": 0.733,
+      "difference": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "p_one_sided": 0.5
+    },
+    "h3_synonyms_abbr": {
+      "n": 10,
+      "better": 0.862,
+      "baseline": 0.828,
+      "difference": 0.035,
+      "ci95": [
+        0.007,
+        0.07
+      ],
+      "p_one_sided": 0.0312
+    }
+  }
+}
