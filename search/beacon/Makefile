@@ -1,7 +1,7 @@
-.PHONY: install up up-kibana down test lint demo fetch ingest eval real-data
+.PHONY: install up up-kibana up-app down test lint demo fetch ingest eval real-data
 
 install:
-	pip install -e ".[dev]"
+	pip install -e ".[dev,web,files]"
 
 up:
 	docker compose up -d elasticsearch
@@ -9,8 +9,11 @@ up:
 up-kibana:
 	docker compose --profile kibana up -d
 
+up-app:
+	docker compose --profile app up -d --build
+
 down:
-	docker compose --profile kibana down
+	docker compose --profile kibana --profile app down
 
 test:
 	pytest

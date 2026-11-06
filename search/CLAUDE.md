@@ -15,7 +15,7 @@ or competition submissions. List those under "Needs Baris" and move on to the ne
 ```bash
 cd search/beacon
 python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev,onnx,compounds]"
+pip install -e ".[dev,onnx,compounds,files,web]"
 pytest && ruff check src tests evals
 make real-data   # corpus, labels and model into data/
 ```
@@ -33,6 +33,13 @@ checkout must live outside it, and any Python started in it needs `-I`.
 | --- | --- |
 | `src/beacon/sources/rechtspraak.py` | API client and XML parser |
 | `src/beacon/sources/algoritmekader.py` | Real Dutch text with audit and requirement labels |
+| `src/beacon/sources/files.py` | PDF, DOCX, HTML and text folders, ACL rules, ingest report, sync plan |
+| `src/beacon/citations.py` | Statute citations to canonical form, for pages and queries |
+| `src/beacon/synonyms.py` | Reviewable synonym list, BM25 only |
+| `src/beacon/routing.py` | Language detection and term coverage, sets the BM25 weight |
+| `src/beacon/groundedness.py` | Checks each claim against its cited passage |
+| `src/beacon/auth.py` | Users, tokens, sessions, throttle, audit log |
+| `src/beacon/web.py` | Web app, HTTP API, MCP over HTTP per user |
 | `src/beacon/chunking.py` | Paragraph-aware chunks |
 | `src/beacon/embeddings.py` | `st:`, `onnx:`, `spacy:` and `hash` embedders, plus a disk cache |
 | `src/beacon/compounds.py` | Dutch compound splitting |
@@ -46,7 +53,7 @@ checkout must live outside it, and any Python started in it needs `-I`.
 | `src/beacon/quality.py` | Data quality report |
 | `src/beacon/mcp_server.py` | Read-only MCP tools |
 | `src/beacon/demo/` | Synthetic corpus and labelled queries |
-| `evals/` | Preregistered plan, experiment runner, frozen config, hand labels |
+| `evals/` | Plans, experiment runners, frozen configs, labels. `experiment3.py`, `experiment_grounded.py` and `scale.py` are the third run |
 | `tests/tools/opensearch_shim.py` | Runs the Elasticsearch path on OpenSearch, for sandboxes |
 | `reports/` | Measured results, committed |
 
@@ -59,6 +66,9 @@ checkout must live outside it, and any Python started in it needs `-I`.
 - **The holdout is spent.** `reports/ak-holdout.md` was scored once. `experiment.py holdout`
   refuses to run again, on purpose. New ideas need new test queries, or get called exploratory.
   Tune on `split == "dev"`, and never look at test queries first.
+- **So are the fresh queries and the claim test half.** `experiment3.py score` and
+  `experiment_grounded.py test` refuse a second run. Write new queries or claims, and a new plan
+  committed first, for any new idea.
 - **Do not edit the injection rules to catch holdout payloads.** Add new payloads instead, score
   them once, and only then consider a rule.
 - **No native `rrf` or `linear` retrievers.** They need a paid licence. `tests/test_elastic.py`
@@ -89,10 +99,14 @@ Add a groundedness check that verifies claims against the cited passage; today o
 numbers are verified.
 
 **MCP.** Keep tools read-only. Text from documents is untrusted and stays labelled as such.
-Groups must never become a tool argument.
+Groups must never become a tool argument. Over HTTP, each user has a server bound to their groups.
+
+**Web app.** No JavaScript, so the strict content policy can stay. Everything from a document goes
+through `esc`. `result_item` and `answer_block` are the only places that build result HTML. Run the
+UI in Playwright after changes: `tests/test_web.py` cannot see layout.
 
 **Injection.** `beacon inject-eval --generator ollama:<model>` measures a real model. Exposure is
 an upper bound, and the leak column is the real result. Run it without the guard as well.
 
-**Template work.** See `beacon/PRIVATE_SEARCH_TEMPLATE.md`. Group-level access control exists.
-Per-user authentication is next.
+**Template work.** See `beacon/PRIVATE_SEARCH_TEMPLATE.md`. Folder ingest, per-user tokens and an
+audit log exist. Single sign-on, directory groups and OCR are next.

@@ -112,10 +112,19 @@ def test_html_drops_scripts(folder):
     assert "Tekst vet." in text and "alert" not in text
 
 
+def test_redirect_stub_is_not_a_failure(tmp_path):
+    (tmp_path / "index.html").write_text(
+        '<!doctype html><title>Weg</title><meta http-equiv="refresh" content="0; URL=./2/">'
+    )
+    documents, report = load_directory(tmp_path, AclRules(default=("public",)))
+    assert documents == [] and report.redirects == 1 and report.failed == {}
+
+
 def test_pdf_pages_and_scanned_detection(tmp_path):
     pytest.importorskip("pypdf")
     make_pdf(tmp_path / "goed.pdf", [PDF_TEXT, PDF_TEXT])
     make_pdf(tmp_path / "half.pdf", [PDF_TEXT, ""])
+    make_pdf(tmp_path / "boek.pdf", [""] + [PDF_TEXT] * 9)
     make_pdf(tmp_path / "scan.pdf", ["", ""])
     documents, report = load_directory(tmp_path, AclRules(default=("public",)))
     good = next(d for d in documents if d.id == "file:goed.pdf")

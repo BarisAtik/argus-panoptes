@@ -35,12 +35,17 @@ DENY_GROUP = "admin"
 MAX_FILE_BYTES = 100 * 1024 * 1024
 MAX_UNPACKED_BYTES = 200 * 1024 * 1024
 MIN_WORDS_PER_PAGE = 20
+PARTLY_SCANNED = 0.25  # share of near-empty pages. Title and blank pages are normal below this.
 _W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 _MD_HEADING = re.compile(r"^#{1,6}\s+(.*)$")
 
 
 class Unreadable(Exception):
     """A file that cannot be turned into text. The message goes into the report."""
+
+
+class Redirect(Exception):
+    """An HTML stub that only points at another page. Not a failure, and not a document."""
 
 
 @dataclass
@@ -82,6 +87,8 @@ class Report:
     documents: int = 0
     words: int = 0
     skipped_type: int = 0
+    redirects: int = 0
+    default_groups: str = DENY_GROUP
     failed: dict[str, str] = field(default_factory=dict)
     likely_scanned: list[str] = field(default_factory=list)
     partly_scanned: list[str] = field(default_factory=list)
@@ -158,6 +165,8 @@ def read_html(path: Path) -> Extracted:
         raise Unreadable(f"broken HTML: {error}") from error
     if root is None:
         return Extracted("", [])
+    if root.xpath(".//meta[translate(@http-equiv, 'REFSH', 'refsh')='refresh']"):
+        raise Redirect
     unwanted = ("script", "style", "noscript", "template", etree.Comment)
     etree.strip_elements(root, *unwanted, with_tail=False)
     title = (root.findtext(".//title") or "").strip()
@@ -233,7 +242,8 @@ def fingerprint(document: Document) -> str:
 
 def load_directory(root: str | Path, acl: AclRules) -> tuple[list[Document], Report]:
     root = Path(root).resolve()
-    report = Report()
+    report = Report(default_groups=", ".join(acl.default))
+    logging.getLogger("pypdf").setLevel(logging.ERROR)  # it logs every odd font
     documents: list[Document] = []
     seen: dict[str, str] = {}
     for path in walk(root):
@@ -244,6 +254,9 @@ def load_directory(root: str | Path, acl: AclRules) -> tuple[list[Document], Rep
             continue
         try:
             extracted = read_file(path)
+        except Redirect:
+            report.redirects += 1
+            continue
         except Unreadable as error:
             report.failed[relative] = str(error)
             continue
@@ -253,7 +266,7 @@ def load_directory(root: str | Path, acl: AclRules) -> tuple[list[Document], Rep
             continue
         if extracted.pages and extracted.empty_pages == extracted.pages:
             report.likely_scanned.append(relative)
-        elif extracted.empty_pages:
+        elif extracted.empty_pages / max(extracted.pages, 1) >= PARTLY_SCANNED:
             report.partly_scanned.append(relative)
         if not extracted.sections:
             report.failed.setdefault(relative, "no text found")
@@ -306,11 +319,12 @@ def report_markdown(report: Report) -> str:
         f"- Files seen: {report.files_seen}",
         f"- Documents indexed: {report.documents} ({report.words} words)",
         f"- Skipped, unsupported type: {report.skipped_type}",
+        f"- Skipped, redirect pages: {report.redirects}",
         f"- Failed: {len(report.failed)}",
         f"- Likely scanned, no text layer: {len(report.likely_scanned)}",
         f"- Partly scanned: {len(report.partly_scanned)}",
         f"- Duplicates left out: {len(report.duplicates)}",
-        f"- No ACL rule, restricted to `{DENY_GROUP}`: {len(report.default_acl)}",
+        f"- No ACL rule, default groups `{report.default_groups}`: {len(report.default_acl)}",
         f"- Planted instructions suspected: {len(report.injection_suspected)}",
     ]
     for title, values in (

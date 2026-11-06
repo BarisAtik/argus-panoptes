@@ -7,7 +7,7 @@ Each experiment has its own folder. See [`PROGRESS.md`](PROGRESS.md) for where t
 
 | Experiment | What it does | Dataset | Status |
 | --- | --- | --- | --- |
-| [`beacon/`](beacon/) | Hybrid search, RAG with checked citations, access control, prompt-injection tests, retrieval evaluation and an MCP server on single-node Elasticsearch | Dutch government guidance (Algoritmekader) and court decisions (rechtspraak.nl), downloaded at run time; synthetic demo set included | Scored on real Dutch text with independent labels and a one-shot holdout. First run on real Elasticsearch still to do |
+| [`beacon/`](beacon/) | Hybrid search with query routing, RAG with claim checks, a small web app with per-user access, folder ingest, prompt-injection tests, retrieval evaluation and an MCP server on single-node Elasticsearch | Dutch government guidance (Algoritmekader, Logius standards) and court decisions (rechtspraak.nl), downloaded at run time; synthetic demo set included | Three one-shot evaluations on real Dutch text. Web app and MCP over HTTP tested in a browser. First run on real Elasticsearch still to do |
 
 ## Quick start
 
@@ -18,11 +18,12 @@ pip install -e ".[dev]"
 pytest
 make demo
 make real-data    # real Dutch text and labels, no Docker
+pip install -e ".[web,onnx,files,compounds]"    # then see beacon/PRIVATE_SEARCH_TEMPLATE.md
 ```
 
 ## Ideas on the list
 
-- Route queries by language, because BM25 hurts English queries on Dutch text
 - A cross-encoder reranker, measured against plain hybrid
-- Keep statute references as a separate exact-match field
+- OCR for scanned PDFs, so the ingest report has less to complain about
+- Claim checking with a real entailment model, since 42% of subtle errors get past the rules
 - Search over other Dutch open data

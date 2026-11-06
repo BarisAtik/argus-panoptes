@@ -10,6 +10,7 @@ write. See [Results on real text](#results-on-real-text).
 ```mermaid
 flowchart LR
     A[rechtspraak.nl or<br>Algoritmekader] -->|beacon fetch| B[corpus.jsonl]
+    Z[your folder: PDF, DOCX,<br>HTML, text] -->|beacon ingest-dir| B
     B -->|beacon quality| Q[quality report]
     B -->|chunk + embed| C[(Elasticsearch)]
     C --> D[BM25]
@@ -20,6 +21,7 @@ flowchart LR
     F --> H[RAG with checked citations]
     F --> I[MCP tools]
     F --> J[beacon eval]
+    F --> W[web app, per-user access]
 ```
 
 ## Try it in a minute
@@ -31,6 +33,19 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pytest
 make demo
+```
+
+## Search your own folder
+
+Reads PDF, Word, HTML and text files, tells you what it could not read, and serves a small web app
+with per-user access. Details are in [`PRIVATE_SEARCH_TEMPLATE.md`](PRIVATE_SEARCH_TEMPLATE.md).
+
+```bash
+pip install -e ".[web,onnx,files,compounds]" && beacon fetch-model
+beacon ingest-dir ~/documenten --acl acl.yaml --out data/files/corpus.jsonl
+beacon add-user lena --groups juridisch,iedereen
+beacon serve --backend local --corpus data/files/corpus.jsonl \
+  --embedder onnx:data/models/multilingual-e5-small
 ```
 
 ## The real stack
@@ -57,6 +72,8 @@ off because traffic stays on loopback; turn it on before you expose the stack an
 
 ## Design decisions
 
+- **`smart` is the default mode.** RRF that skips BM25 for non-Dutch queries, adds known synonyms and
+  matches exact statute citations. It was [scored once on fresh queries](reports/ak-routing.md).
 - **Fusion runs in the client.** Elasticsearch's native `rrf` and `linear` retrievers need an
   Enterprise licence and return a 403 on Basic. Beacon sends plain BM25 and plain kNN, then fuses
   the results itself. A test asserts that no request needs a paid feature.
@@ -126,6 +143,8 @@ What I take from it:
 ## Connect an agent
 
 The server is read-only and has four tools: `search`, `get_document`, `ask` and `index_info`.
+Over stdio it serves the groups it was started with. `beacon serve` also offers it at `/mcp/`, where
+each user's bearer token decides what they can reach, and every tool call goes in the audit log.
 
 ```bash
 # Claude Code, against the real index
@@ -266,3 +285,26 @@ See [`../PROGRESS.md`](../PROGRESS.md) for the next steps, and
 - The Algoritmekader results cover one small, tidy corpus. Expect different numbers elsewhere.
 - `multilingual-e5-small` is listed as MIT on a third-party page. Confirm on the
   model card before commercial use. The spaCy Dutch model is CC BY-SA 4.0.
+
+### Fresh queries: routing, scored once ([report](reports/ak-routing.md))
+
+The [plan](evals/PREREGISTRATION-3.md) was committed before any fresh query was ranked. 62 new
+queries, labelled blind by two AI annotators (weighted kappa 0.485, so moderate at best).
+
+| Planned test | n | Result |
+| --- | --- | --- |
+| Skipping BM25 for non-Dutch queries | 29 | **0.548 to 0.793** (+0.245, Holm p under 0.001) |
+| The same router on Dutch queries | 23 | No query changed |
+| Synonyms on abbreviation queries | 10 | +0.003, not supported. The second annotator's labels give +0.035 |
+| Exact citations on statute lookups | 128 | +0.149, but partly circular, see the report |
+
+Plain dense search scored 0.789 overall, level with the full `smart` pipeline at 0.781 and above RRF
+at 0.656. This was not a planned comparison, but it is another reminder that hybrid is not
+automatically better. Hybrid kept a small lead on recall@10 (0.854 against 0.828).
+
+### Checking claims without an LLM ([report](reports/ak-groundedness.md))
+
+`ask` checks each claim against the passage it cites. On 45 unseen passages, with claims written by
+a separate AI agent that never saw the checker, it flagged every wrong citation, 87% of hallucinated
+details and 58% of subtle errors. It raised false alarms on 12% of correct claims. A clean result
+proves nothing, and no real LLM has been run through it yet.

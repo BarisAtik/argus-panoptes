@@ -10,27 +10,53 @@ runs on the owner's machine, which is the part hosted assistants cannot offer.
 | Engine | Self-managed Elasticsearch, bound to localhost or an internal network |
 | Embeddings | Run locally with `st:`, `onnx:` (no torch) or `spacy:` |
 | Answers | `extractive` or `ollama:<model>`. **Do not use `anthropic:` on private documents**, since passages leave the machine |
-| Agents | MCP over stdio, read-only tools |
+| Agents | MCP over stdio or HTTP, read-only tools, scoped per user |
+| Records | Audit log with hashed queries, plain text only if the operator opts in |
+
+## Try it on a folder
+
+```bash
+pip install -e ".[web,onnx,files,compounds]"
+beacon fetch-model
+
+cat > acl.yaml <<YAML
+default: [admin]
+rules:
+  - path: "juridisch/*"
+    groups: [juridisch]
+  - path: "publiek/*"
+    groups: [iedereen]
+YAML
+
+beacon ingest-dir ~/documenten --acl acl.yaml --out data/files/corpus.jsonl
+cat data/files/ingest-report.md          # read this before you trust the search
+beacon add-user lena --groups juridisch,iedereen
+beacon serve --backend local --corpus data/files/corpus.jsonl \
+  --embedder onnx:data/models/multilingual-e5-small --embedding-cache data/cache
+# http://127.0.0.1:8080, log in with the token. MCP is at /mcp/ with `Authorization: Bearer`.
+```
+
+With Elasticsearch, add `--index` to `ingest-dir`. It keeps a state file and on each run re-indexes
+only changed files, and removes deleted ones. A changed access rule counts as a change.
 
 ## Adapting it to a new collection
 
-1. Write a source in `src/beacon/sources/` that produces `Document` objects. PDF, Word and mail
-   parsers are the usual work, and most of the effort goes here.
-2. Run `beacon quality`, and adapt its checks to the collection.
-3. Label 50 to 100 real queries with the people who will use the system, then run `beacon eval`.
+1. Run `beacon ingest-dir` and read its report. It lists unreadable files, scanned PDFs, duplicates
+   and files without an access rule. Files without a rule go to the group `admin`.
+2. Label 50 to 100 real queries with the people who will use the system, then run `beacon eval`.
    Choose the embedder and fusion from that data, not from defaults.
-4. Give each `Document` its `acl` groups, and start every server with `--groups` or
-   `BEACON_GROUPS`.
+3. Replace the list in `synonyms.py` and the laws in `citations.py` with the client's own terms.
 
 ## Missing before this is a product
 
-- **Per-user permissions.** Group filters now hold on every path, tested in `tests/test_acl.py`.
-  But one MCP process serves one set of groups, chosen when it starts. Serving many users from
-  one process needs real authentication, and groups synced from the client's directory.
-- **A user interface.** There is a CLI and MCP only.
-- **File parsing and OCR.** Only rechtspraak XML and Markdown with front matter are implemented.
-- **Incremental sync, deletion and audit logging.** Deletion matters for GDPR requests.
-- **TLS and a real secrets setup** for anything beyond one machine.
+- **Directory sync and login.** Users and groups live in a YAML file, with tokens. A client will
+  want groups from their directory and single sign-on.
+- **OCR.** Scanned PDFs are reported, not read.
+- **TLS and a real secrets setup.** The app has no TLS of its own, so put a reverse proxy in front
+  of it for anything beyond one machine.
+- **A hardening review.** Tests cover escaping, access, headers and throttling, but nobody
+  independent has attacked it. Sessions live in one process, and adding a user needs a restart.
+- **Mail and shared-drive connectors.** Only folders are read.
 - **Evaluation on real user questions.**
 
 ## What a client demo can show today
@@ -40,7 +66,9 @@ Run it on the Algoritmekader, because it is public, Dutch and shareable:
 - Search in English over Dutch text, side by side with BM25, which cannot do it.
 - `reports/ak-holdout.md`: a one-shot score against labels the builder did not write. This is
   the part most vendors cannot show.
-- `tests/test_acl.py`: a user without the right group gets the same answer as for a missing file.
+- `tests/test_acl.py` and `tests/test_web.py`: a user without the right group gets the same answer
+  as for a missing file, in the browser, the API and MCP.
+- `reports/ak-groundedness.md`: what the claim check catches, and the 42% of subtle errors it misses.
 - `reports/ak-injection.md`: the honest limits of filtering planted instructions.
 
 ## Licensing notes (not legal advice)
