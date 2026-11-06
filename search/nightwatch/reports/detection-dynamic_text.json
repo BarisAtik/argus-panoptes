@@ -1,0 +1,248 @@
+{
+ "split": "test",
+ "variant": "dynamic_text",
+ "provenance": {
+  "sigma_commit": "52f81d60d5ea122e49a34b2289ea0c2a7bb0b113",
+  "datasets_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+  "engine": "opensearch 3.9.0-SNAPSHOT",
+  "lucene": "10.5.1",
+  "pysigma": "1.5.1",
+  "lucene_backend": "2.1.1"
+ },
+ "index": {
+  "indexed": 560704,
+  "rejected": 0
+ },
+ "rules": {
+  "parsed": 2427,
+  "skipped": 0,
+  "usable": 2412,
+  "failed_queries": 4,
+  "ever_fired": 107
+ },
+ "failures": {
+  "query_shard_exception": 4
+ },
+ "readiness": {
+  "ready": 2292,
+  "no_field": 57,
+  "no_source": 63,
+  "unknown_source": 15
+ },
+ "most_missing_fields": [
+  [
+   "Data",
+   28
+  ],
+  [
+   "Contents",
+   6
+  ],
+  [
+   "CommandLine",
+   4
+  ],
+  [
+   "processPath",
+   2
+  ],
+  [
+   "LocalName",
+   2
+  ],
+  [
+   "RemoteName",
+   2
+  ],
+  [
+   "NewTemplateContent",
+   2
+  ],
+  [
+   "TemplateContent",
+   2
+  ],
+  [
+   "SamAccountName",
+   2
+  ],
+  [
+   "AppName",
+   1
+  ],
+  [
+   "ExceptionCode",
+   1
+  ],
+  [
+   "NewUacValue",
+   1
+  ],
+  [
+   "NewTargetUserName",
+   1
+  ],
+  [
+   "CertThumbprint",
+   1
+  ],
+  [
+   "Caption",
+   1
+  ]
+ ],
+ "datasets": 78,
+ "any_alert": 78,
+ "any_alert_wilson": [
+  0.9530621895820832,
+  1.0
+ ],
+ "recall_wilson": [
+  0.3195906027300107,
+  0.5337844450265918
+ ],
+ "firing_pairs": 2075,
+ "on_target_share": 0.02650602409638554,
+ "B1": {
+  "all_rules": 33,
+  "predated_rules": 11,
+  "n": 78,
+  "only_all": 22,
+  "only_predated": 0,
+  "p": 2.384185791015625e-07,
+  "missed_by_all": [
+   "SDWIN-190301174830: Empire DCSync",
+   "SDWIN-190319020729: Empire Net Local Users",
+   "SDWIN-190319021158: Empire Net Domain Users",
+   "SDWIN-190518201207: Empire Shell Net Domain Admins",
+   "SDWIN-190518202151: Empire Mimikatz LogonPasswords",
+   "SDWIN-190518210125: Empire Invoke SMBExec",
+   "SDWIN-190518210652: Empire Invoke PsExec",
+   "SDWIN-190518211052: Empire Invoke DCOM ShellWindows",
+   "SDWIN-190518213907: Empire Invoke Execute MSBuild",
+   "SDWIN-190518230752: Empire Mimikatz Extract Kerberos Keys",
+   "SDWIN-190519005224: Empire Remote Get Session",
+   "SDWIN-190625133822: Empire Reg Dump SAM Hive",
+   "SDWIN-200609225055: MSF Record Mic",
+   "SDWIN-200724174200: Covenant Remote WMI Eventing ActiveScriptEventConsumers",
+   "SDWIN-200805020926: Covenant DCSync",
+   "SDWIN-200805034820: Covenant SC.exe Utility Query",
+   "SDWIN-200806012009: Covenant SharpSC Query",
+   "SDWIN-200806015757: Covenant Remote File Copy",
+   "SDWIN-200806030120: Covenant SharpSC Start",
+   "SDWIN-200806031938: Covenant SharpSC Stop Service",
+   "SDWIN-200806035621: Covenant SharpWMI Exec",
+   "SDWIN-200806130039: Covenant GetDomainGroup Domain Admins",
+   "SDWIN-200807103913: Empire Mimikatz Lsadump LSA Patch",
+   "SDWIN-200916232559: Mimikatz Netlogon Unauthenticated NetrServerAuthenticate2",
+   "SDWIN-200918145959: DCOM RegisterXLL",
+   "SDWIN-200921001437: Empire Invoke WMI",
+   "SDWIN-200922042230: Empire Powerdump Extract Hashes",
+   "SDWIN-201009173318: Covenant Remote WMI Wbemcomn DLL Hijacking",
+   "SDWIN-201017061100: WMIC Remote XSL Jscript Execution",
+   "SDWIN-201019033054: Psexec Reg LSA Secrets Dump",
+   "SDWIN-201020013208: UI Prompt For Credentials Function",
+   "SDWIN-201021001911: Netsh Open FW Proxy Ports",
+   "SDWIN-201021204544: Service Modification Fax",
+   "SDWIN-201021232814: Internet Explorer Version Discovery",
+   "SDWIN-201023023651: Bitsadmin Download Malicious File",
+   "SDWIN-201028191914: Windows Vault Web Credentials",
+   "SDWIN-201102041306: PowerShell HTTP Listener",
+   "SDWIN-201219075059: Remote Scheduled Task Modification",
+   "SDWIN-210314014019: Exchange ProxyLogon SSRF RCE Vuln POC",
+   "SDWIN-210427020247: Export ADFS Database Configuration Remotely",
+   "SDWIN-210611210814: APT Simulator Cobalt Strike",
+   "SDWIN-220630130349: Disabling Windows Event Logging via Audit Policy Modification",
+   "SDWIN-220705170038: Modifying Security Event Log File Path via Modification of Log Configuration",
+   "SDWIN-220708104215: Stopping Event Log Service via Modification of Start Up Type",
+   "SDWIN-220803205800: Stopping Event Logging via Creation of MiniNt Registry Key"
+  ],
+  "p_holm": 4.76837158203125e-07
+ },
+ "B2": {
+  "pairs": 2013,
+  "rules": 103,
+  "share_severe": 0.02986279257465698,
+  "share_mild": 0.021963824289405683,
+  "difference": 0.007898968285251298,
+  "p": 0.2303884805759712,
+  "p_holm": 0.2303884805759712
+ },
+ "noisiest": [
+  {
+   "title": "Potential Azure Browser SSO Abuse",
+   "level": "low",
+   "datasets": 78
+  },
+  {
+   "title": "Potential RjvPlatform.DLL Sideloading From Default Location",
+   "level": "medium",
+   "datasets": 78
+  },
+  {
+   "title": "Creation Exe for Service with Unquoted Path",
+   "level": "high",
+   "datasets": 77
+  },
+  {
+   "title": "HackTool - Typical HiveNightmare SAM File Export",
+   "level": "high",
+   "datasets": 77
+  },
+  {
+   "title": "Suspicious Interactive PowerShell as SYSTEM",
+   "level": "high",
+   "datasets": 77
+  },
+  {
+   "title": "LiveKD Kernel Memory Dump File Created",
+   "level": "high",
+   "datasets": 77
+  },
+  {
+   "title": "LiveKD Driver Creation By Uncommon Process",
+   "level": "high",
+   "datasets": 77
+  },
+  {
+   "title": "WMI Persistence - Script Event Consumer File Write",
+   "level": "high",
+   "datasets": 77
+  },
+  {
+   "title": "UEFI Persistence Via Wpbbin - FileCreation",
+   "level": "high",
+   "datasets": 77
+  },
+  {
+   "title": "Security Event Logging Disabled via MiniNt Registry Key - Registry Set",
+   "level": "high",
+   "datasets": 76
+  },
+  {
+   "title": "Change User Account Associated with the FAX Service",
+   "level": "high",
+   "datasets": 76
+  },
+  {
+   "title": "Suspicious Service Installed",
+   "level": "medium",
+   "datasets": 76
+  },
+  {
+   "title": "Azure AD Health Service Agents Registry Keys Access",
+   "level": "medium",
+   "datasets": 74
+  },
+  {
+   "title": "Program Executed Using Proxy/Local Command Via SSH.EXE",
+   "level": "medium",
+   "datasets": 70
+  },
+  {
+   "title": "Execution Of Non-Existing File",
+   "level": "high",
+   "datasets": 70
+  }
+ ]
+}

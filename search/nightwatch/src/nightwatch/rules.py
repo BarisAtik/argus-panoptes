@@ -21,6 +21,7 @@ class Rule:
     status: str
     level: str
     created: str
+    author: str = ""  # DRL 1.1: messages based on a match must keep this
     techniques: list[str] = field(default_factory=list)
     sigma: SigmaRule | None = field(default=None, repr=False)
 
@@ -46,6 +47,7 @@ def from_sigma(rule: SigmaRule, path: str = "") -> Rule:
         status=str(rule.status.name).lower() if rule.status else "none",
         level=str(rule.level.name).lower() if rule.level else "none",
         created=_iso(rule.date),
+        author=rule.author or "",
         techniques=techniques_of(rule),
         sigma=rule,
     )

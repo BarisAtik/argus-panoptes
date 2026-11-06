@@ -56,8 +56,7 @@ def test_placeholder_value_is_not_a_value():
 
 def test_negated_field_does_not_block():
     text = (
-        "  selection:\n    Image: a\n  filter:\n    User: b\n"
-        "  condition: selection and not filter"
+        "  selection:\n    Image: a\n  filter:\n    User: b\n  condition: selection and not filter"
     )
     assert check(rule(text), inventory(Image="x")).status == "ready"
 

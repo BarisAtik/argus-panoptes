@@ -10,6 +10,7 @@ title: Test Rule
 id: 11111111-1111-4111-8111-111111111111
 status: stable
 level: high
+author: A Rule Author
 date: 2020-01-02
 tags:
   - attack.execution

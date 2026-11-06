@@ -49,7 +49,10 @@ def holm(p_values: dict[str, float]) -> dict[str, float]:
 
 
 def clustered_permutation(
-    outcome: Sequence[int], group: Sequence[int], cluster: Sequence[str], rounds: int = 20000,
+    outcome: Sequence[int],
+    group: Sequence[int],
+    cluster: Sequence[str],
+    rounds: int = 20000,
     seed: int = 7,
 ) -> tuple[float, float]:
     """Difference in mean outcome, group 1 minus group 0, keeping each cluster's rows together.

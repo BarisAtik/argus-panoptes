@@ -1,0 +1,6 @@
+R version 4.5.3 (2026-03-11), lme4 2.0.6
+pairs 516, rules 208, datasets 75
+log-odds severe vs mild: 4.513 (Wald 95% -1.634 to 10.660), one-sided p = 0.0751
+odds ratio: 91.20
+random effect sd: rule 5.909, dataset 2.672
+singular fit: FALSE

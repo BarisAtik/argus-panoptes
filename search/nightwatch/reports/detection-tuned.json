@@ -1,0 +1,229 @@
+{
+ "split": "test",
+ "variant": "tuned",
+ "provenance": {
+  "sigma_commit": "52f81d60d5ea122e49a34b2289ea0c2a7bb0b113",
+  "datasets_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+  "engine": "opensearch 3.9.0-SNAPSHOT",
+  "lucene": "10.5.1",
+  "pysigma": "1.5.1",
+  "lucene_backend": "2.1.1"
+ },
+ "index": {
+  "indexed": 560704,
+  "rejected": 0
+ },
+ "rules": {
+  "parsed": 2427,
+  "skipped": 0,
+  "usable": 2412,
+  "failed_queries": 5,
+  "ever_fired": 214
+ },
+ "failures": {
+  "query_shard_exception": 4,
+  "too_many_nested_clauses": 1
+ },
+ "readiness": {
+  "ready": 2292,
+  "no_field": 57,
+  "no_source": 63,
+  "unknown_source": 15
+ },
+ "most_missing_fields": [
+  [
+   "Data",
+   28
+  ],
+  [
+   "Contents",
+   6
+  ],
+  [
+   "CommandLine",
+   4
+  ],
+  [
+   "processPath",
+   2
+  ],
+  [
+   "LocalName",
+   2
+  ],
+  [
+   "RemoteName",
+   2
+  ],
+  [
+   "NewTemplateContent",
+   2
+  ],
+  [
+   "TemplateContent",
+   2
+  ],
+  [
+   "SamAccountName",
+   2
+  ],
+  [
+   "AppName",
+   1
+  ],
+  [
+   "ExceptionCode",
+   1
+  ],
+  [
+   "NewUacValue",
+   1
+  ],
+  [
+   "NewTargetUserName",
+   1
+  ],
+  [
+   "CertThumbprint",
+   1
+  ],
+  [
+   "Caption",
+   1
+  ]
+ ],
+ "datasets": 78,
+ "any_alert": 77,
+ "any_alert_wilson": [
+  0.9308914292702968,
+  0.9977332682712203
+ ],
+ "recall_wilson": [
+  0.5696065582636252,
+  0.7725183303043022
+ ],
+ "firing_pairs": 618,
+ "on_target_share": 0.21844660194174756,
+ "B1": {
+  "all_rules": 53,
+  "predated_rules": 33,
+  "n": 78,
+  "only_all": 20,
+  "only_predated": 0,
+  "p": 9.5367431640625e-07,
+  "missed_by_all": [
+   "SDWIN-190301125905: Empire Powerview Add-DomainObjectAcl",
+   "SDWIN-190319021158: Empire Net Domain Users",
+   "SDWIN-190518201207: Empire Shell Net Domain Admins",
+   "SDWIN-190518211052: Empire Invoke DCOM ShellWindows",
+   "SDWIN-190518230752: Empire Mimikatz Extract Kerberos Keys",
+   "SDWIN-190519005224: Empire Remote Get Session",
+   "SDWIN-200805034820: Covenant SC.exe Utility Query",
+   "SDWIN-200806012009: Covenant SharpSC Query",
+   "SDWIN-200806031938: Covenant SharpSC Stop Service",
+   "SDWIN-200806130039: Covenant GetDomainGroup Domain Admins",
+   "SDWIN-200916232559: Mimikatz Netlogon Unauthenticated NetrServerAuthenticate2",
+   "SDWIN-200917174542: DCOM ExecuteExcel4macro",
+   "SDWIN-200918145959: DCOM RegisterXLL",
+   "SDWIN-201020013208: UI Prompt For Credentials Function",
+   "SDWIN-201021001911: Netsh Open FW Proxy Ports",
+   "SDWIN-201028191914: Windows Vault Web Credentials",
+   "SDWIN-201029001615: Python HTTP Server",
+   "SDWIN-201102041306: PowerShell HTTP Listener",
+   "SDWIN-201102163918: Seatbelt Group User Discovery",
+   "SDWIN-201219075059: Remote Scheduled Task Modification",
+   "SDWIN-210427020247: Export ADFS Database Configuration Remotely",
+   "SDWIN-220630130349: Disabling Windows Event Logging via Audit Policy Modification",
+   "SDWIN-220705170038: Modifying Security Event Log File Path via Modification of Log Configuration",
+   "SDWIN-220708104215: Stopping Event Log Service via Modification of Start Up Type",
+   "SDWIN-220803205800: Stopping Event Logging via Creation of MiniNt Registry Key"
+  ],
+  "p_holm": 1.9073486328125e-06
+ },
+ "B2": {
+  "pairs": 516,
+  "rules": 208,
+  "share_severe": 0.3029045643153527,
+  "share_mild": 0.21818181818181817,
+  "difference": 0.0847227461335345,
+  "p": 0.08179591020448977,
+  "p_holm": 0.08179591020448977
+ },
+ "noisiest": [
+  {
+   "title": "User Logoff Event",
+   "level": "informational",
+   "datasets": 55
+  },
+  {
+   "title": "New PowerShell Instance Created",
+   "level": "informational",
+   "datasets": 21
+  },
+  {
+   "title": "Security Eventlog Cleared",
+   "level": "high",
+   "datasets": 19
+  },
+  {
+   "title": "Suspicious High IntegrityLevel Conhost Legacy Option",
+   "level": "informational",
+   "datasets": 19
+  },
+  {
+   "title": "Local Accounts Discovery",
+   "level": "low",
+   "datasets": 17
+  },
+  {
+   "title": "Potentially Suspicious AccessMask Requested From LSASS",
+   "level": "medium",
+   "datasets": 14
+  },
+  {
+   "title": "Important Windows Eventlog Cleared",
+   "level": "high",
+   "datasets": 14
+  },
+  {
+   "title": "Alternate PowerShell Hosts - PowerShell Module",
+   "level": "medium",
+   "datasets": 14
+  },
+  {
+   "title": "PSScriptPolicyTest Creation By Uncommon Process",
+   "level": "medium",
+   "datasets": 13
+  },
+  {
+   "title": "AMSI Bypass Pattern Assembly GetType",
+   "level": "high",
+   "datasets": 13
+  },
+  {
+   "title": "Suspicious PowerShell Invocations - Specific",
+   "level": "high",
+   "datasets": 13
+  },
+  {
+   "title": "Suspicious WSMAN Provider Image Loads",
+   "level": "medium",
+   "datasets": 12
+  },
+  {
+   "title": "Non Interactive PowerShell Process Spawned",
+   "level": "low",
+   "datasets": 12
+  },
+  {
+   "title": "PowerShell Core DLL Loaded By Non PowerShell Process",
+   "level": "medium",
+   "datasets": 11
+  },
+  {
+   "title": "Suspicious Execution of Powershell with Base64",
+   "level": "medium",
+   "datasets": 10
+  }
+ ]
+}

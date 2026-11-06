@@ -146,9 +146,7 @@ class Engine:
 
     def count(self, index: str, query: str, within: dict | None = None) -> int:
         """Raises `QueryFailed` when the engine refuses the query, so 0 always means 0."""
-        response = self.client.post(
-            f"/{index}/_count", json={"query": self._body(query, within)}
-        )
+        response = self.client.post(f"/{index}/_count", json={"query": self._body(query, within)})
         if response.status_code != 200:
             raise QueryFailed(_reason(response))
         return response.json()["count"]

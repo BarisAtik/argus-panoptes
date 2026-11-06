@@ -25,7 +25,7 @@ class SqlStore:
             for key in row:
                 spelling.setdefault(key.lower(), key)
         self.columns = sorted(spelling.values())
-        self.db = sqlite3.connect(":memory:")
+        self.db = sqlite3.connect(":memory:", check_same_thread=False)  # tools run in threads
         self.db.create_function("regexp", 2, _regexp)
         columns = ", ".join(f'"{name}" TEXT' for name in self.columns)
         self.db.execute(f"CREATE TABLE logs ({columns})")
@@ -34,8 +34,10 @@ class SqlStore:
         self.db.executemany(
             f"INSERT INTO logs ({names}) VALUES ({marks})",
             (
-                [{key.lower(): value for key, value in row.items()}.get(name.lower())
-                 for name in self.columns]
+                [
+                    {key.lower(): value for key, value in row.items()}.get(name.lower())
+                    for name in self.columns
+                ]
                 for row in rows
             ),
         )

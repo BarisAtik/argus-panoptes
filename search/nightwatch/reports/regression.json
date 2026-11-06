@@ -1,0 +1,793 @@
+{
+ "split": "test",
+ "cases": 380,
+ "provenance": {
+  "sigma_commit": "52f81d60d5ea122e49a34b2289ea0c2a7bb0b113",
+  "datasets_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+  "engine": "opensearch 3.9.0-SNAPSHOT",
+  "lucene": "10.5.1",
+  "pysigma": "1.5.1",
+  "lucene_backend": "2.1.1"
+ },
+ "summary": {
+  "dynamic_text": {
+   "fires": 75,
+   "fire_rate": 0.19736842105263158,
+   "wilson": [
+    0.16046505976547448,
+    0.24032921433317594
+   ],
+   "exact": 74,
+   "failed_queries": 3,
+   "hits_on_other_cases": 97
+  },
+  "keyword_raw": {
+   "fires": 294,
+   "fire_rate": 0.7736842105263158,
+   "wilson": [
+    0.7289945072840985,
+    0.8128958883136436
+   ],
+   "exact": 292,
+   "failed_queries": 3,
+   "hits_on_other_cases": 121
+  },
+  "keyword_lower": {
+   "fires": 354,
+   "fire_rate": 0.9315789473684211,
+   "wilson": [
+    0.9016363619898715,
+    0.9528831079911837
+   ],
+   "exact": 352,
+   "failed_queries": 3,
+   "hits_on_other_cases": 150
+  },
+  "keyword_lower_1024": {
+   "fires": 352,
+   "fire_rate": 0.9263157894736842,
+   "wilson": [
+    0.8955673099801432,
+    0.9485311908548014
+   ],
+   "exact": 350,
+   "failed_queries": 3,
+   "hits_on_other_cases": 150
+  },
+  "wildcard_raw": {
+   "fires": 34,
+   "fire_rate": 0.08947368421052632,
+   "wilson": [
+    0.06473419638349673,
+    0.12243021021988995
+   ],
+   "exact": 34,
+   "failed_queries": 4,
+   "hits_on_other_cases": 56
+  },
+  "wildcard_lower": {
+   "fires": 34,
+   "fire_rate": 0.08947368421052632,
+   "wilson": [
+    0.06473419638349673,
+    0.12243021021988995
+   ],
+   "exact": 34,
+   "failed_queries": 4,
+   "hits_on_other_cases": 57
+  },
+  "keyword_lower_chunked": {
+   "fires": 365,
+   "fire_rate": 0.9605263157894737,
+   "wilson": [
+    0.9358999592330433,
+    0.9759348410516193
+   ],
+   "exact": 363,
+   "failed_queries": 3,
+   "hits_on_other_cases": 168
+  },
+  "tuned": {
+   "fires": 372,
+   "fire_rate": 0.9789473684210527,
+   "wilson": [
+    0.9590136503927542,
+    0.9892945419032948
+   ],
+   "exact": 370,
+   "failed_queries": 3,
+   "hits_on_other_cases": 169
+  },
+  "sqlite": {
+   "fires": 375,
+   "fire_rate": 0.9868421052631579,
+   "wilson": [
+    0.9695726554469704,
+    0.9943669905682442
+   ],
+   "exact": 373,
+   "failed_queries": 4,
+   "hits_on_other_cases": 171
+  }
+ },
+ "tests": {
+  "A1": {
+   "better": 60,
+   "worse": 0,
+   "p": 8.673617379884035e-19,
+   "worse_cases": [],
+   "better_cases": [
+    "b8fd0e93-ff58-4cbd-8f48-1c114e342e62",
+    "a7f3c891-2e4d-4b6a-9f8c-d5e2a1b04c73",
+    "2f400434-01e1-416b-b52c-bb5bfbb9eb78",
+    "8ff28fdd-e2fa-4dfa-aeda-ef3d61c62090",
+    "e50d5d26-0cf6-4045-b82b-13c0a4e316be",
+    "95afc12e-3cbb-40c3-9340-84a032e596a3",
+    "7b836d7f-179c-4ba4-90a7-a7e60afb48e6",
+    "8c521530-5169-495d-a199-0a3a881ad24e",
+    "36fbec91-fa1b-4d5d-8df1-8d8edcb632ad",
+    "cdfa73b6-3c9d-4bb8-97f8-ddbd8921f5c5",
+    "162e69a7-7981-4344-84a9-0f1c9a217a52",
+    "ae7fbf8e-f3cb-49fd-8db4-5f3bed522c71",
+    "a9723fcc-881c-424c-8709-fd61442ab3c3",
+    "c1337eb8-921a-4b59-855b-4ba188ddcc42",
+    "adf876b3-f1f8-4aa9-a4e4-a64106feec06",
+    "9f5c1d59-33be-4e60-bcab-85d2f566effd",
+    "d7b81144-b866-48a4-9bcc-275dc69d870e",
+    "c3d76afc-93df-461e-8e67-9b2bad3f2ac4",
+    "587254ee-a24b-4335-b3cd-065c0f1f4baa",
+    "68c8acb4-1b60-4890-8e82-3ddf7a6dba84",
+    "f376c8a7-a2d0-4ddc-aa0c-16c17236d962",
+    "52ff7941-8211-46f9-84f8-9903efb7077d",
+    "d042284c-a296-4988-9be5-f424fadcc28c",
+    "9292293b-8496-4715-9db6-37028dcda4b3",
+    "da92713f-ca2d-4fab-8320-098013d3f43a",
+    "6f4191bb-912b-48a8-9ce7-682769541e6d",
+    "d95de845-b83c-4a9a-8a6a-4fc802ebf6c0",
+    "7c9fed65-039a-4055-8c23-fa763d94aff6",
+    "b9d9cc83-380b-4ba3-8d8f-60c0e7e2930c",
+    "85b0b087-eddf-4a2b-b033-d771fa2b9775",
+    "ee218c12-627a-4d27-9e30-d6fb2fe22ed2",
+    "09576804-7a05-458e-a817-eb718ca91f54",
+    "536e2947-3729-478c-9903-745aaffe60d2",
+    "5e3cc4d8-3e68-43db-8656-eaaeefdec9cc",
+    "1af57a4b-460a-4738-9034-db68b880c665",
+    "87e3c4e8-a6a8-4ad9-bb4f-46e7ff99a180",
+    "de587dce-915e-4218-aac4-835ca6af6f70",
+    "fd877b94-9bb5-4191-bb25-d79cbd93c167",
+    "ccc946a3-f65a-432a-bb6f-efc6acc1fd27",
+    "28ac00d6-22d9-4a3c-927f-bbd770104573",
+    "baef1ec6-2ca9-47a3-97cc-4cf2bda10b77",
+    "9ec9fb1b-e059-4489-9642-f270c207923d",
+    "f2c64357-b1d2-41b7-849f-34d2682c0fad",
+    "89ca78fd-b37c-4310-b3d3-81a023f83936",
+    "7d1aaf3d-4304-425c-b7c3-162055e0b3ab",
+    "502b42de-4306-40b4-9596-6f590c81f073",
+    "8bc64091-6875-4881-aaf9-7bd25b5dda08",
+    "ab9e3b40-0c85-4ba1-aede-455d226fd124",
+    "f57f8d16-1f39-4dcb-a604-6c73d9b54b3d",
+    "9fc51a3c-81b3-4fa7-b35f-7c02cf10fd2d",
+    "8f3ab69a-aa22-4943-aa58-e0a52fdf6818",
+    "9d5a1274-922a-49d0-87f3-8c653483b909",
+    "c453ab7a-1f5c-4716-a3b4-dea8135fb43a",
+    "847d5ff3-8a31-4737-a970-aeae8fe21765",
+    "480421f9-417f-4d3b-9552-fd2728443ec8",
+    "45e112d0-7759-4c2a-aa36-9f8fb79d3393",
+    "e2482f8d-3443-4237-b906-cc145d87a076",
+    "d223b46b-5621-4037-88fe-fda32eead684",
+    "02ee49e2-e294-4d0f-9278-f5b3212fc588",
+    "3f2c93c7-7b2a-4d58-bb8d-6f39422d8148"
+   ],
+   "p_holm": 3.469446951953614e-18
+  },
+  "A2": {
+   "better": 284,
+   "worse": 5,
+   "p": 1.6603210717860418e-77,
+   "worse_cases": [
+    "b29a93fb-087c-4b5b-a84d-ee3309e69d08",
+    "df69cb1d-b891-4cd9-90c7-d617d90100ce",
+    "189e3b02-82b2-4b90-9662-411eb64486d4",
+    "313fbb0a-a341-4682-848d-6d6f8c4fab7c",
+    "03d83090-8cba-44a0-b02f-0b756a050306"
+   ],
+   "better_cases": [
+    "7595ba94-cf3b-4471-aa03-4f6baa9e5fad",
+    "9e3cb244-bdb8-4632-8c90-6079c8f4f16d",
+    "4f8a1c2e-7d3b-4e5f-9a6c-0b1d2e3f4a5b",
+    "fed85bf9-e075-4280-9159-fbe8a023d6fa",
+    "0b9ad457-2554-44c1-82c2-d56a99c42377",
+    "df6ecb8b-7822-4f4b-b412-08f524b4576c",
+    "13c02350-4177-4e45-ac17-cf7ca628ff5e",
+    "d5866ddf-ce8f-4aea-b28e-d96485a20d3d",
+    "8fbf3271-1ef6-4e94-8210-03c2317947f6",
+    "aba15bdd-657f-422a-bab3-ac2d2a0d6f1c",
+    "efc21479-9e83-41da-8cf1-122e06ba8db3",
+    "602a1f13-c640-4d73-b053-be9a2fa58b96",
+    "9711de76-5d4f-4c50-a94f-21e4e8f8384d",
+    "7047d730-036f-4f40-b9d8-1c63e36d5e62",
+    "1277f594-a7d1-4f28-a2d3-73af5cbeab43",
+    "b8fd0e93-ff58-4cbd-8f48-1c114e342e62",
+    "f0540f7e-2db3-4432-b9e0-3965486744bc",
+    "1cf465a1-2609-4c15-9b66-c32dbe4bfd67",
+    "7d604714-e071-49ff-8726-edeb95a70679",
+    "b447f7de-1e53-4cbf-bfb4-f1f6d0b04e4e",
+    "cd8b36ac-8e4a-4c2f-a402-a29b8fbd5bca",
+    "a7f3c891-2e4d-4b6a-9f8c-d5e2a1b04c73",
+    "304afd73-55a5-4bb9-8c21-0b1fc84ea9e4",
+    "69ca12af-119d-44ed-b50f-a47af0ebc364",
+    "2f400434-01e1-416b-b52c-bb5bfbb9eb78",
+    "2b140a5c-dc02-4bb8-b6b1-8bdb45714cde",
+    "ed74fe75-7594-4b4b-ae38-e38e3fd2eb23",
+    "992a6cae-db6a-43c8-9cec-76d7195c96fc",
+    "8ff28fdd-e2fa-4dfa-aeda-ef3d61c62090",
+    "e50d5d26-0cf6-4045-b82b-13c0a4e316be",
+    "96c982fe-3d08-4df4-bed2-eb14e02f21c8",
+    "c1dda054-d638-4c16-afc8-53e007f3fbc5",
+    "4ff4ad3e-9fb5-4a70-9962-d6ea58090318",
+    "1f6399cf-2c80-4924-ace1-6fcff3393480",
+    "846c7a87-8e14-4569-9d49-ecfd4276a01c",
+    "991a9744-f2f0-44f2-bd33-9092eba17dc3",
+    "95afc12e-3cbb-40c3-9340-84a032e596a3",
+    "060c3ef1-fd0a-4091-bf46-e7d625f60b73",
+    "904e8e61-8edf-4350-b59c-b905fc8e810c",
+    "7b836d7f-179c-4ba4-90a7-a7e60afb48e6",
+    "d59d7842-9a21-4bc6-ba98-64bfe0091355",
+    "34f90d3c-c297-49e9-b26d-911b05a4866c",
+    "89819aa4-bbd6-46bc-88ec-c7f7fe30efa6",
+    "b7216a7d-687e-4c8d-82b1-3080b2ad961f",
+    "78aa1347-1517-4454-9982-b338d6df8343",
+    "8c521530-5169-495d-a199-0a3a881ad24e",
+    "36fbec91-fa1b-4d5d-8df1-8d8edcb632ad",
+    "da34e323-1e65-42db-83be-a6725ac2caa3",
+    "cdfa73b6-3c9d-4bb8-97f8-ddbd8921f5c5",
+    "a0edd39f-a0c6-4c17-8141-261f958e8d8f",
+    "61d0475c-173f-4844-86f7-f3eebae1c66b",
+    "a699b30e-d010-46c8-bbd1-ee2e26765fe9",
+    "162e69a7-7981-4344-84a9-0f1c9a217a52",
+    "b5522a23-82da-44e5-9c8b-e10ed8955f88",
+    "84c174ab-d3ef-481f-9c86-a50d0b8e3edb",
+    "42d36aa1-3240-4db0-8257-e0118dcdd9cd",
+    "ae7fbf8e-f3cb-49fd-8db4-5f3bed522c71",
+    "d4488827-73af-4f8d-9244-7b7662ef046e",
+    "2837e152-93c8-43d2-85ba-c3cd3c2ae614",
+    "1c563233-030e-4a07-af8c-ee0490a66d3a",
+    "a9723fcc-881c-424c-8709-fd61442ab3c3",
+    "0718cd72-f316-4aa2-988f-838ea8533277",
+    "c1337eb8-921a-4b59-855b-4ba188ddcc42",
+    "14c71865-6cd3-44ae-adaa-1db923fae5f2",
+    "adf876b3-f1f8-4aa9-a4e4-a64106feec06",
+    "1139d2e2-84b1-4226-b445-354492eba8ba",
+    "91109523-17f0-4248-a800-f81d9e7c081d",
+    "9e07f6e7-83aa-45c6-998e-0af26efd0a85",
+    "9f5c1d59-33be-4e60-bcab-85d2f566effd",
+    "7dbbcac2-57a0-45ac-b306-ff30a8bd2981",
+    "60fc936d-2eb0-4543-8a13-911c750a1dfc",
+    "d7b81144-b866-48a4-9bcc-275dc69d870e",
+    "d059842b-6b9d-4ed1-b5c3-5b89143c6ede",
+    "99c840f2-2012-46fd-9141-c761987550ef",
+    "8518ed3d-f7c9-4601-a26c-f361a4256a0c",
+    "5b80a791-ad9b-4b75-bcc1-ad4e1e89c200",
+    "2ddef153-167b-4e89-86b6-757a9e65dcac",
+    "0e8cfe08-02c9-4815-a2f8-0d157b7ed33e",
+    "27ba3207-dd30-4812-abbf-5d20c57d474e",
+    "94771a71-ba41-4b6e-a757-b531372eaab6",
+    "737e618a-a410-49b5-bec3-9e55ff7fbc15",
+    "d2125259-ddea-4c1c-9c22-977eb5b29cf0",
+    "19b08b1c-861d-4e75-a1ef-ea0c1baf202b",
+    "13e6fe51-d478-4c7e-b0f2-6da9b400a829",
+    "ea0cdc3e-2239-4f26-a947-4e8f8224e464",
+    "82a6714f-4899-4f16-9c1e-9a333544d4c3",
+    "3ffd6f51-e6c1-47b7-94b4-c1e61d4117c5",
+    "6c6d9280-e6d0-4b9d-80ac-254701b64916",
+    "c7942406-33dd-4377-a564-0f62db0593a3",
+    "5a6b7c8d-9e0f-1a2b-3c4d-5e6f7a8b9c0d",
+    "e9b61244-893f-427c-b287-3e708f321c6b",
+    "41ca393d-538c-408a-ac27-cf1e038be80c",
+    "c73124a7-3e89-44a3-bdc1-25fe4df754b1",
+    "b1ec66c6-f4d1-4b5c-96dd-af28ccae7727",
+    "07f8bdc2-c9b3-472a-9817-5a670b872f53",
+    "056c7317-9a09-4bd4-9067-d051312752ea",
+    "515c8be5-e5df-4c5e-8f6d-a4a2f05e4b48",
+    "c17d47b7-dcd6-4109-87eb-d1817bd4cbc9",
+    "dcaa3f04-70c3-427a-80b4-b870d73c94c4",
+    "b730a276-6b63-41b8-bcf8-55930c8fc6ee",
+    "5a6e1e16-07de-48d8-8aae-faa766c05e88",
+    "56454143-524f-49fb-b1c6-3fb8b1ad41fb",
+    "cb9cc1d1-e84e-4bdc-b7ad-c31b1b7908ec",
+    "2c1486f5-02e8-4f86-9099-b97f2da4ed77",
+    "aa6f6ea6-0676-40dd-b510-6e46f02d8867",
+    "85f520e7-6f5e-43ca-874c-222e5bf9c0de",
+    "0022869c-49f7-4ff2-ba03-85ac42ddac58",
+    "9fc3072c-dc8f-4bf7-b231-18950000fadd",
+    "7124aebe-4cd7-4ccb-8df0-6d6b93c96795",
+    "c3d76afc-93df-461e-8e67-9b2bad3f2ac4",
+    "587254ee-a24b-4335-b3cd-065c0f1f4baa",
+    "91a2c315-9ee6-4052-a853-6f6a8238f90d",
+    "47e4bab7-c626-47dc-967b-255608c9a920",
+    "ccb5742c-c248-4982-8c5c-5571b9275ad3",
+    "4fe074b4-b833-4081-8f24-7dcfeca72b42",
+    "37db85d1-b089-490a-a59a-c7b6f984f480",
+    "c0b2768a-dd06-4671-8339-b16ca8d1f27f",
+    "e56d3073-83ff-4021-90fe-c658e0709e72",
+    "68c8acb4-1b60-4890-8e82-3ddf7a6dba84",
+    "f376c8a7-a2d0-4ddc-aa0c-16c17236d962",
+    "058f4380-962d-40a5-afce-50207d36d7e2",
+    "c598cc0c-9e70-4852-b9eb-8921af79f598",
+    "39b31e81-5f5f-4898-9c0e-2160cfc0f9bf",
+    "7638e5fe-600c-4289-a968-f49dd537ec7d",
+    "52ff7941-8211-46f9-84f8-9903efb7077d",
+    "b2317cfa-4a47-4ead-b3ff-297438c0bc2d",
+    "e92a4287-e072-4a40-9739-370c106bb750",
+    "66e563f9-1cbd-4a22-a957-d8b7c0f44372",
+    "ce7cf472-6fcc-490a-9481-3786840b5d9b",
+    "d042284c-a296-4988-9be5-f424fadcc28c",
+    "d3bf399f-b0cf-4250-8bb4-dfc192ab81dc",
+    "cafeeba3-01da-4ab4-b6c4-a31b1d9730c7",
+    "9292293b-8496-4715-9db6-37028dcda4b3",
+    "da92713f-ca2d-4fab-8320-098013d3f43a",
+    "84f52741-8834-4a8c-a413-2eb2269aa6c8",
+    "4a2a2c3e-209f-4d01-b513-4155a540b469",
+    "6f4191bb-912b-48a8-9ce7-682769541e6d",
+    "f7b5f842-a6af-4da5-9e95-e32478f3cd2f",
+    "d95de845-b83c-4a9a-8a6a-4fc802ebf6c0",
+    "5b768e71-86f2-4879-b448-81061cbae951",
+    "1a5fefe6-734f-452e-a07d-fc1c35bce4b2",
+    "afa71271-6a97-4e47-810f-83120fb1a4ce",
+    "e6313acd-208c-44fc-a0ff-db85d572e90e",
+    "7c9fed65-039a-4055-8c23-fa763d94aff6",
+    "b9d9cc83-380b-4ba3-8d8f-60c0e7e2930c",
+    "6385697e-9f1b-40bd-8817-f4a91f40508e",
+    "74403157-20f5-415d-89a7-c505779585cf",
+    "85b0b087-eddf-4a2b-b033-d771fa2b9775",
+    "43d91656-a9b2-4541-b7e2-6a9bd3a13f4e",
+    "fb843269-508c-4b76-8b8d-88679db22ce7",
+    "ee218c12-627a-4d27-9e30-d6fb2fe22ed2",
+    "b2815d0d-7481-4bf0-9b6c-a4c48a94b349",
+    "09576804-7a05-458e-a817-eb718ca91f54",
+    "536e2947-3729-478c-9903-745aaffe60d2",
+    "5e3cc4d8-3e68-43db-8656-eaaeefdec9cc",
+    "02030f2f-6199-49ec-b258-ea71b07e03dc",
+    "e312efd0-35a1-407f-8439-b8d434b438a6",
+    "a6fc3c46-23b8-4996-9ea2-573f4c4d88c5",
+    "45a594aa-1fbd-4972-a809-ff5a99dd81b8",
+    "1af57a4b-460a-4738-9034-db68b880c665",
+    "a6a39bdb-935c-4f0a-ab77-35f4bbf44d33",
+    "87e3c4e8-a6a8-4ad9-bb4f-46e7ff99a180",
+    "36210e0d-5b19-485d-a087-c096088885f0",
+    "85a8e5ba-bd03-4bfb-bbfa-a4409a8f8b98",
+    "e76ca062-4de0-4d79-8d90-160a0d335eca",
+    "8a1b2c3d-4e5f-6789-abcd-ef1234567890",
+    "74a12f18-505c-4114-8d0b-8448dd5485c6",
+    "44030449-b0df-4c94-aae1-502359ab28ee",
+    "50a0aa3d-ab16-4594-a8aa-5145a6e6792b",
+    "899133d5-4d7c-4a7f-94ee-27355c879d90",
+    "de587dce-915e-4218-aac4-835ca6af6f70",
+    "fd877b94-9bb5-4191-bb25-d79cbd93c167",
+    "ccc946a3-f65a-432a-bb6f-efc6acc1fd27",
+    "28ac00d6-22d9-4a3c-927f-bbd770104573",
+    "ada4b0c4-758b-46ac-9033-9004613a150d",
+    "0d5675be-bc88-4172-86d3-1e96a4476536",
+    "c43a5405-e8e1-4221-9ac9-dbe3fa14e886",
+    "7c06ab9b-b1d2-4ba9-b06e-09491ded20d9",
+    "baef1ec6-2ca9-47a3-97cc-4cf2bda10b77",
+    "9ec9fb1b-e059-4489-9642-f270c207923d",
+    "089fc3d2-71e8-4763-a8a5-c97fbb0a403e",
+    "4782eb5a-a513-4523-a0ac-f3082b26ac5c",
+    "6c8fbee5-dee8-49bc-851d-c3142d02aa47",
+    "81bcb81b-5b1f-474b-b373-52c871aaa7b1",
+    "dbc1f800-0fe0-4bc0-9c66-292c2abe3f78",
+    "9ac94dc8-9042-493c-ba45-3b5e7c86b980",
+    "f2c64357-b1d2-41b7-849f-34d2682c0fad",
+    "89ca78fd-b37c-4310-b3d3-81a023f83936",
+    "da2738f2-fadb-4394-afa7-0a0674885afa",
+    "f5d19838-41b5-476c-98d8-ba8af4929ee2",
+    "7d1aaf3d-4304-425c-b7c3-162055e0b3ab",
+    "beaa66d6-aa1b-4e3c-80f5-e0145369bfaf",
+    "502b42de-4306-40b4-9596-6f590c81f073",
+    "f8ad2e2c-40b6-4117-84d7-20b89896ab23",
+    "8bc64091-6875-4881-aaf9-7bd25b5dda08",
+    "213d6a77-3d55-4ce8-ba74-fcfef741974e",
+    "aa2efee7-34dd-446e-8a37-40790a66efd7",
+    "ab9e3b40-0c85-4ba1-aede-455d226fd124",
+    "1228c958-e64e-4e71-92ad-7d429f4138ba",
+    "0f60b28c-64dd-4e2c-9a63-5334d3e3a6e6",
+    "f57f8d16-1f39-4dcb-a604-6c73d9b54b3d",
+    "17a1be64-8d88-40bf-b5ff-a4f7a50ebcc8",
+    "3a6586ad-127a-4d3b-a677-1e6eacdf8fde",
+    "9fc51a3c-81b3-4fa7-b35f-7c02cf10fd2d",
+    "be58d2e2-06c8-4f58-b666-b99f6dc3b6cd",
+    "f17211f1-1f24-4d0c-829f-31e28dc93cdd",
+    "2e65275c-8288-4ab4-aeb7-6274f58b6b20",
+    "5afee48e-67dd-4e03-a783-f74259dcf998",
+    "554601fb-9b71-4bcc-abf4-21a611be4fde",
+    "8f3ab69a-aa22-4943-aa58-e0a52fdf6818",
+    "22154f0e-5132-4a54-aa78-cc62f6def531",
+    "639c9081-f482-47d3-a0bd-ddee3d4ecd76",
+    "1f0b4cac-9c81-41f4-95d0-8475ff46b3e2",
+    "97a80ec7-0e2f-4d05-9ef4-65760e634f6b",
+    "79df3f68-dccb-48e9-9171-b75cbc37c51d",
+    "51cbac1e-eee3-4a90-b1b7-358efb81fa0a",
+    "164eda96-11b2-430b-85ff-6a265c15bf32",
+    "dfd2fcb7-8bd5-4daa-b132-5adb61d6ad45",
+    "9d5a1274-922a-49d0-87f3-8c653483b909",
+    "68bcd73b-37ef-49cb-95fc-edc809730be6",
+    "c79da740-5030-45ec-a2e0-479e824a562c",
+    "7773b877-5abb-4a3e-b9c9-fd0369b59b00",
+    "0b7163dc-7eee-4960-af17-c0cd517f92da",
+    "c0514f28-fdae-42df-b886-06e2b2bc5b37",
+    "3c89a1e8-0fba-449e-8f1b-8409d6267ec8",
+    "847d5ff3-8a31-4737-a970-aeae8fe21765",
+    "88d306e9-8e2d-4025-9768-28757d2732db",
+    "f9f62824-de4e-40ca-afe7-8358f76a876d",
+    "530576ee-3b62-4bce-9a03-9aac6c61788a",
+    "d645ef86-2396-48a1-a2b6-b629ca3f57ff",
+    "526cc8bc-1cdc-48ad-8b26-f19bff969cec",
+    "460479f3-80b7-42da-9c43-2cc1d54dbccd",
+    "1547e27c-3974-43e2-a7d7-7f484fb928ec",
+    "944e8941-f6f6-4ee8-ac05-1c224e923c0e",
+    "c69fc6a2-607d-4530-b7d1-75823af1bde4",
+    "37b437cf-3fc5-4c8e-9c94-1d7c9aff842b",
+    "cbf93e5d-ca6c-4722-8bea-e9119007c248",
+    "480421f9-417f-4d3b-9552-fd2728443ec8",
+    "46dd5308-4572-4d12-aa43-8938f0184d4f",
+    "674202d0-b22a-4af4-ae5f-2eda1f3da1af",
+    "724ea201-6514-4f38-9739-e5973c34f49a",
+    "509e84b9-a71a-40e0-834f-05470369bd1e",
+    "45e112d0-7759-4c2a-aa36-9f8fb79d3393",
+    "a07f0359-4c90-4dc4-a681-8ffea40b4f47",
+    "73921b9c-cafd-4446-b0c6-fdb0ace42bc0",
+    "6648f900-4a7d-47e3-bad6-952b313a1c0e",
+    "8b7273a4-ba5d-4d8a-b04f-11f2900d043a",
+    "974515da-6cc5-4c95-ae65-f97f9150ec7f",
+    "e2482f8d-3443-4237-b906-cc145d87a076",
+    "3ae1a046-f7db-439d-b7ce-b8b366b81fa6",
+    "5de03871-5d46-4539-a82d-3aa992a69a83",
+    "d223b46b-5621-4037-88fe-fda32eead684",
+    "8b9606c9-28be-4a38-b146-0e313cc232c1",
+    "33efc23c-6ea2-4503-8cfe-bdf82ce8f705",
+    "e6fe26ee-d063-4f5b-b007-39e90aaf50e3",
+    "9b0f8a61-91b2-464f-aceb-0527e0a45020",
+    "36803969-5421-41ec-b92f-8500f79c23b0",
+    "fecfd1a1-cc78-4313-a1ea-2ee2e8ec27a7",
+    "25ffa65d-76d8-4da5-a832-3f2b0136e133",
+    "c7da8edc-49ae-45a2-9e61-9fd860e4e73d",
+    "02ee49e2-e294-4d0f-9278-f5b3212fc588",
+    "9c226817-8dc9-46c2-a58d-66655aafd7dc",
+    "966315ef-c5e1-4767-ba25-fce9c8de3660",
+    "a2863fbc-d5cb-48d5-83fb-d976d4b1743b",
+    "e88a6ddc-74f7-463b-9b26-f69fc0d2ce85",
+    "0eb46774-f1ab-4a74-8238-1155855f2263",
+    "83475063-b1c8-4774-9568-69bbda71a539",
+    "999e8307-a775-4d5f-addc-4855632335be",
+    "cf879ffb-793a-4753-9a14-bc8f37cc90df",
+    "3f2c93c7-7b2a-4d58-bb8d-6f39422d8148",
+    "05164d17-8e11-4d7d-973e-9e4962436b87",
+    "271de298-cc0e-4842-acd8-079a0a99ea65",
+    "af688c76-4ce4-4309-bfdd-e896f01acf27",
+    "5299fadf-f228-4526-8274-251db1960be9",
+    "7c3a5b1d-9e2f-4a8c-b5d7-1e0f3c6a9b2d",
+    "f2e4b7d9-5c3a-4f8b-9e1d-7a6c2b3f4e5d",
+    "caf02a0a-1e1c-4552-9b48-5e070bd88d11",
+    "8a2f4b1c-3d5e-4f7a-9b2c-1e4f6d8a9c2b",
+    "4e485d01-e18a-43f6-a46b-ef20496fa9d3",
+    "acf2807c-805b-4042-aab9-f86b6ba9cb2b",
+    "3286d37a-00fd-41c2-a624-a672dcd34e60",
+    "e4b6d2a7-d8a4-4f19-acbd-943c16d90647",
+    "349d891d-fef0-4fe4-bc53-eee623a15969",
+    "277dc340-0540-42e7-8efb-5ff460045e07"
+   ],
+   "p_holm": 8.301605358930209e-77
+  },
+  "A3": {
+   "better": 2,
+   "worse": 0,
+   "p": 0.25,
+   "worse_cases": [],
+   "better_cases": [
+    "baef1ec6-2ca9-47a3-97cc-4cf2bda10b77",
+    "3f2c93c7-7b2a-4d58-bb8d-6f39422d8148"
+   ],
+   "p_holm": 0.25
+  },
+  "A4": {
+   "better": 11,
+   "worse": 0,
+   "p": 0.00048828125,
+   "worse_cases": [],
+   "better_cases": [
+    "b29a93fb-087c-4b5b-a84d-ee3309e69d08",
+    "ddcd88cb-7f62-4ce5-86f9-1704190feb0a",
+    "df69cb1d-b891-4cd9-90c7-d617d90100ce",
+    "189e3b02-82b2-4b90-9662-411eb64486d4",
+    "dcd74b95-3f36-4ed9-9598-0490951643aa",
+    "bd5971a7-626d-46ab-8176-ed643f694f68",
+    "70ad982f-67c8-40e0-a955-b920c2fa05cb",
+    "5947497f-1aa4-41dd-9693-c9848d58727d",
+    "313fbb0a-a341-4682-848d-6d6f8c4fab7c",
+    "c6438007-e081-42ce-9483-b067fbef33c3",
+    "03d83090-8cba-44a0-b02f-0b756a050306"
+   ],
+   "p_holm": 0.00146484375
+  },
+  "A5": {
+   "better": 7,
+   "worse": 0,
+   "p": 0.0078125,
+   "worse_cases": [],
+   "better_cases": [
+    "b4926b47-a9d7-434c-b3a0-adc3fa0bd13e",
+    "85de1f22-d189-44e4-8239-dc276b45379b",
+    "9cc85849-3b02-4cb5-b371-3a1ff54f2218",
+    "5cb299fc-5fb1-4d07-b989-0644c68b6043",
+    "916eb839-895e-47f8-99ee-3008bf377a3e",
+    "d7bcd677-645d-4691-a8d4-7a5602b780d1",
+    "f3a98ce4-6164-4dd4-867c-4d83de7eca51"
+   ],
+   "p_holm": 0.015625
+  }
+ },
+ "disagreements": {
+  "b4926b47-a9d7-434c-b3a0-adc3fa0bd13e": {
+   "title": "Suspicious Double Extension Files",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:11 AND ((TargetFilename:/(?i)\\.(docx?|gif|jpe?g|mp3|mp4|pdf|png|pptx?|rtf|svg|txt|xlsx?)\\.(bat|exe|iso|rar|svg|vbe|vbs|zip)$/ OR (TargetFilename:(*.rar.exe OR *.zip.exe))) AND (NOT (TargetFilename:(*.svg.svg OR *.png.svg OR *.jpg.svg OR *.jpeg.svg))) AND (NOT TargetFilename:\\/usr\\/share\\/icons\\/*)))"
+  },
+  "63bf8794-9917-45bc-88dd-e1b5abc0ecfd": {
+   "title": "Powershell Install a DLL in System Directory",
+   "keyword_lower": null,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND ScriptBlockText:/(Copy-Item|cpi) .{2,128} -Destination .{1,32}\\\\Windows\\\\(System32|SysWOW64)/)"
+  },
+  "b29a93fb-087c-4b5b-a84d-ee3309e69d08": {
+   "title": "Manipulation of User Computer or Group Security Principals Across AD",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND ScriptBlockText:*System.DirectoryServices.AccountManagement*)"
+  },
+  "ddcd88cb-7f62-4ce5-86f9-1704190feb0a": {
+   "title": "Potential In-Memory Execution Using Reflection.Assembly",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND (ScriptBlockText:*\\[Reflection.Assembly\\]\\:\\:load* AND (NOT ((Path:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ SQL\\ Server\\\\* OR C\\:\\\\Program\\ Files\\\\Microsoft\\ SQL\\ Server\\\\*)) AND Path:*\\\\Tools\\\\PowerShell\\\\Modules\\\\SQLPS\\\\SqlPsPostScript.ps1 AND ScriptBlockText:*SQLSERVER\\:\\ \\{\\ Set\\-Locat"
+  },
+  "df69cb1d-b891-4cd9-90c7-d617d90100ce": {
+   "title": "Suspicious FromBase64String Usage On Gzip Archive - Ps Script",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND (ScriptBlockText:*FromBase64String* AND ScriptBlockText:*MemoryStream* AND ScriptBlockText:*H4sI*))"
+  },
+  "189e3b02-82b2-4b90-9662-411eb64486d4": {
+   "title": "Potential Invoke-Mimikatz PowerShell Script",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND ((ScriptBlockText:*DumpCreds* AND ScriptBlockText:*DumpCerts*) OR ScriptBlockText:*sekurlsa\\:\\:logonpasswords* OR (ScriptBlockText:*crypto\\:\\:certificates* AND ScriptBlockText:*CERT_SYSTEM_STORE_LOCAL_MACHINE*)))"
+  },
+  "dcd74b95-3f36-4ed9-9598-0490951643aa": {
+   "title": "PowerView PowerShell Cmdlets - ScriptBlock",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND (ScriptBlockText:(*Export\\-PowerViewCSV* OR *Find\\-DomainLocalGroupMember* OR *Find\\-DomainObjectPropertyOutlier* OR *Find\\-DomainProcess* OR *Find\\-DomainShare* OR *Find\\-DomainUserEvent* OR *Find\\-DomainUserLocation* OR *Find\\-ForeignGroup* OR *Find\\-ForeignUser* OR *Find\\-GPOComputerAdmi"
+  },
+  "7d416556-6502-45b2-9bad-9d2f05f38997": {
+   "title": "Powershell Sensitive File Discovery",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND (ScriptBlockText:/(?i)\\b(?:get-childitem|gci|ls|dir)\\b/ AND ScriptBlockText:*\\-recurse* AND (ScriptBlockText:(*.pass* OR *.kdbx* OR *.kdb*))))"
+  },
+  "bd5971a7-626d-46ab-8176-ed643f694f68": {
+   "title": "Extracting Information with PowerShell",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND (ScriptBlockText:*ls* AND ScriptBlockText:*\\ \\-R* AND ScriptBlockText:*select\\-string\\ * AND ScriptBlockText:*\\-Pattern\\ *))"
+  },
+  "70ad982f-67c8-40e0-a955-b920c2fa05cb": {
+   "title": "Suspicious IO.FileStream",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND (ScriptBlockText:*New\\-Object* AND ScriptBlockText:*IO.FileStream* AND ScriptBlockText:*\\\\\\\\.\\\\*))"
+  },
+  "5947497f-1aa4-41dd-9693-c9848d58727d": {
+   "title": "Suspicious Unblock-File",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND (ScriptBlockText:*Unblock\\-File\\ * AND ScriptBlockText:*\\-Path\\ *))"
+  },
+  "313fbb0a-a341-4682-848d-6d6f8c4fab7c": {
+   "title": "Suspicious PowerShell WindowStyle Option",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND ((ScriptBlockText:*powershell* AND ScriptBlockText:*WindowStyle* AND ScriptBlockText:*Hidden*) AND (NOT (ScriptBlockText:*\\:\\\\Program\\ Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\* AND ScriptBlockText:*$PSScriptRoot\\\\Module\\\\WorkspaceScriptModule\\\\WorkspaceScriptModule*))))"
+  },
+  "c6438007-e081-42ce-9483-b067fbef33c3": {
+   "title": "Powershell Timestomp",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND (ScriptBlockText:(*.CreationTime\\ \\=* OR *.LastWriteTime\\ \\=* OR *.LastAccessTime\\ \\=* OR *\\[IO.File\\]\\:\\:SetCreationTime* OR *\\[IO.File\\]\\:\\:SetLastAccessTime* OR *\\[IO.File\\]\\:\\:SetLastWriteTime*)))"
+  },
+  "03d83090-8cba-44a0-b02f-0b756a050306": {
+   "title": "Potential WinAPI Calls Via PowerShell Scripts",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND ((ScriptBlockText:*VirtualAlloc* AND ScriptBlockText:*OpenProcess* AND ScriptBlockText:*WriteProcessMemory* AND ScriptBlockText:*CreateRemoteThread*) OR (ScriptBlockText:*OpenProcessToken* AND ScriptBlockText:*LookupPrivilegeValue* AND ScriptBlockText:*AdjustTokenPrivileges*) OR (ScriptBloc"
+  },
+  "85de1f22-d189-44e4-8239-dc276b45379b": {
+   "title": "Curl Web Request With Potential Custom User-Agent",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\curl.exe OR OriginalFileName:curl.exe) AND (CommandLine:/\\s-H\\s/ OR CommandLine:*\\-\\-header*) AND CommandLine:*User\\-Agent\\:*))"
+  },
+  "9cc85849-3b02-4cb5-b371-3a1ff54f2218": {
+   "title": "File Download From IP URL Via Curl.EXE",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND (((Image:*\\\\curl.exe OR OriginalFileName:curl.exe) AND CommandLine:/:\\/\\/[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}/ AND CommandLine:*http* AND (CommandLine:(*\\ \\-O* OR *\\-\\-remote\\-name* OR *\\-\\-output*))) AND (NOT (CommandLine:(*.bat OR *.bat\\\" OR *.dat OR *.dat\\\" OR *.dll OR *.dll\\\" OR *.exe OR *.exe\\\" OR *.gif OR *.gif\\\" OR"
+  },
+  "5cb299fc-5fb1-4d07-b989-0644c68b6043": {
+   "title": "Suspicious File Download From IP Via Curl.EXE",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\curl.exe OR OriginalFileName:curl.exe) AND CommandLine:/:\\/\\/[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}/ AND CommandLine:*http* AND (CommandLine:(*\\ \\-O* OR *\\-\\-remote\\-name* OR *\\-\\-output*)) AND (CommandLine:(*.bat OR *.bat\\\" OR *.dat OR *.dat\\\" OR *.dll OR *.dll\\\" OR *.exe OR *.exe\\\" OR *.gif OR *.gif\\\" OR *.hta "
+  },
+  "916eb839-895e-47f8-99ee-3008bf377a3e": {
+   "title": "NTLM Hash Leak Via Curl NTLM Authentication",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\curl.exe OR OriginalFileName:curl.exe) AND CommandLine:*\\-\\-ntlm* AND CommandLine:/(?i)\\s(-u|--user)\\s*:/))"
+  },
+  "589ac73f-8e12-409c-964e-31a2f5775ae2": {
+   "title": "HackTool - WSASS Execution",
+   "keyword_lower": null,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND (Image:*\\\\wsass.exe OR Hashes:*IMPHASH\\=32F5095C9BBDCACF28FD4060EB4DFC42* OR CommandLine:/(?i)\\.exe[\\\"\\']?\\s+[^\\\"]{0,64}werfaultsecure\\.exe[\\\"\\']?\\s+\\d{2,10}/))"
+  },
+  "d7bcd677-645d-4691-a8d4-7a5602b780d1": {
+   "title": "Potential PowerShell Command Line Obfuscation",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((((Image:(*\\\\powershell.exe OR *\\\\pwsh.exe)) OR (OriginalFileName:(PowerShell.EXE OR pwsh.dll))) AND (CommandLine:/\\+.*\\+.*\\+.*\\+.*\\+.*\\+.*\\+.*\\+.*\\+.*\\+.*\\+.*\\+.*\\+.*\\+/ OR CommandLine:/\\{.*\\{.*\\{.*\\{.*\\{.*\\{.*\\{.*\\{.*\\{.*\\{/ OR CommandLine:/\\^.*\\^.*\\^.*\\^.*\\^/ OR CommandLine:/`.*`.*`.*`.*`/)) AND (NOT (ParentImage:\"C\\:\\\\Program "
+  },
+  "3f2c93c7-7b2a-4d58-bb8d-6f39422d8148": {
+   "title": "CVE-2024-49113 Exploitation Attempt - LDAP Nightmare",
+   "keyword_lower": 1,
+   "sqlite": null,
+   "expected": 1,
+   "lucene": "Channel:Application AND ((Provider_Name:\"Application Error\" AND EventID:1000 AND AppName:lsass.exe AND ModuleName:WLDAP32.dll) OR (Provider_Name:\"Application Error\" AND EventID:1000 AND (Data:*lsass.exe* AND Data:*WLDAP32.dll*)))"
+  },
+  "bae7c70b-8569-44e9-accf-b30073da8a5d": {
+   "title": "Shai-Hulud 2.0 Malicious NPM Package Installation",
+   "keyword_lower": null,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\node.exe AND (CommandLine:(*install* OR *\\ i\\ *))) AND (CommandLine:(*02\\-echo@0.0.7* OR *@accordproject\\/concerto\\-analysis@3.24.1* OR *@accordproject\\/concerto\\-linter@3.24.1* OR *@accordproject\\/concerto\\-linter\\-default\\-ruleset@3.24.1* OR *@accordproject\\/concerto\\-metamodel@3.12.5* OR *@accordproject\\/concerto\\-typ"
+  },
+  "f3a98ce4-6164-4dd4-867c-4d83de7eca51": {
+   "title": "Powershell Token Obfuscation - Powershell",
+   "keyword_lower": 0,
+   "sqlite": 1,
+   "expected": 1,
+   "lucene": "(Channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR PowerShellCore\\/Operational)) AND (EventID:4104 AND ((ScriptBlockText:/\\w+`(\\w+|-|.)`[\\w+|\\s]/ OR ScriptBlockText:/\"(\\{\\d\\}){2,}\"\\s*-f/ OR ScriptBlockText:/(?i)\\$\\{`?e`?n`?v`?:`?p`?a`?t`?h`?\\}/) AND (NOT (ScriptBlockText:*$\\{env\\:path\\}* OR (ScriptBlockText:(*it\\ will\\ return\\ true\\ or\\ false\\ instead* OR *The\\ function\\ also\\ prevents\\ `Get"
+  }
+ },
+ "failures": {
+  "dynamic_text": {
+   "query_shard_exception": 3
+  },
+  "keyword_raw": {
+   "query_shard_exception": 3
+  },
+  "keyword_lower": {
+   "query_shard_exception": 3
+  },
+  "keyword_lower_1024": {
+   "query_shard_exception": 3
+  },
+  "wildcard_raw": {
+   "too_many_nested_clauses": 1,
+   "query_shard_exception": 3
+  },
+  "wildcard_lower": {
+   "too_many_nested_clauses": 1,
+   "query_shard_exception": 3
+  },
+  "keyword_lower_chunked": {
+   "query_shard_exception": 3
+  },
+  "tuned": {
+   "query_shard_exception": 3
+  },
+  "sqlite": {
+   "OperationalError": 4
+  }
+ },
+ "failed_rules": {
+  "dynamic_text": {
+   "63bf8794-9917-45bc-88dd-e1b5abc0ecfd": "query_shard_exception: failed to create query: Determinizing automaton with 211 states and 369 transitions would require more than 10000 effort.",
+   "589ac73f-8e12-409c-964e-31a2f5775ae2": "query_shard_exception: failed to create query: Determinizing automaton with 105 states and 258 transitions would require more than 10000 effort.",
+   "bae7c70b-8569-44e9-accf-b30073da8a5d": "query_shard_exception: Failed to parse query [Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\node.exe AND (CommandLine:(*install* OR *\\ i\\ *))) AND (CommandLine:(*02\\-echo@0.0.7* OR *@accordpr"
+  },
+  "keyword_raw": {
+   "63bf8794-9917-45bc-88dd-e1b5abc0ecfd": "query_shard_exception: failed to create query: Determinizing automaton with 211 states and 369 transitions would require more than 10000 effort.",
+   "589ac73f-8e12-409c-964e-31a2f5775ae2": "query_shard_exception: failed to create query: Determinizing automaton with 105 states and 258 transitions would require more than 10000 effort.",
+   "bae7c70b-8569-44e9-accf-b30073da8a5d": "query_shard_exception: Failed to parse query [Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\node.exe AND (CommandLine:(*install* OR *\\ i\\ *))) AND (CommandLine:(*02\\-echo@0.0.7* OR *@accordpr"
+  },
+  "keyword_lower": {
+   "63bf8794-9917-45bc-88dd-e1b5abc0ecfd": "query_shard_exception: failed to create query: Determinizing automaton with 211 states and 369 transitions would require more than 10000 effort.",
+   "589ac73f-8e12-409c-964e-31a2f5775ae2": "query_shard_exception: failed to create query: Determinizing automaton with 105 states and 258 transitions would require more than 10000 effort.",
+   "bae7c70b-8569-44e9-accf-b30073da8a5d": "query_shard_exception: Failed to parse query [Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\node.exe AND (CommandLine:(*install* OR *\\ i\\ *))) AND (CommandLine:(*02\\-echo@0.0.7* OR *@accordpr"
+  },
+  "keyword_lower_1024": {
+   "63bf8794-9917-45bc-88dd-e1b5abc0ecfd": "query_shard_exception: failed to create query: Determinizing automaton with 211 states and 369 transitions would require more than 10000 effort.",
+   "589ac73f-8e12-409c-964e-31a2f5775ae2": "query_shard_exception: failed to create query: Determinizing automaton with 105 states and 258 transitions would require more than 10000 effort.",
+   "bae7c70b-8569-44e9-accf-b30073da8a5d": "query_shard_exception: Failed to parse query [Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\node.exe AND (CommandLine:(*install* OR *\\ i\\ *))) AND (CommandLine:(*02\\-echo@0.0.7* OR *@accordpr"
+  },
+  "wildcard_raw": {
+   "4d07b1f4-cb00-4470-b9f8-b0191d48ff52": "too_many_nested_clauses: Query contains too many nested clauses; maxClauseCount is set to 1024",
+   "63bf8794-9917-45bc-88dd-e1b5abc0ecfd": "query_shard_exception: failed to create query: Determinizing automaton with 211 states and 369 transitions would require more than 10000 effort.",
+   "589ac73f-8e12-409c-964e-31a2f5775ae2": "query_shard_exception: failed to create query: Determinizing automaton with 105 states and 258 transitions would require more than 10000 effort.",
+   "bae7c70b-8569-44e9-accf-b30073da8a5d": "query_shard_exception: Failed to parse query [Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\node.exe AND (CommandLine:(*install* OR *\\ i\\ *))) AND (CommandLine:(*02\\-echo@0.0.7* OR *@accordpr"
+  },
+  "wildcard_lower": {
+   "4d07b1f4-cb00-4470-b9f8-b0191d48ff52": "too_many_nested_clauses: Query contains too many nested clauses; maxClauseCount is set to 1024",
+   "63bf8794-9917-45bc-88dd-e1b5abc0ecfd": "query_shard_exception: failed to create query: Determinizing automaton with 211 states and 369 transitions would require more than 10000 effort.",
+   "589ac73f-8e12-409c-964e-31a2f5775ae2": "query_shard_exception: failed to create query: Determinizing automaton with 105 states and 258 transitions would require more than 10000 effort.",
+   "bae7c70b-8569-44e9-accf-b30073da8a5d": "query_shard_exception: Failed to parse query [Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\node.exe AND (CommandLine:(*install* OR *\\ i\\ *))) AND (CommandLine:(*02\\-echo@0.0.7* OR *@accordpr"
+  },
+  "keyword_lower_chunked": {
+   "63bf8794-9917-45bc-88dd-e1b5abc0ecfd": "query_shard_exception: failed to create query: Determinizing automaton with 211 states and 369 transitions would require more than 10000 effort.",
+   "589ac73f-8e12-409c-964e-31a2f5775ae2": "query_shard_exception: failed to create query: Determinizing automaton with 105 states and 258 transitions would require more than 10000 effort.",
+   "bae7c70b-8569-44e9-accf-b30073da8a5d": "query_shard_exception: Failed to parse query [Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\node.exe AND (CommandLine:(*install* OR *\\ i\\ *))) AND (CommandLine:(*02\\-echo@0.0.7* OR *@accordpr"
+  },
+  "tuned": {
+   "63bf8794-9917-45bc-88dd-e1b5abc0ecfd": "query_shard_exception: failed to create query: Determinizing automaton with 212 states and 372 transitions would require more than 10000 effort.",
+   "589ac73f-8e12-409c-964e-31a2f5775ae2": "query_shard_exception: failed to create query: Determinizing automaton with 104 states and 267 transitions would require more than 10000 effort.",
+   "bae7c70b-8569-44e9-accf-b30073da8a5d": "query_shard_exception: Failed to parse query [Channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND (EventID:1 AND ((Image:*\\\\node.exe AND (CommandLine:(*install* OR *\\ i\\ *))) AND (CommandLine:(*02\\-echo@0.0.7* OR *@accordpr"
+  },
+  "sqlite": {
+   "1321dc4e-a1fe-481d-a016-52c45f0c8b4f": "OperationalError: no such column: NewValue",
+   "801bd44f-ceed-4eb6-887c-11544633c0aa": "OperationalError: no such column: NewValue",
+   "3f2c93c7-7b2a-4d58-bb8d-6f39422d8148": "OperationalError: no such column: AppName",
+   "a7c3e5f2-8b1d-4e9a-b6c2-3d7f5e8a9b4c": "OperationalError: no such column: SourceName"
+  }
+ },
+ "never_fired": [
+  {
+   "id": "1321dc4e-a1fe-481d-a016-52c45f0c8b4f",
+   "title": "Windows Defender Exclusions Added"
+  },
+  {
+   "id": "801bd44f-ceed-4eb6-887c-11544633c0aa",
+   "title": "Windows Defender Configuration Changes"
+  },
+  {
+   "id": "08249dc0-a28d-4555-8ba5-9255a198e08c",
+   "title": "Local Network Connection Initiated By Script Interpreter"
+  },
+  {
+   "id": "a7c3e5f2-8b1d-4e9a-b6c2-3d7f5e8a9b4c",
+   "title": "RedSun - TieringEngineService.exe Detected as EICAR Test File"
+  }
+ ],
+ "chosen": "tuned"
+}

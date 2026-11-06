@@ -259,7 +259,7 @@ Four deliberate faults in the scoping code were each caught by `tests/test_acl.p
 
 | Part | State |
 | --- | --- |
-| Unit tests, lint | 158 passing, ruff clean |
+| Unit tests, lint | 233 passing, 17 integration tests skipped without an engine, ruff clean |
 | Real Dutch data | Algoritmekader fetched live and parsed, labels joined, rebuild reproduced |
 | Real e5 model | Quantised ONNX runs on CPU. It comes from a third-party npm package, so check its hash |
 | MCP server | Tested in memory and over real stdio on the real corpus (`evals/mcp_smoke.py`) |

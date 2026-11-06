@@ -174,8 +174,9 @@ def regress(args: argparse.Namespace) -> None:
         "summary": summary,
         "tests": tests,
         "disagreements": disagreements,
-        "failures": {k: dict(Counter(v.split(":")[0] for v in f.values()))
-                     for k, f in failures.items()},
+        "failures": {
+            k: dict(Counter(v.split(":")[0] for v in f.values())) for k, f in failures.items()
+        },
         "failed_rules": {k: dict(list(f.items())[:15]) for k, f in failures.items()},
         "never_fired": [{"id": r, "title": by_id[r].title} for r in never],
         "chosen": max(

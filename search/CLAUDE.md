@@ -10,6 +10,9 @@ Read `PROGRESS.md` first. Its TODO list is the plan.
 `PROGRESS.md`, and carry on. The only exceptions are steps that need Baris's own accounts, money
 or competition submissions. List those under "Needs Baris" and move on to the next item.
 
+Two projects live here: `beacon/` (document search) and `nightwatch/` (detection rules on logs).
+Unless a TODO says otherwise, real Elasticsearch runs come first, for both.
+
 ## Setup
 
 ```bash
@@ -20,11 +23,14 @@ pytest && ruff check src tests evals
 make real-data   # corpus, labels and model into data/
 ```
 
-The sandbox used so far could reach PyPI, npm, conda-forge and git over GitHub, but not Hugging
-Face, Docker registries, Elastic or rechtspraak.nl. Those are proxy policy denials, so report them
+For Nightwatch: `cd search/nightwatch`, `pip install -e ".[dev]"`, `pytest`, `nightwatch fetch`.
+
+The sandbox used so far could reach PyPI, npm, conda-forge and git over GitHub, including
+`raw.githubusercontent.com`, but not Hugging Face, Docker registries, Elastic or rechtspraak.nl. Those are proxy policy denials, so report them
 and do not hunt for ways around them. Other options inside that policy: `beacon fetch-model` for
 the model, and OpenSearch from conda-forge with `tests/tools/opensearch_shim.py` for a Lucene
-engine. OpenSearch refuses to run as root, so use a separate user. Scripts that read a downloaded
+engine. OpenSearch refuses to run as root, so use a separate user with a home of its own, and turn off
+`cluster.routing.allocation.disk.threshold_enabled` if a nearly full disk blocks index creation. Scripts that read a downloaded
 checkout must live outside it, and any Python started in it needs `-I`.
 
 ## Map of beacon/
@@ -110,3 +116,34 @@ an upper bound, and the leak column is the real result. Run it without the guard
 
 **Template work.** See `beacon/PRIVATE_SEARCH_TEMPLATE.md`. Folder ingest, per-user tokens and an
 audit log exist. Single sign-on, directory groups and OCR are next.
+
+## Working on Nightwatch
+
+| Path | What it is |
+| --- | --- |
+| `src/nightwatch/sources.py` | Pinned downloads, regression and attack corpora, dev and test split |
+| `src/nightwatch/events.py` | Both log formats to one flat, all-string event |
+| `src/nightwatch/rules.py` | Rules with status, level, date, author and ATT&CK techniques |
+| `src/nightwatch/convert.py` | One pipeline to Lucene and SQL, regex and CIDR rewrites |
+| `src/nightwatch/engine.py` | REST client, mapping variants, value chunking |
+| `src/nightwatch/sqlstore.py` | SQLite store for tests, laptops and as a reference |
+| `src/nightwatch/readiness.py` | Can a rule ever fire on these logs? |
+| `src/nightwatch/audit.py` | Read-only check of a live index |
+| `src/nightwatch/evaluate.py` | Wilson, exact McNemar, Holm, clustered permutation |
+| `src/nightwatch/mcp_server.py` | Read-only MCP tools |
+| `evals/experiment.py` | The planned experiments. Test runs refuse to repeat |
+| `evals/mixed_model.R` | R cross-check of test B2 |
+
+- **The test split is spent.** `reports/regression.json` and the `detection-*.json` files were
+  scored once. A new idea needs a new plan, committed first, and new data: the obvious fresh data
+  is `datasets/compound` in Security-Datasets, unused so far.
+- **Say which engine.** Every number so far is OpenSearch 3.9. Never write that a result holds for
+  Elasticsearch until it has run there. The first thing to find out is whether the `wildcard`
+  field works through `query_string` on Elasticsearch.
+- **An alert is not a detection, and an off-target alert is not a false positive.** There is no
+  benign baseline. Do not report precision until there is one.
+- **Zero must stay distinguishable.** A refused query raises `QueryFailed`. Never catch it into 0.
+- **Logs are attacker-controlled text.** Anything returned to an agent stays labelled untrusted.
+- **DRL 1.1.** Output based on a rule match keeps the rule's author. Rules are not committed.
+- **Benign means benign.** This measures defences on public lab logs. Do not add offensive
+  tooling, and do not add real logs: they hold personal data.

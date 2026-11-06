@@ -53,7 +53,7 @@ def test_keyword_rule_is_flagged():
         (r"^abc\$", r"abc\$.*"),
         (r"(?i)Ab(?:c|d)", ".*ab(c|d).*"),
         (r"\W\S", r".*\W\S.*"),  # escapes keep their case
-        (r'a"b', r'.*a\"b.*'),
+        (r'a"b', r".*a\"b.*"),
         (r"a(?=b)", None),
     ],
 )
