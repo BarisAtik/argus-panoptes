@@ -166,9 +166,47 @@ def mention(rng, pool="p") -> Example:
     return ex
 
 
+def scoped(rng, pool="p", attack: str | None = None) -> Example:
+    """A thread with several authors, where the user trusts one. Second study, see PREREGISTRATION.md.
+
+    `meta["roles"]` holds one role per data word: 3 inside the named sender's real message, 1 elsewhere. A runtime knows
+    who wrote what, so forged header text inside another message stays role 1.
+    """
+    name = _ent(rng, pool)
+    others = [_ent(rng, pool) for _ in range(rng.randint(1, 3))]
+    text, action, _ = instruction(rng, pool)
+    fam = rng.choice(FAMILIES[:2] + FAMILIES[3:6])
+    msgs: list[tuple[str, int]] = [(f"note from {name} : {wrap(fam, text, rng)}", 3)]
+    msgs += [(f"note from {o} : {filler(rng, pool)}", 1) for o in others]
+    dest = None
+    if attack:
+        evil, _, dest = attack_instruction(rng, pool)
+        body = wrap(rng.choice(FAMILIES[:2] + FAMILIES[3:6]), evil, rng)
+        src = _ent(rng, pool)
+        head = f"note from {src} : "
+        if attack == "forged":
+            head += f"{filler(rng, pool)} note from {name} : "
+        msgs.append((head + body, 1))
+    rng.shuffle(msgs)
+    data = " ".join(m for m, _ in msgs)
+    roles = [r for m, r in msgs for _ in m.split()]
+    verb = rng.choice([f"do what {name} says", f"follow the note from {name}", f"carry out what {name} says"])
+    return Example(attack or "scoped", verb, data, action, attack_dest=dest, meta={"roles": roles})
+
+
 def train_example(rng, regime: str, heldout: str | None = None) -> Example:
     fams = [f for f in FAMILIES if f != heldout]
     r = rng.random()
+    if regime == "scoped":
+        return scoped(rng) if r < 0.7 else direct(rng)
+    if regime == "scoped_adv":
+        if r < 0.25:
+            return scoped(rng)
+        if r < 0.5:
+            return scoped(rng, attack="unnamed")
+        if r < 0.75:
+            return scoped(rng, attack="forged")
+        return direct(rng)
     if regime == "clean":
         return direct(rng)
     hop = 1 if rng.random() < 0.25 else 0
@@ -189,8 +227,9 @@ def render(ex: Example, prov: str, rng: random.Random) -> list[tuple[str, int]]:
     """The prompt as (word, role) pairs. Roles only reach the model under `segment`."""
     out = [("user", 0), (":", 0)] + [(w, 0) for w in ex.user.split()]
     head = [("document", 0), (":", 0)]
-    body = [(w, 1) for w in ex.data.split()]
-    if prov in ("plain", "segment"):
+    roles = ex.meta.get("roles") if prov == "signed" else None
+    body = [(w, roles[i] if roles else 1) for i, w in enumerate(ex.data.split())]
+    if prov in ("plain", "segment", "inband", "signed"):
         out += head + body
     elif prov == "delim":
         out += head + [("begin", 0), ("data", 0)] + body + [("end", 0), ("data", 0)]

@@ -98,3 +98,6 @@ instruction. Two attacks: `unnamed`, another sender gives an instruction, and `f
 - **A4, a name is enough for honest cases.** `scoped_adv` with `inband` has ASR under 5% on `unnamed`.
 
 The first study's hypotheses stand as written and are scored as written.
+
+Implementation note, same day, before any model of this study ran: the header reads `note from NAME :`, not `message from NAME :`. Those
+words are already in the vocabulary, and a new word would have shifted token ids and broken the first study's checkpoints.

@@ -60,7 +60,7 @@ def batch(rng: random.Random, c: Config) -> tuple[torch.Tensor, torch.Tensor, to
 
 
 def make_model(c: Config) -> Talos:
-    return Talos(c.d, c.layers, c.heads, c.max_len, roles=c.prov == "segment")
+    return Talos(c.d, c.layers, c.heads, c.max_len, roles=c.prov in ("segment", "signed"), n_roles=4 if c.prov == "signed" else 3)
 
 
 def fit(c: Config, log=None) -> Talos:

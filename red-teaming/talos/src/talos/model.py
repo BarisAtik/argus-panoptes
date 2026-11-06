@@ -28,10 +28,10 @@ class Block(nn.Module):
 
 
 class Talos(nn.Module):
-    def __init__(self, d=128, layers=4, heads=4, max_len=160, roles=False, dropout=0.0):
+    def __init__(self, d=128, layers=4, heads=4, max_len=160, roles=False, dropout=0.0, n_roles=3):
         super().__init__()
         self.tok, self.pos = nn.Embedding(VOCAB, d), nn.Embedding(max_len, d)
-        self.role = nn.Embedding(3, d) if roles else None
+        self.role = nn.Embedding(n_roles, d) if roles else None
         self.blocks = nn.ModuleList(Block(d, heads, dropout) for _ in range(layers))
         self.norm = nn.LayerNorm(d)
         self.head = nn.Linear(d, VOCAB, bias=False)

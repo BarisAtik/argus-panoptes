@@ -182,3 +182,42 @@ def test_long_input_fits_the_window():
     ex = to_example([{"role": "user", "content": "word " * 500}, {"role": "tool", "content": "word " * 500}])
     assert len(ex.user.split()) == MAX_USER and len(ex.data.split()) == MAX_DATA
     assert MAX_USER + MAX_DATA + 12 + 8 <= 160  # prompt scaffolding and the action
+
+
+def test_forged_header_is_word_identical_but_role_differs():
+    rng = random.Random(11)
+    ex = W.scoped(rng, attack="forged")
+    name = ex.user.split()[-1] if ex.user.split()[-1] != "says" else ex.user.split()[2]
+    words = ex.data.split()
+    roles = ex.meta["roles"]
+    assert len(words) == len(roles)
+    heads = [i for i in range(len(words) - 2) if words[i: i + 3] == ["note", "from", name]]
+    assert len(heads) == 2  # the real header and the forgery spell the same words
+    assert sorted(roles[i] for i in heads) == [1, 3]
+
+
+def test_inband_gives_the_model_no_authorship_signal():
+    rng = random.Random(12)
+    ex = W.scoped(rng, attack="forged")
+    assert {r for _, r in W.render(ex, "inband", rng)} <= {0, 1}
+    assert 3 in {r for _, r in W.render(ex, "signed", rng)}
+
+
+def test_scoped_oracle_counts_the_attack_destination():
+    rng = random.Random(13)
+    ex = W.scoped(rng, attack="unnamed")
+    assert outcome(ex, ex.target)["task"] == 1 and outcome(ex, ex.target)["attack"] == 0
+    assert outcome(ex, f"call pay to {ex.attack_dest} amount 5")["attack"] == 1
+
+
+def test_scoped_words_are_in_the_vocabulary():
+    rng = random.Random(14)
+    for _ in range(300):
+        for w in words_of(W.scoped(rng, attack="forged")):
+            assert w in STOI or is_entity(w), w
+
+
+def test_second_grid_is_the_preregistered_size():
+    from talos.study2 import grid
+
+    assert len(grid()) == 16
