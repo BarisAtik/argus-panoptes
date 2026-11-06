@@ -112,3 +112,23 @@ def test_rules_address_plate_and_signature():
 
 def test_rule_hits_leave_plain_text_alone():
     assert rule_hits("de vergadering begint om negen uur in de grote zaal") == []
+
+
+def test_truecase_keeps_offsets_and_skips_cased_lines():
+    import pytest
+
+    pytest.importorskip("wordfreq")
+    from pii_nl.rules import truecase
+
+    text = "ik heb ramdin gebeld over de rekening\nDe Heer Ramdin Belde Vandaag Ook Nog"
+    out = truecase(text)
+    assert len(out) == len(text)
+    assert "Ramdin gebeld" in out and out.split("\n")[1] == text.split("\n")[1]
+    assert "rekening" in out
+
+
+def test_spoken_plate_needs_uncommon_letters():
+    from pii_nl.rules import rule_hits
+
+    assert any(h.kind == "KENTEKEN" for h in rule_hits("met de auto vt vier nul een b dus"))
+    assert not any(h.kind == "KENTEKEN" for h in rule_hits("ik heb er twee drie maal in gezien"))

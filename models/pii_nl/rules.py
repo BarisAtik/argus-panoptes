@@ -9,9 +9,17 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterable
+from functools import lru_cache
 
 from ner_nl.redact import Hit, merge, model_hits, pattern_hits
 
+try:
+    from wordfreq import zipf_frequency
+except ImportError:  # optional: rules still run, without the frequency checks
+    zipf_frequency = None
+
+COMMON_ZIPF = 4.6
+RARE_ZIPF = 3.3
 WORD = r"[^\W\d_][^\W\d_'’-]*(?:[-'’][^\W\d_]+)*"
 PARTICLES = r"(?:van|de|der|den|ter|ten|te|het|el|al|ben|bin)"
 DIGITS = "nul een één twee drie vier vijf zes zeven acht negen tien".split()
@@ -75,6 +83,11 @@ BIRTH = re.compile(rf"\b(?:geboren|geboortedatum|geb)\b\.?[\s:a-z]{{0,20}}?({_DA
 SPOKEN_RUN = re.compile(rf"\b{DIGIT}(?:\s+{DIGIT}){{5,}}\b", re.I)
 SPOKEN_MIXED = re.compile(rf"\b(?:[a-z]{{1,4}}\s+)?{DIGIT}(?:\s+(?:{DIGIT}|[a-z]{{1,4}})){{5,}}\b")
 _DIGIT_END = re.compile(rf".*\b{DIGIT}\b", re.S)
+SPOKEN_PLATE = re.compile(
+    rf"\b(?:[a-z]{{1,3}}\s+{DIGIT}(?:\s+{DIGIT}){{1,3}}\s+[a-z]{{1,3}}"
+    rf"|{DIGIT}\s+[a-z]{{2,3}}\s+{DIGIT}\s+{DIGIT}"
+    rf"|{DIGIT}\s+{DIGIT}\s+[a-z]{{2,3}}\s+{DIGIT})\b"
+)
 SPOKEN_CUE = re.compile(
     rf"\b(postcode|kenteken)\s+(?:is\s+|van\s+)?((?:(?:{DIGIT}|[a-z]{{1,3}})(?:\s+|$)){{2,8}})",
     re.I,
@@ -84,6 +97,41 @@ SPOKEN_MAIL = re.compile(
 )
 CAPITAL = r"[A-Z][^\W\d_]*(?:[-'’][^\W\d_]+)*"
 INITIALS = re.compile(rf"\b(?:[A-Z]\.\s?)+(?:{PARTICLES}\s+)*{CAPITAL}")
+LOWER_INITIAL = re.compile(r"(?<![\w.])[a-z]\.\s(?=[a-z])")
+
+
+@lru_cache(maxsize=50000)
+def zipf(word: str) -> float:
+    """General Dutch word frequency on the Zipf scale, or 8 without `wordfreq` (nothing is rare)."""
+    if zipf_frequency is None:
+        return 8.0
+    return zipf_frequency(word.lower(), "nl")
+
+
+def _common(word: str) -> bool:
+    """Too frequent to be taken for a name when nothing else speaks for it."""
+    return zipf_frequency is not None and zipf(word) >= COMMON_ZIPF
+
+
+def truecase(text: str, rare: float = RARE_ZIPF) -> str:
+    """Capitalise rare words on lowercase lines, so a news model has its usual cue. Same length."""
+    lines = []
+    for line in text.split("\n"):
+        words = re.findall(WORD, line)
+        capitals = sum(w[0].isupper() for w in words)
+        if words and capitals / len(words) < 0.25:
+            line = re.sub(
+                WORD,
+                lambda m: m.group().capitalize()
+                if len(m.group()) >= 3
+                and m.group().lower() not in STOP
+                and m.group().lower() not in DIGITS
+                and zipf(m.group()) < rare
+                else m.group(),
+                line,
+            )
+        lines.append(line)
+    return "\n".join(lines)
 
 
 def _spoken_mixed(text: str) -> list[Hit]:
@@ -96,6 +144,15 @@ def _spoken_mixed(text: str) -> list[Hit]:
         plain = sum(w in STOP and w not in DIGITS for w in words)
         if plain <= 1:
             hits.append(Hit(match.start(), match.start() + last.end(), "NUMMER", "pattern"))
+    return hits
+
+
+def _spoken_plates(text: str) -> list[Hit]:
+    hits = []
+    for match in SPOKEN_PLATE.finditer(text):
+        letters = [w for w in match.group().split() if w not in DIGITS]
+        if not any(w in STOP or _common(w) for w in letters):
+            hits.append(Hit(match.start(), match.end(), "KENTEKEN", "pattern"))
     return hits
 
 
@@ -115,7 +172,7 @@ def _name_tokens(text: str, start: int) -> int:
             seen += 1
             end = start + match.end()
             continue
-        if low in STOP or low in DIGITS:
+        if low in STOP or low in DIGITS or (word.islower() and _common(low)):
             break
         if words and cased and word[0].islower():
             break  # in cased text a name stops at the first lowercase word
@@ -135,6 +192,10 @@ def _cued_names(text: str) -> list[Hit]:
             end = _name_tokens(text, match.end())
             if end > match.end():
                 hits.append(Hit(match.end(), end, "PERSOON", "rule"))
+    for match in LOWER_INITIAL.finditer(text):
+        end = _name_tokens(text, match.end() - 1)
+        if end > match.end():
+            hits.append(Hit(match.start(), end, "PERSOON", "rule"))
     return hits
 
 
@@ -180,7 +241,15 @@ def propagate(text: str, hits: list[Hit]) -> list[Hit]:
         for w in re.findall(WORD, text[h.start : h.end])
     }
     names |= _mail_names(hits, text)
-    names = {n for n in names if len(n) >= 3 and n not in STOP and not re.fullmatch(PARTICLES, n)}
+    names = {
+        n
+        for n in names
+        if len(n) >= 3
+        and n not in STOP
+        and n not in DIGITS
+        and zipf(n) < 5.0
+        and not re.fullmatch(PARTICLES, n)
+    }
     if not names:
         return hits
     extra = [
@@ -191,25 +260,26 @@ def propagate(text: str, hits: list[Hit]) -> list[Hit]:
     return hits + extra
 
 
-def rule_hits(text: str, nlp=None) -> list[Hit]:
+def rule_hits(text: str, nlp=None, cased=None) -> list[Hit]:
+    """`cased`, if given, replaces `text` for the model only. It must keep the same offsets."""
     hits = pattern_hits(text)
     for kind, pattern in EXTRA_PATTERNS:
         hits += [Hit(m.start(), m.end(), kind, "pattern") for m in pattern.finditer(text)]
     hits += [Hit(m.start(1), m.end(1), "GEBOORTEDATUM", "pattern") for m in BIRTH.finditer(text)]
     hits += [Hit(m.start(), m.end(), "NUMMER", "pattern") for m in SPOKEN_RUN.finditer(text)]
-    hits += _spoken_mixed(text)
+    hits += _spoken_mixed(text) + _spoken_plates(text)
     hits += [Hit(m.start(2), m.end(2), "NUMMER", "pattern") for m in SPOKEN_CUE.finditer(text)]
     hits += [Hit(m.start(), m.end(), "E-MAIL", "pattern") for m in SPOKEN_MAIL.finditer(text)]
     hits += [Hit(m.start(), m.end(), "PERSOON", "rule") for m in INITIALS.finditer(text)]
     hits += _cued_names(text) + _signature(text) + _midsentence_capitals(text)
     if nlp is not None:
-        hits += model_hits(text, nlp)
+        hits += model_hits(text if cased is None else cased, nlp)
     return propagate(text, hits)
 
 
-def redact(text: str, nlp=None) -> tuple[str, list[Hit]]:
+def redact(text: str, nlp=None, use_truecase: bool = True) -> tuple[str, list[Hit]]:
     """Replace each masked stretch by a `[KIND]` label. Adjacent model hits collapse via `merge`."""
-    kept = merge(rule_hits(text, nlp))
+    kept = merge(rule_hits(text, nlp, truecase(text) if use_truecase else None))
     parts, cursor = [], 0
     for hit in kept:
         parts += [text[cursor : hit.start], f"[{hit.kind}]"]

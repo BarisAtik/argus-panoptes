@@ -48,14 +48,16 @@ def build(name: str):
         return lambda text: [
             (a.start_char, a.end_char) for a in engine.deidentify(text).annotations
         ]
-    if name in ("rules", "rules_lg"):
-        from .rules import rule_hits
+    if name in ("rules", "rules_lg", "rules_lg_tc"):
+        from .rules import rule_hits, truecase
 
         if name == "rules":
             return lambda text: _spans(rule_hits(text))
         import spacy
 
         nlp = spacy.load(SPACY["spacy_lg"])
+        if name == "rules_lg_tc":
+            return lambda text: _spans(rule_hits(text, nlp, truecase(text)))
         return lambda text: _spans(rule_hits(text, nlp))
     raise ValueError(f"unknown system {name}")
 
@@ -136,7 +138,7 @@ def stage_report(args) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["score", "report"])
-    parser.add_argument("--split", default="dev", choices=["dev", "test"])
+    parser.add_argument("--split", default="dev", choices=["dev", "test", "test2"])
     parser.add_argument("--systems", nargs="+", default=["patterns"])
     parser.add_argument("--repeats", type=int, default=8)
     parser.add_argument("--seed", type=int, default=0)
