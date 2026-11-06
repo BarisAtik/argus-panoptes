@@ -231,7 +231,7 @@ def test_crf_marginals_and_partition_match_brute_force():
             s = start[path[0]] + em[b, 0, path[0]]
             for t in range(1, n):
                 s = s + trans[path[t - 1], path[t]] + em[b, t, path[t]]
-            scores.append((path, float(s + end[path[-1]])))
+            scores.append((path, float((s + end[path[-1]]).detach())))
         total = float(torch.logsumexp(torch.tensor([x for _, x in scores]), 0))
         for path, value in scores:
             for t, tag in enumerate(path):
@@ -284,3 +284,55 @@ def test_training_learns_a_toy_rule_and_handles_empty_sentences():
     assert info["best_dev_f1"] > 0.9
     out = predict(model, encoder, [data[0], Sentence((), (), "x")])
     assert out[1] == [] and out[0][1] == "B-LOC"
+
+
+def test_redact_validates_iban_and_bsn():
+    from ner_nl.redact import bsn_valid, iban_valid, redact
+
+    assert iban_valid("NL91 ABNA 0417 1643 00")
+    assert not iban_valid("NL92 ABNA 0417 1643 00")
+    assert bsn_valid("111222333") and not bsn_valid("111222334")
+    text = "IBAN NL91ABNA0417164300, BSN 111222333, geen BSN: 123456789."
+    out, hits = redact(text)
+    assert out == "IBAN [IBAN], BSN [BSN], geen BSN: 123456789."
+    assert {h.kind for h in hits} == {"IBAN", "BSN"}
+
+
+@pytest.mark.parametrize(
+    "text",
+    ["06-12345678", "020 123 45 67", "+31 6 12345678", "0031 20 1234567", "+31 (0)20-1234567"],
+)
+def test_redact_finds_dutch_phone_formats(text):
+    from ner_nl.redact import redact
+
+    assert redact(f"Bel {text} nu")[0] == "Bel [TELEFOON] nu"
+
+
+@pytest.mark.parametrize("text", ["2023-2024", "1234567", "100 000 000 euro", "12-03-2021"])
+def test_redact_leaves_ordinary_numbers_alone(text):
+    from ner_nl.redact import redact
+
+    assert redact(text)[0] == text
+
+
+def test_redact_other_patterns_and_overlap_priority():
+    from ner_nl.redact import Hit, merge, redact
+
+    text = "Mail a.b@voorbeeld.nl of kijk op https://x.nl/a, postcode 1234 AB, ip 10.0.0.1"
+    out = redact(text)[0]
+    assert out == "Mail [E-MAIL] of kijk op [URL], postcode [POSTCODE], ip [IP]"
+    kept = merge([Hit(0, 5, "PERSOON", "model"), Hit(2, 4, "BSN", "pattern")])
+    assert [h.kind for h in kept] == ["BSN"]
+
+
+def test_redact_uses_a_model_when_given_one():
+    from ner_nl.redact import redact
+
+    class Ent:
+        start_char, end_char, label_ = 4, 15, "PERSON"
+
+    class Doc:
+        ents = [Ent()]
+
+    out, _ = redact("Bel Sanne Bakker", lambda _: Doc())
+    assert out == "Bel [PERSOON]r"

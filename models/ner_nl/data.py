@@ -61,5 +61,6 @@ def find_corpus(data_dir: str | Path | None = None) -> Path:
 
 def load_split(split: str, data_dir: str | Path | None = None) -> list[Sentence]:
     path = find_corpus(data_dir) / SPLITS[split]
-    with open(path, encoding="latin-1") as handle:
+    # The NLTK copy is UTF-8. Read as Latin-1, `\xa0` inside `à` would split a line in two.
+    with open(path, encoding="utf-8") as handle:
         return parse_conll2002(handle, split)
