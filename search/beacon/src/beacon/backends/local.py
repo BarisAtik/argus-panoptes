@@ -111,6 +111,15 @@ class LocalBackend:
             key=lambda chunk: chunk.position,
         )
 
+    def delete_document(self, doc_id: str) -> None:
+        """Rebuilds the index, which is fine at the small scale this backend is for."""
+        keep = [i for i, chunk in enumerate(self.chunks) if chunk.doc_id != doc_id]
+        chunks = [self.chunks[i] for i in keep]
+        vectors = self.vectors[keep]
+        self.create(vectors.shape[1])
+        if chunks:
+            self.add(chunks, vectors)
+
     def stats(self) -> dict:
         return {
             "backend": "local",

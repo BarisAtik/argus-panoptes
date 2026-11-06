@@ -79,5 +79,41 @@ services:
       - "127.0.0.1:5601:5601"
     profiles: ["kibana"]
 
+  # The web app, HTTP API and MCP over HTTP. Mount your data folder, with users.yaml in it:
+  #   docker compose --profile app up -d --build
+  # No TLS of its own, so keep it on loopback or behind a reverse proxy that has it.
+  app:
+    build: .
+    container_name: beacon-app
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ES_URL: http://elasticsearch:9200
+      ES_USER: elastic
+      ELASTIC_PASSWORD: *elastic_password
+      BEACON_BACKEND: elastic
+      BEACON_EMBEDDER: ${BEACON_EMBEDDER:-onnx:/data/models/multilingual-e5-small}
+    command:
+      - beacon
+      - serve
+      - --host=0.0.0.0
+      - --users=/data/users.yaml
+      - --audit=/data/audit.jsonl
+      - --allowed-host=localhost:*
+      - --allowed-host=127.0.0.1:*
+    volumes:
+      - ./data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    ports:
+      - "127.0.0.1:8080:8080"
+    profiles: ["app"]
+
 volumes:
   esdata:

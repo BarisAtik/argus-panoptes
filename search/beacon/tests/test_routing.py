@@ -136,3 +136,12 @@ def test_coverage_routing_drops_lexical_when_nothing_matches():
     retriever.chunks("xyzzy plugh", "smart")
     assert calls == []
     assert isinstance(retriever.embedder.embed_query("x"), np.ndarray)
+
+
+def test_delete_document():
+    backend = stack().backend
+    backend.delete_document("a")
+    assert backend.document_chunks("a") == []
+    assert backend.document_chunks("b")
+    found = backend.lexical("gegevensbeschermingseffectbeoordeling", 5)
+    assert [hit.chunk.doc_id for hit in found] == ["b"]

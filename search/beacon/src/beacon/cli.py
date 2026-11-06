@@ -347,6 +347,60 @@ def cmd_quality(args) -> None:
         Path(args.out).write_text(markdown, encoding="utf-8")
 
 
+def cmd_ingest_dir(args) -> None:
+    from .sources import files as source
+
+    if args.acl:
+        acl = source.AclRules.load(args.acl)
+    elif args.public:
+        acl = source.AclRules(default=("public",))
+    else:
+        sys.exit("pass --acl rules.yaml, or --public if everyone may read every file")
+    documents, report = source.load_directory(args.folder, acl)
+    source.write_corpus(documents, report, args.out)
+    print(source.report_markdown(report))
+    if args.index:
+        state_path = Path(args.out).with_name("sync-state.json")
+        state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.is_file() else {}
+        changed, removed, current = source.plan_sync(documents, state)
+        settings = Settings.from_env()
+        embedder = get_embedder(args.embedder or settings.embedder, args.embedding_cache)
+        backend = get_backend(args.backend or settings.backend, settings)
+        backend.create(embedder.dims)
+        for doc_id in [*removed, *(d.id for d in changed if d.id in state)]:
+            backend.delete_document(doc_id)
+        chunks = [c for d in changed for c in chunk_document(d, title_prefix=True)]
+        embed_and_add(backend, embedder, chunks)
+        state_path.write_text(json.dumps(current, indent=1), encoding="utf-8")
+        print(f"indexed {len(changed)} documents, removed {len(removed)}")
+
+
+def cmd_add_user(args) -> None:
+    from .auth import add_user
+
+    groups = [g.strip() for g in args.groups.split(",") if g.strip()]
+    token = add_user(args.users, args.name, groups)
+    print(f"token for {args.name}, shown once: {token}", file=sys.stderr)
+
+
+def cmd_serve(args) -> None:
+    import uvicorn
+
+    from .auth import AuditLog, UserStore
+    from .web import create_app
+
+    args.title_prefix = True
+    store = UserStore(args.users)
+    if not len(store):
+        sys.exit(f"no users in {args.users}. Add one with: beacon add-user NAME --groups a,b")
+    retriever, _ = build_stack(args)
+    app = create_app(
+        retriever, get_generator(args.generator), store,
+        AuditLog(args.audit, args.audit_queries), allowed_hosts=args.allowed_host or None,
+    )  # fmt: skip
+    uvicorn.run(app, host=args.host, port=args.port, log_level="warning")
+
+
 def cmd_mcp(args) -> None:
     from .mcp_server import build_server
 
@@ -460,6 +514,36 @@ def build_parser() -> argparse.ArgumentParser:
     quality_parser.add_argument("--demo", action="store_true")
     quality_parser.add_argument("--out")
     quality_parser.set_defaults(handler=cmd_quality)
+
+    ingest_dir = commands.add_parser(
+        "ingest-dir", help="turn a folder of PDF, DOCX, HTML and text files into a corpus"
+    )
+    ingest_dir.add_argument("folder")
+    ingest_dir.add_argument("--acl", help="YAML with rules: path pattern to groups")
+    ingest_dir.add_argument("--public", action="store_true", help="everyone may read everything")
+    ingest_dir.add_argument("--out", default="data/files/corpus.jsonl")
+    ingest_dir.add_argument("--index", action="store_true", help="also update the search index")
+    ingest_dir.add_argument("--backend", choices=["elastic", "local"])
+    ingest_dir.add_argument("--embedder")
+    ingest_dir.add_argument("--embedding-cache")
+    ingest_dir.set_defaults(handler=cmd_ingest_dir)
+
+    add_user_parser = commands.add_parser("add-user", help="create a user with a token")
+    add_user_parser.add_argument("name")
+    add_user_parser.add_argument("--groups", required=True, help="comma separated")
+    add_user_parser.add_argument("--users", default="data/users.yaml")
+    add_user_parser.set_defaults(handler=cmd_add_user)
+
+    serve = commands.add_parser("serve", help="web app, HTTP API and MCP over HTTP")
+    add_stack_arguments(serve)
+    serve.add_argument("--users", default="data/users.yaml")
+    serve.add_argument("--audit", default="data/audit.jsonl")
+    serve.add_argument("--audit-queries", action="store_true", help="log plain queries, not hashes")
+    serve.add_argument("--generator", default="extractive")
+    serve.add_argument("--host", default="127.0.0.1")
+    serve.add_argument("--port", type=int, default=8080)
+    serve.add_argument("--allowed-host", action="append", help="Host header MCP accepts")
+    serve.set_defaults(handler=cmd_serve)
 
     mcp = commands.add_parser("mcp", help="run the MCP server over stdio")
     add_stack_arguments(mcp)

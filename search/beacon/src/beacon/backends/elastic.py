@@ -241,6 +241,11 @@ class ElasticBackend:
         )
         return [self._hit({**raw, "_score": 0.0}).chunk for raw in response["hits"]["hits"]]
 
+    def delete_document(self, doc_id: str) -> None:
+        self.client.delete_by_query(
+            index=self.index, query={"term": {"doc_id": doc_id}}, refresh=True
+        )
+
     def stats(self) -> dict:
         try:
             chunks = int(self.client.count(index=self.index)["count"])

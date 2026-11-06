@@ -8,6 +8,7 @@ the server says so in its instructions and marks it in each result.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import Any
 
 from mcp.server.mcpserver import MCPServer
@@ -46,8 +47,14 @@ def _hit(hit: Hit) -> dict[str, Any]:
     }
 
 
-def build_server(retriever: Retriever, generator: Generator) -> MCPServer:
+def build_server(
+    retriever: Retriever,
+    generator: Generator,
+    note: Callable[[str, str, list[str]], None] | None = None,
+) -> MCPServer:
+    """`note(action, query, document_ids)` is called for every tool use, for an audit trail."""
     server = MCPServer("beacon-search", instructions=INSTRUCTIONS)
+    record = note or (lambda action, query, documents: None)
 
     @server.tool(annotations=READ_ONLY)
     def search(
@@ -68,6 +75,7 @@ def build_server(retriever: Retriever, generator: Generator) -> MCPServer:
             raise ValueError(f"mode must be one of {MODES}")
         filters = Filters(court=court, subject=subject, date_from=date_from, date_to=date_to)
         hits = retriever.search(query, mode, max(1, min(k, MAX_RESULTS)), filters)
+        record("search", query, [hit.chunk.doc_id for hit in hits])
         return {"query": query, "mode": mode, "results": [_hit(hit) for hit in hits]}
 
     @server.tool(annotations=READ_ONLY)
@@ -76,6 +84,7 @@ def build_server(retriever: Retriever, generator: Generator) -> MCPServer:
         chunks = retriever.document(doc_id)
         if not chunks:
             raise ValueError(f"unknown document: {doc_id}")
+        record("get_document", "", [doc_id])
         text = "\n\n".join(chunk.text for chunk in chunks)
         return {
             "doc_id": doc_id,
@@ -95,6 +104,7 @@ def build_server(retriever: Retriever, generator: Generator) -> MCPServer:
             question, retriever, generator, k=max(1, min(k, MAX_RESULTS)), mode="smart",
             guard=guard,
         )
+        record("ask", question, [hit.chunk.doc_id for hit in result.contexts])
         return {
             "answer": result.text,
             "abstained": result.abstained,
@@ -111,6 +121,9 @@ def build_server(retriever: Retriever, generator: Generator) -> MCPServer:
     @server.tool(annotations=READ_ONLY)
     def index_info() -> dict[str, Any]:
         """Report the size of the index and the embedding model in use."""
+        if retriever.groups is not None:
+            # Totals would tell a user how much is hidden from them.
+            return {"embedder": retriever.embedder.name}
         return {**retriever.backend.stats(), "embedder": retriever.embedder.name}
 
     return server
