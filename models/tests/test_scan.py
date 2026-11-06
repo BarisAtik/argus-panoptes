@@ -152,3 +152,26 @@ def test_repair_digits_keeps_length_and_plain_words():
 def test_error_rate():
     assert error_rate("abcd", "abcd") == 0
     assert error_rate("abcd  efg", "abxd efg") == pytest.approx(1 / 8)
+
+
+def test_cli_masks_a_word_and_reports_unread_share():
+    from scan_nl import cli, ocr
+
+    image = np.array(PAGE.image)
+    matrix = np.eye(3)
+    words = truth_words(DOC, PAGE, matrix)
+    ocr.ENGINES["fake"] = lambda _: words
+    target = DOC.spans[0]
+    box = gold_boxes(PAGE, DOC, target.start, target.end)[0]
+    try:
+        out, count, regions, unread = cli.redact_image(
+            image, lambda t: [(t.index("Geachte"), t.index("Geachte") + 3)], engine="fake"
+        )
+    finally:
+        del ocr.ENGINES["fake"]
+    assert count == 1 and regions == 0 and unread < 0.02
+    x0, y0, _, y1 = PAGE.words[[DOC.text[w.start:w.end] for w in PAGE.words].index("Geachte")].box
+    assert (out[y0:y1, x0:x0 + 20] == 0).all()
+    original = np.array(PAGE.image)
+    x0, y0, x1, y1 = box
+    assert (out[y0:y1, x0:x1] == original[y0:y1, x0:x1]).all()

@@ -130,6 +130,30 @@ Moroccan or Surinamese-Hindustani table, so only Dutch, Turkish and Polish can b
     points and Polish at least 5, both intervals excluding zero.
 17. **Diacritics.** Folding accents changes recall by less than 3 points for both Faker lists.
 
+### Verdicts, commit 527926f, 2026-11-06
+
+Report: [`results/ner_nl/name_audit.md`](../results/ner_nl/name_audit.md). Gaps are in points of exact
+PER recall, and their intervals resample names and articles.
+
+| # | Verdict | Evidence |
+| --- | --- | --- |
+| 13 | Supported | Without the three worst names: Hindustani 40.8 to 37.5, Turkish 29.8 to 25.6 |
+| 14 | Supported | Hindustani -40.8 (-51.2 to -30.2), Turkish -29.8 (-40.2 to -19.5) |
+| 15 | Supported, but misleading | Pooled Spearman 0.50. Inside each list it is only -0.16 to 0.20, so the pooled figure mostly reflects the tradition, not the frequency of a name |
+| 16 | Supported | Faker Turkish -45.7 (-52.4 to -39.0), Faker Polish -9.0 (-14.2 to -3.8) |
+| 17 | Supported | Folding moved recall by +0.8 points (Polish) and +1.5 (Turkish) |
+
+**So the gap can be quoted, with care.** It is not a handful of names, and an independent list agrees
+on direction. Its size depends on the lists, though: the reference itself moves from 87.1% with
+hand-picked common Dutch names to 72.1% with a uniform sample of Faker's Dutch surnames, so
+popular names flatter any list. Faker's tables are unweighted, so its sample leans to rarer names on
+the Dutch and Polish side and has only 60 usable Turkish surnames. Moroccan and Hindustani gaps have
+no independent check. The Moroccan gap, -10.9 (-19.7 to -2.1), is close to zero once names are
+resampled.
+
+**Deviation.** The first run read a placeholder Polish table with one surname, a bug in the loader.
+The fix changed which attribute is read. All other rows were unchanged by the rerun.
+
 ## Known limits
 
 - One newspaper, one region, one year. Nothing here says how Dutch from the Netherlands, social

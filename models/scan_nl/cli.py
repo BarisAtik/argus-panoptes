@@ -1,10 +1,10 @@
 """Black out personal data on a scanned Dutch page. Runs locally, sends nothing out.
 
-    python -m scan_nl.cli page.png -o page_redacted.png --review 0.80
+    python -m scan_nl.cli page.png -o page_redacted.png
 
-The output is a new image holding only pixels: nothing hidden stays underneath. Pages the reader
-is unsure about are flagged for a person. Treat every output as a first pass: read the measured
-leak rates in results/scan_nl/ before relying on it.
+The output is a new image holding only pixels: nothing hidden stays underneath. Ink the reader did
+not turn into words is blacked out too, and such pages are flagged for a person (exit code 3). Treat
+every output as a first pass: read the measured leak rates in results/scan_nl/ before relying on it.
 """
 
 from __future__ import annotations
@@ -19,24 +19,38 @@ from PIL import Image
 
 from . import ocr as ocr_mod
 from .audit import redact_words
-from .mitigate import conf_masks, digit_masks, repair_digits
+from .mitigate import unread_regions
 
 
 def redact_image(image: np.ndarray, system, engine: str = "tesseract_enh", pad: float = 6.0,
-                 conf: float = 0.5, digits: int = 5, share: float = 0.6):
-    """Return the blacked-out grey array, the masked words and the mean reading confidence."""
+                 fail_closed: bool = True):
+    """Return the blacked-out page, the number of masked words and regions, and the unread share."""
     words = ocr_mod.ENGINES[engine](image)
-    masked, _ = redact_words(words, system, repair_digits)
-    chosen = set(masked) | set(digit_masks(words, digits, share)) | set(conf_masks(words, conf))
-    chosen = sorted(chosen)
+    masked, _ = redact_words(words, system)
+    scale = image.shape[1] / 2480
+    regions, unread = unread_regions(image, words, scale)
+    polys = [np.array(words[i].poly, dtype=float) for i in masked]
+    polys += regions if fail_closed else []
     out = image.copy()
-    for index in chosen:
-        poly = np.array(words[index].poly, dtype=float)
+    for poly in polys:
         centre = poly.mean(axis=0)
-        grown = centre + (poly - centre) * (1 + 2 * pad / np.maximum(np.ptp(poly, axis=0), 1))
+        size = np.maximum(np.ptp(poly, axis=0), 1)
+        grown = centre + (poly - centre) * (1 + 2 * pad * scale / size)
         cv2.fillPoly(out, [np.round(grown).astype(np.int32)], 0)
-    confidence = float(np.mean([w.conf for w in words])) if words else 0.0
-    return out, [words[i] for i in chosen], confidence
+    return out, len(masked), len(regions), unread
+
+
+def load_system(model: str):
+    import spacy
+
+    from pii_nl.rules import rule_hits, truecase
+
+    nlp = spacy.load(model)
+
+    def system(text: str) -> list[tuple[int, int]]:
+        return [(h.start, h.end) for h in rule_hits(text, nlp, truecase(text))]
+
+    return system
 
 
 def main() -> None:
@@ -44,24 +58,18 @@ def main() -> None:
     parser.add_argument("image")
     parser.add_argument("-o", "--out", required=True)
     parser.add_argument("--model", default="nl_core_news_lg")
-    parser.add_argument("--review", type=float, default=0.80, help="flag pages under this conf")
+    parser.add_argument("--review", type=float, default=0.05, help="flag above this unread ink")
+    parser.add_argument("--no-fail-closed", action="store_true")
     args = parser.parse_args()
 
-    import spacy
-
-    from pii_nl.rules import rule_hits, truecase
-
-    nlp = spacy.load(args.model)
-
-    def system(text: str) -> list[tuple[int, int]]:
-        return [(h.start, h.end) for h in rule_hits(text, nlp, truecase(text))]
-
     image = np.asarray(Image.open(args.image).convert("L"))
-    out, masked, confidence = redact_image(image, system)
+    out, words, regions, unread = redact_image(
+        image, load_system(args.model), fail_closed=not args.no_fail_closed
+    )
     Image.fromarray(out).save(args.out)
-    flagged = confidence < args.review
-    print(json.dumps({"masked_words": len(masked), "mean_confidence": round(confidence, 3),
-                      "needs_review": flagged}))
+    flagged = unread > args.review
+    print(json.dumps({"masked_words": words, "unread_regions_masked": regions,
+                      "unread_ink_share": round(unread, 3), "needs_review": flagged}))
     sys.exit(3 if flagged else 0)
 
 

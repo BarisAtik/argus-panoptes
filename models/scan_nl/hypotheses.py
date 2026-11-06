@@ -149,6 +149,35 @@ def check(split: str = "blind") -> dict:
     return out
 
 
+def post_hoc(split: str = "blind") -> dict:
+    """Not registered. Each line answers a question the registered results raised."""
+    rows = load(split)
+    outside = ("_outside",)
+    out = {"overall": {}, "unread_by_condition": {}, "alarm": {}, "by_font": {}}
+    for engine in ("tesseract_nld", "tesseract_enh", "rapidocr"):
+        for defence in ("none", "unread"):
+            out["overall"][f"{engine}/{defence}"] = {
+                "leak": ratio(pick(rows, engine, defence=defence)),
+                "ordinary": ratio(pick(rows, engine, defence=defence, kinds=outside)),
+            }
+        out["alarm"][engine] = alarm(pick(rows, engine))
+    conditions = sorted({r["condition"] for r in rows})
+    for condition in conditions:
+        out["unread_by_condition"][condition] = {
+            e: {
+                "leak": ratio(pick(rows, e, (condition,), defence="unread"))["rate"],
+                "ordinary": ratio(pick(rows, e, (condition,), defence="unread", kinds=outside))[
+                    "rate"
+                ],
+            }
+            for e in ("tesseract_nld", "tesseract_enh")
+        }
+    for font in sorted({r["font"] for r in rows}):
+        chosen = [r for r in pick(rows, "tesseract_enh") if r["font"] == font]
+        out["by_font"][font] = ratio(chosen)
+    return out
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--split", default="blind")
@@ -156,7 +185,8 @@ def main() -> None:
     result = check(args.split)
     path = Path(OUT) / f"hypotheses_{args.split}.json"
     path.write_text(json.dumps(result, indent=2))
-    print(json.dumps(result, indent=1))
+    extra = post_hoc(args.split)
+    (Path(OUT) / f"post_hoc_{args.split}.json").write_text(json.dumps(extra, indent=2))
 
 
 if __name__ == "__main__":

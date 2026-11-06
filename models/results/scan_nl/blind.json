@@ -1,0 +1,487 @@
+{
+  "meta": {
+    "provenance": "real",
+    "created_utc": "2026-11-06T10:00:00+00:00",
+    "git_sha": "ffe2dae",
+    "python": "3.12.16",
+    "platform": "Linux-6.18.44-fc-v242-x86_64-with-glibc2.39",
+    "packages": {
+      "spacy": "3.8.16",
+      "nl_core_news_lg": "3.8.0",
+      "rapidocr_onnxruntime": "1.4.4",
+      "opencv-python-headless": "5.0.0.93"
+    },
+    "split": "blind",
+    "system": "rules_lg_tc"
+  },
+  "table": [
+    {
+      "engine": "truth",
+      "condition": "clean_300",
+      "CER": "0.000",
+      "CER no spaces": "0.000",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "truth",
+      "condition": "dpi_200",
+      "CER": "0.000",
+      "CER no spaces": "0.000",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "truth",
+      "condition": "dpi_150",
+      "CER": "0.000",
+      "CER no spaces": "0.000",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "truth",
+      "condition": "dpi_100",
+      "CER": "0.000",
+      "CER no spaces": "0.000",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "truth",
+      "condition": "blur",
+      "CER": "0.000",
+      "CER no spaces": "0.000",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "truth",
+      "condition": "noise",
+      "CER": "0.000",
+      "CER no spaces": "0.000",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "truth",
+      "condition": "jpeg",
+      "CER": "0.000",
+      "CER no spaces": "0.000",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "truth",
+      "condition": "skew_1",
+      "CER": "0.000",
+      "CER no spaces": "0.000",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "truth",
+      "condition": "skew_4",
+      "CER": "0.004",
+      "CER no spaces": "0.006",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.064 to 0.092)"
+    },
+    {
+      "engine": "truth",
+      "condition": "fax",
+      "CER": "0.000",
+      "CER no spaces": "0.000",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.064 to 0.093)"
+    },
+    {
+      "engine": "truth",
+      "condition": "photocopy",
+      "CER": "0.000",
+      "CER no spaces": "0.001",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "truth",
+      "condition": "phone",
+      "CER": "0.000",
+      "CER no spaces": "0.000",
+      "pixel leak": "0.004 (0.000 to 0.009)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "clean_300",
+      "CER": "0.001",
+      "CER no spaces": "0.002",
+      "pixel leak": "0.017 (0.009 to 0.025)",
+      "text-audit leak": "0.008 (0.000 to 0.022)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "dpi_200",
+      "CER": "0.001",
+      "CER no spaces": "0.002",
+      "pixel leak": "0.012 (0.006 to 0.019)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "dpi_150",
+      "CER": "0.001",
+      "CER no spaces": "0.002",
+      "pixel leak": "0.012 (0.006 to 0.019)",
+      "text-audit leak": "0.010 (0.000 to 0.025)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "dpi_100",
+      "CER": "0.001",
+      "CER no spaces": "0.002",
+      "pixel leak": "0.013 (0.005 to 0.022)",
+      "text-audit leak": "0.008 (0.000 to 0.022)",
+      "ordinary words masked": "0.078 (0.064 to 0.092)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "blur",
+      "CER": "0.003",
+      "CER no spaces": "0.005",
+      "pixel leak": "0.031 (0.017 to 0.046)",
+      "text-audit leak": "0.009 (0.000 to 0.024)",
+      "ordinary words masked": "0.082 (0.067 to 0.097)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "noise",
+      "CER": "0.017",
+      "CER no spaces": "0.018",
+      "pixel leak": "0.052 (0.036 to 0.067)",
+      "text-audit leak": "0.030 (0.010 to 0.050)",
+      "ordinary words masked": "0.083 (0.069 to 0.097)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "jpeg",
+      "CER": "0.002",
+      "CER no spaces": "0.002",
+      "pixel leak": "0.013 (0.006 to 0.021)",
+      "text-audit leak": "0.008 (0.000 to 0.022)",
+      "ordinary words masked": "0.079 (0.064 to 0.093)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "skew_1",
+      "CER": "0.003",
+      "CER no spaces": "0.003",
+      "pixel leak": "0.012 (0.004 to 0.021)",
+      "text-audit leak": "0.009 (0.000 to 0.023)",
+      "ordinary words masked": "0.077 (0.063 to 0.091)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "skew_4",
+      "CER": "0.356",
+      "CER no spaces": "0.361",
+      "pixel leak": "0.219 (0.169 to 0.269)",
+      "text-audit leak": "0.043 (0.021 to 0.064)",
+      "ordinary words masked": "0.103 (0.092 to 0.115)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "fax",
+      "CER": "0.009",
+      "CER no spaces": "0.010",
+      "pixel leak": "0.058 (0.033 to 0.084)",
+      "text-audit leak": "0.019 (0.001 to 0.038)",
+      "ordinary words masked": "0.086 (0.074 to 0.099)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "photocopy",
+      "CER": "0.065",
+      "CER no spaces": "0.067",
+      "pixel leak": "0.029 (0.019 to 0.040)",
+      "text-audit leak": "0.016 (0.000 to 0.034)",
+      "ordinary words masked": "0.081 (0.067 to 0.095)"
+    },
+    {
+      "engine": "tesseract_enh",
+      "condition": "phone",
+      "CER": "0.008",
+      "CER no spaces": "0.009",
+      "pixel leak": "0.016 (0.008 to 0.023)",
+      "text-audit leak": "0.011 (0.000 to 0.026)",
+      "ordinary words masked": "0.078 (0.064 to 0.093)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "clean_300",
+      "CER": "0.001",
+      "CER no spaces": "0.002",
+      "pixel leak": "0.017 (0.009 to 0.025)",
+      "text-audit leak": "0.008 (0.000 to 0.022)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "dpi_200",
+      "CER": "0.001",
+      "CER no spaces": "0.001",
+      "pixel leak": "0.012 (0.006 to 0.019)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.063 to 0.092)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "dpi_150",
+      "CER": "0.001",
+      "CER no spaces": "0.001",
+      "pixel leak": "0.010 (0.004 to 0.017)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.078 (0.064 to 0.093)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "dpi_100",
+      "CER": "0.011",
+      "CER no spaces": "0.012",
+      "pixel leak": "0.037 (0.020 to 0.054)",
+      "text-audit leak": "0.015 (0.000 to 0.030)",
+      "ordinary words masked": "0.076 (0.064 to 0.089)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "blur",
+      "CER": "0.003",
+      "CER no spaces": "0.005",
+      "pixel leak": "0.031 (0.017 to 0.046)",
+      "text-audit leak": "0.009 (0.000 to 0.024)",
+      "ordinary words masked": "0.082 (0.067 to 0.097)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "noise",
+      "CER": "0.020",
+      "CER no spaces": "0.020",
+      "pixel leak": "0.053 (0.036 to 0.070)",
+      "text-audit leak": "0.033 (0.012 to 0.053)",
+      "ordinary words masked": "0.083 (0.070 to 0.097)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "jpeg",
+      "CER": "0.003",
+      "CER no spaces": "0.003",
+      "pixel leak": "0.026 (0.012 to 0.039)",
+      "text-audit leak": "0.009 (0.000 to 0.023)",
+      "ordinary words masked": "0.079 (0.065 to 0.093)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "skew_1",
+      "CER": "0.003",
+      "CER no spaces": "0.003",
+      "pixel leak": "0.012 (0.004 to 0.021)",
+      "text-audit leak": "0.009 (0.000 to 0.023)",
+      "ordinary words masked": "0.077 (0.063 to 0.091)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "skew_4",
+      "CER": "0.356",
+      "CER no spaces": "0.361",
+      "pixel leak": "0.219 (0.169 to 0.269)",
+      "text-audit leak": "0.043 (0.021 to 0.064)",
+      "ordinary words masked": "0.103 (0.092 to 0.115)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "fax",
+      "CER": "0.016",
+      "CER no spaces": "0.017",
+      "pixel leak": "0.089 (0.060 to 0.117)",
+      "text-audit leak": "0.030 (0.010 to 0.051)",
+      "ordinary words masked": "0.085 (0.073 to 0.097)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "photocopy",
+      "CER": "0.627",
+      "CER no spaces": "0.626",
+      "pixel leak": "0.619 (0.531 to 0.707)",
+      "text-audit leak": "0.012 (0.000 to 0.027)",
+      "ordinary words masked": "0.045 (0.035 to 0.056)"
+    },
+    {
+      "engine": "tesseract_nld",
+      "condition": "phone",
+      "CER": "0.511",
+      "CER no spaces": "0.513",
+      "pixel leak": "0.561 (0.481 to 0.641)",
+      "text-audit leak": "0.030 (0.010 to 0.050)",
+      "ordinary words masked": "0.049 (0.038 to 0.060)"
+    },
+    {
+      "engine": "tesseract_eng",
+      "condition": "clean_300",
+      "CER": "0.002",
+      "CER no spaces": "0.003",
+      "pixel leak": "0.007 (0.002 to 0.012)",
+      "text-audit leak": "0.007 (0.000 to 0.021)",
+      "ordinary words masked": "0.080 (0.066 to 0.094)"
+    },
+    {
+      "engine": "tesseract_eng",
+      "condition": "dpi_100",
+      "CER": "0.012",
+      "CER no spaces": "0.013",
+      "pixel leak": "0.026 (0.014 to 0.038)",
+      "text-audit leak": "0.010 (0.000 to 0.024)",
+      "ordinary words masked": "0.079 (0.066 to 0.092)"
+    },
+    {
+      "engine": "tesseract_eng",
+      "condition": "fax",
+      "CER": "0.020",
+      "CER no spaces": "0.022",
+      "pixel leak": "0.082 (0.061 to 0.103)",
+      "text-audit leak": "0.027 (0.009 to 0.045)",
+      "ordinary words masked": "0.093 (0.082 to 0.104)"
+    },
+    {
+      "engine": "tesseract_eng",
+      "condition": "photocopy",
+      "CER": "0.627",
+      "CER no spaces": "0.626",
+      "pixel leak": "0.620 (0.532 to 0.709)",
+      "text-audit leak": "0.016 (0.002 to 0.030)",
+      "ordinary words masked": "0.043 (0.032 to 0.053)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "clean_300",
+      "CER": "0.138",
+      "CER no spaces": "0.120",
+      "pixel leak": "0.199 (0.147 to 0.251)",
+      "text-audit leak": "0.022 (0.006 to 0.039)",
+      "ordinary words masked": "0.097 (0.080 to 0.114)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "dpi_200",
+      "CER": "0.140",
+      "CER no spaces": "0.107",
+      "pixel leak": "0.263 (0.207 to 0.319)",
+      "text-audit leak": "0.020 (0.005 to 0.035)",
+      "ordinary words masked": "0.144 (0.116 to 0.172)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "dpi_150",
+      "CER": "0.160",
+      "CER no spaces": "0.128",
+      "pixel leak": "0.273 (0.216 to 0.330)",
+      "text-audit leak": "0.013 (0.000 to 0.028)",
+      "ordinary words masked": "0.138 (0.120 to 0.157)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "dpi_100",
+      "CER": "0.172",
+      "CER no spaces": "0.147",
+      "pixel leak": "0.252 (0.189 to 0.314)",
+      "text-audit leak": "0.011 (0.000 to 0.025)",
+      "ordinary words masked": "0.118 (0.106 to 0.130)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "blur",
+      "CER": "0.188",
+      "CER no spaces": "0.093",
+      "pixel leak": "0.434 (0.379 to 0.489)",
+      "text-audit leak": "0.002 (0.000 to 0.007)",
+      "ordinary words masked": "0.358 (0.322 to 0.393)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "noise",
+      "CER": "0.108",
+      "CER no spaces": "0.094",
+      "pixel leak": "0.364 (0.320 to 0.408)",
+      "text-audit leak": "0.030 (0.014 to 0.047)",
+      "ordinary words masked": "0.114 (0.098 to 0.129)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "jpeg",
+      "CER": "0.193",
+      "CER no spaces": "0.122",
+      "pixel leak": "0.372 (0.321 to 0.423)",
+      "text-audit leak": "0.015 (0.003 to 0.026)",
+      "ordinary words masked": "0.267 (0.235 to 0.298)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "skew_1",
+      "CER": "0.125",
+      "CER no spaces": "0.112",
+      "pixel leak": "0.164 (0.126 to 0.202)",
+      "text-audit leak": "0.022 (0.006 to 0.039)",
+      "ordinary words masked": "0.094 (0.078 to 0.110)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "skew_4",
+      "CER": "0.126",
+      "CER no spaces": "0.110",
+      "pixel leak": "0.184 (0.138 to 0.231)",
+      "text-audit leak": "0.016 (0.005 to 0.026)",
+      "ordinary words masked": "0.098 (0.080 to 0.117)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "fax",
+      "CER": "0.171",
+      "CER no spaces": "0.160",
+      "pixel leak": "0.198 (0.148 to 0.247)",
+      "text-audit leak": "0.029 (0.010 to 0.048)",
+      "ordinary words masked": "0.100 (0.088 to 0.112)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "photocopy",
+      "CER": "0.082",
+      "CER no spaces": "0.032",
+      "pixel leak": "0.300 (0.253 to 0.347)",
+      "text-audit leak": "0.017 (0.001 to 0.033)",
+      "ordinary words masked": "0.213 (0.179 to 0.247)"
+    },
+    {
+      "engine": "rapidocr",
+      "condition": "phone",
+      "CER": "0.119",
+      "CER no spaces": "0.055",
+      "pixel leak": "0.309 (0.264 to 0.354)",
+      "text-audit leak": "0.018 (0.005 to 0.031)",
+      "ordinary words masked": "0.244 (0.217 to 0.272)"
+    }
+  ]
+}

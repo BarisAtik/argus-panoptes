@@ -52,6 +52,12 @@ random effects, keeps those two: odds ratios 0.08 (0.04 to 0.14) and 0.14 (0.08 
 the same model drops the Polish gap that the bootstrap had called clear, which is why the name has
 to be a random effect: the lists are a small sample of names, and the bootstrap ignores that.
 
+A [follow-up audit](../results/ner_nl/name_audit.md) (hypotheses 13 to 17 in the card) resampled names
+as well: Hindustani -40.8 points (-51.2 to -30.2) and Turkish -29.8 (-40.2 to -19.5). Dropping the
+three worst names barely moves them, and Faker's independent tables show the same direction
+(Turkish -45.7, Polish -9.0). The Dutch reference itself falls from 87.1% to 72.1% on less popular
+names, so treat the size of any gap as a property of the lists too.
+
 The damage is mostly mislabelling, so a redactor suffers less than the recall suggests, but it
 still suffers: `lg` fully masks 92% of swapped-in Dutch-list names and 70% of the Hindustani list
 (post hoc analysis, not pre-registered). Those lost names get called ORG or GPE, or nothing.

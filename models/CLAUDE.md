@@ -23,8 +23,8 @@ enforcement doesn't count as permission.
 
 - `forge/`: framework-free stats, calibration, retrieval metrics, reports. Reuse it. Don't
   reimplement a metric inside a project.
-- `asr_nl/`, `text_nl/`, `clip_search/`: one package per project. Each has a README and an
-  evaluation card (`text_nl/MODEL_CARD.md`, `*/EVALUATION_CARD.md`).
+- `asr_nl/`, `text_nl/`, `clip_search/`, `ner_nl/`, `pii_nl/`, `scan_nl/`: one package per project.
+  Each has a README and an evaluation card (`text_nl/MODEL_CARD.md`, `*/EVALUATION_CARD.md`).
 - `scripts/first_results.sh`: first real runs, in order of effort (`text`, `clip`, `asr`).
 - `tests/`: one file per project. Heavy imports (torch, transformers) stay inside functions so
   that the shared code imports without them.
@@ -38,6 +38,12 @@ is a zip holding a zstd tar: unpack, then copy `site-packages/*` into the venv. 
 `micromamba` from the same channel and solve one environment, which also brings PyTorch CPU and R.
 Check the licence of whatever comes this way. Third-party re-uploads of weights from a blocked hub
 are not package installs: leave those alone until Baris decides.
+
+A publisher's own wheel with its weights inside is an ordinary package too, and so is a distro
+package: `rapidocr_onnxruntime` (Apache-2.0, bundles PP-OCRv4) and `tesseract-ocr-nld`. Tesseract
+and its language packs were already installed here. The conda environment needs
+`pip install wordfreq faker rapidocr-onnxruntime opencv-python-headless pillow "deduce>=3"` and
+`pip install -e . --no-deps`. Do not probe mirrors of a blocked hub, which are refused anyway.
 
 ## Rules that keep this honest
 
@@ -76,9 +82,16 @@ result here. The next real step is real documents with consent, or public ones (
 **ner_nl.** Run stages in the order listed at the top of `ner_nl/run.py`, or `scripts/ner_study.sh`,
 in the environment from `ner_nl/environment.yml` (DEDUCE's `regex` pin clashes with `transformers`).
 CoNLL-2002 is local only. Sentences must not reach the repo, including in review notes. Record
-verdicts by position. Models trained on it are never hosted or sold. Before quoting the name gap,
-do the per-name analysis in `PROGRESS.md`: twenty surnames per list is thin. `run.py` needs the
-own-model runs before `evaluate`. A new backend goes in `backends.py` and gets all three tests.
+verdicts by position. Models trained on it are never hosted or sold. Quote the name gap with its
+resampled interval from `results/ner_nl/name_audit.md`, and note that the size depends on the lists.
+`run.py` needs the own-model runs before `evaluate`. A new backend goes in `backends.py` and gets all three tests.
+
+**scan_nl.** `blind` is spent as soon as you read `results/scan_nl/`: a new claim needs new blind
+templates from a fresh agent that can't see `rules.py` or this code. OCR is cached under `runs/`, so
+fixes after OCR rescore in about 90 minutes on 2 cores. Scoring takes as long as OCR, so don't send
+parallel `sleep` calls and expect progress between them. No generated page goes in the repo, since a
+drawn value can match a real one. Next: deskew, which `skew_4` showed is missing, then real public
+pages. Don't call the 62% a real-world rate: it comes from a chosen shadow.
 
 ## Git
 

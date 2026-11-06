@@ -92,4 +92,52 @@ there: 8 came out at 1.8 times and 10 went the other way. Both stay as written.
 
 ## Results
 
-Pending.
+Commit ffe2dae, 2026-11-06, 120 documents, 12 conditions. Full tables: [`results/scan_nl/blind.md`](../results/scan_nl/blind.md).
+Checks: [`hypotheses.json`](../results/scan_nl/hypotheses.json). Dev figures, with thresholds tuned, are in
+[`dev.md`](../results/scan_nl/dev.md).
+
+| # | Verdict | Evidence |
+| --- | --- | --- |
+| 1 | Supported | `truth` 0.4% (0.0 to 0.9) |
+| 2 | Supported | Pixels 61.9% (53.1 to 70.7) on `photocopy`, 56.1% (48.1 to 64.1) on `phone`. Text audit 1.2% and 3.0% |
+| 3 | **Wrong in part** | Five of six stay within 3 points. `noise` adds 3.5 (1.9 to 5.0) |
+| 4 | Supported | 32.6% to 2.9% on hard, a 91% cut |
+| 5 | Supported | CER 0.21% against 0.13%. English leaks 1.0 point less (0.2 to 1.9), which nobody expected |
+| 6 | Supported, narrowly on the second part | 23.5 points more leak (19.6 to 27.4). Ordinary words masked 16.5% against 8.2%, a ratio of 2.02 |
+| 7 | Supported | 14.1% to 4.1%, a 71% cut, with 18.5% of ordinary words masked |
+| 8 | **Wrong** | The rule catches 1176 of 1501 leaked values, confidence 658: 1.79 times, not 2. It was under 2 on dev too |
+| 9 | Supported | `repair` -0.05 points, `digits` -0.9, at +29.6 points of distractors masked |
+| 10 | **Wrong** | Beyond the Dutch list: Polish +6.2, Moroccan +1.2, Hindustani -0.3, Turkish -2.1. Only Polish fits, and that difference has no interval |
+
+**What it means.** On these pages the redactor is not the weak link. With perfect reading it leaks
+0.4%. Most of what escapes is text the reader never saw, and a check of the output text can't see
+that either: it reports about 2% where the page shows about 60%. The reader was sure of itself, too,
+because confidence averages only over the words it found.
+
+**Surprises and things found after the fact (not registered).**
+- `skew_4` was not in the registered sets and came out as the worst condition left: 21.9% for both
+  Tesseract variants, CER 36%. `tesseract_enh` does no deskewing, so this was a gap in the plan.
+- Best combination: `tesseract_enh` with `unread`, 3.2% (2.5 to 3.9) over all conditions with 9.6%
+  of ordinary words masked. Without `unread`: 4.1% and 8.2%. Picked after seeing the blind data, so
+  treat it as a lead.
+- With `tesseract_nld`, pages without a flag leak 3.8%, and the rule sends 20% of pages to a person.
+- Fail closed works by destroying the page: on `photocopy` it blacks out 66% of ordinary words.
+  That is the correct failure for this tool, but a redacted page without text is not a useful page.
+- `rapidocr` handles `skew_4` better than Tesseract (18.4%) but is worse everywhere else. Most of its
+  gap is whole lines missed by the detector and glued words. Part of it may still be the word-box
+  adapter. No confidence or `unread` signal was useful for it.
+- Tesseract `eng` reads Dutch about as well as `nld`. Together with hypothesis 10, this suggests the
+  language pack matters little on these pages. That is a reading of two results, not a test.
+
+## Known limits
+
+- **The sizes are about this damage model.** The large shadow failure comes from a smooth 25 to 35%
+  brightness ramp, which global thresholding handles badly. How often real scans look like that is
+  unknown. The mechanism is shown; its rate on real paper is not.
+- Simple one-column pages. Tables, stamps, logos, letterheads and handwriting would all add failures.
+- One template author, 24 templates, four registers. The 7.8% of ordinary words masked comes from
+  the redactor on text it wasn't tuned for.
+- Fonts rotate by hash and are not balanced across conditions in a designed way. Leak by font runs
+  from 2.7% to 5.4% for `tesseract_enh`, and is not tested.
+- A covered box proves nothing about information in layout, line length or document metadata.
+- Thresholds of 90% coverage and 5% unread ink are choices. A different one moves the numbers.

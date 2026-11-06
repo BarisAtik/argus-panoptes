@@ -1,20 +1,21 @@
 # 🔥 The Forge — models
 
-Tinkering with open models from the Hugging Face ecosystem using PyTorch, across speech, text
-and images. The rule here: **a number only counts if it comes with how it could be wrong.**
+Tinkering with open models from the Hugging Face ecosystem and beyond, across speech, text and
+images. The rule here: **a number only counts if it comes with how it could be wrong.**
 
 | Project | Modality | Question | Status |
 | --- | --- | --- | --- |
 | [`asr_nl/`](asr_nl/) | 🎙️ audio | Where does Whisper break on Dutch: accents, noise, compounds, silence? | Pipeline tested; first real run pending |
 | [`text_nl/`](text_nl/) | 📝 text | Can a small Dutch classifier be trusted beyond its accuracy score? | Pipeline tested; first real run pending |
 | [`clip_search/`](clip_search/) | 🖼️ image | How much worse is image search when you ask in Dutch? | Pipeline tested; first real run pending |
-| [`ner_nl/`](ner_nl/) | 🏷️ text | How far does a Dutch tagger travel beyond its home corpus? | **Real results**: spaCy lg F1 0.70 on clean text, 0.42 as transcript; a 41-point name gap by naming tradition |
+| [`ner_nl/`](ner_nl/) | 🏷️ text | How far does a Dutch tagger travel beyond its home corpus? | **Real results**: spaCy lg F1 0.70 on clean text, 0.42 as transcript; a name gap of 30 to 41 points that survives resampling names and an independent list |
 | [`pii_nl/`](pii_nl/) | 🕵️ text | How much personal data survives Dutch redaction in chat, calls and notes? | **First real results**: 4.8% of values leak on blind synthetic templates, against 30.9% for spaCy lg |
+| [`scan_nl/`](scan_nl/) | 🖼️ image | When a Dutch page is a scan, what does a redaction really hide? | **Real results**: on shadowed pages Tesseract leaks 62% of values in the pixels while a text audit reports 1%; 15 lines of OpenCV bring that to 3% |
 | [`forge/`](forge/) | 🧰 shared | Cluster bootstrap and t intervals, calibration, ranking metrics, stamped reports | Done |
 
-**Status means what it says.** `pii_nl` and `ner_nl` ran real models; their numbers live in
-[`results/`](results/). Speech, classifier and image projects are tested against tiny random
-models only, and so have no performance results yet. The design behind them comes from a
+**Status means what it says.** `pii_nl`, `ner_nl` and `scan_nl` ran real models; their numbers
+live in [`results/`](results/). The speech, classifier and CLIP projects are tested against tiny
+random models only, and so have no performance results yet. The design behind them comes from a
 [simulation](docs/ci_coverage_simulation.md) behind the
 evaluation design: resampling clips instead of speakers can make a "95%" interval cover the
 truth only about 55% of the time. A [second simulation](docs/small_group_coverage.md) shows that
