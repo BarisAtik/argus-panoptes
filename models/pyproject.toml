@@ -20,11 +20,12 @@ demo = ["gradio>=4.44"]
 dev = ["pytest>=8", "ruff>=0.5", "jiwer>=3", "scikit-learn>=1.4"]
 
 [tool.setuptools.packages.find]
-include = ["forge*", "asr_nl*", "text_nl*", "clip_search*", "ner_nl*"]
+include = ["forge*", "asr_nl*", "text_nl*", "clip_search*", "ner_nl*", "pii_nl*"]
 
 [tool.setuptools.package-data]
 text_nl = ["challenge/*.jsonl"]
 asr_nl = ["configs/*.yaml"]
+pii_nl = ["templates/*.jsonl"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
