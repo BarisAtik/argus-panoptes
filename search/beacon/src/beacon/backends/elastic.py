@@ -15,7 +15,7 @@ from ..models import Chunk, Filters, Hit
 
 SOURCE_FIELDS = [
     "id", "doc_id", "position", "section", "text", "title",
-    "court", "date", "doc_type", "subjects", "url", "acl",
+    "court", "date", "doc_type", "subjects", "url", "acl", "refs",
 ]  # fmt: skip
 
 
@@ -75,6 +75,7 @@ def index_body(dims: int, compound_words: list[str] | None = None) -> dict:
                 "doc_type": {"type": "keyword"},
                 "subjects": {"type": "keyword"},
                 "acl": {"type": "keyword"},
+                "refs": {"type": "keyword"},
                 "url": {"type": "keyword", "index": False},
                 "embedding": {
                     "type": "dense_vector",
@@ -201,6 +202,35 @@ class ElasticBackend:
         )
         return [self._hit(raw) for raw in response["hits"]["hits"]]
 
+    def by_refs(self, refs: list[str], k: int, filters: Filters | None = None) -> list[Hit]:
+        """First chunk of each document citing a ref, with most matching refs first."""
+        wanted = [{"constant_score": {"filter": {"term": {"refs": ref}}}} for ref in refs]
+        response = self.client.search(
+            index=self.index,
+            query={
+                "bool": {
+                    "should": wanted,
+                    "minimum_should_match": 1,
+                    "filter": [{"term": {"position": 0}}, *filter_clauses(filters)],
+                }
+            },
+            size=k,
+            source_includes=SOURCE_FIELDS,
+        )
+        return [self._hit(raw) for raw in response["hits"]["hits"]]
+
+    def term_coverage(self, query: str) -> float:
+        """Share of the query's terms that occur in the index, after Dutch analysis."""
+        analyzed = self.client.indices.analyze(index=self.index, field="text", text=query)
+        terms = list(dict.fromkeys(token["token"] for token in analyzed["tokens"]))
+        if not terms:
+            return 0.0
+        found = sum(
+            1 for term in terms
+            if self.client.count(index=self.index, query={"term": {"text": term}})["count"]
+        )  # fmt: skip
+        return found / len(terms)
+
     def document_chunks(self, doc_id: str) -> list[Chunk]:
         response = self.client.search(
             index=self.index,
@@ -226,7 +256,7 @@ class ElasticBackend:
 
 
 def _default(key: str):
-    if key in ("subjects", "acl"):
+    if key in ("subjects", "acl", "refs"):
         return []
     if key == "position":
         return 0

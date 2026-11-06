@@ -11,20 +11,32 @@ from collections.abc import Sequence
 from dataclasses import dataclass, replace
 
 from .backends import Backend
+from .citations import article_refs, extract_refs
 from .embeddings import Embedder
 from .models import Chunk, Filters, Hit
+from .routing import lexical_weight
+from .synonyms import expand
 
-MODES = ("bm25", "dense", "rrf", "linear")
+MODES = ("bm25", "dense", "rrf", "linear", "smart")
 ECLI = re.compile(r"\bECLI:[A-Z]{2}:[A-Z0-9]{1,7}:\d{4}:[A-Z0-9.]{1,25}\b", re.IGNORECASE)
 
 
-def rrf_fuse(rankings: Sequence[Sequence[Hit]], rrf_k: int = 60) -> list[Hit]:
+def rrf_fuse(
+    rankings: Sequence[Sequence[Hit]],
+    rrf_k: int = 60,
+    weights: Sequence[float] | None = None,
+) -> list[Hit]:
     """Reciprocal rank fusion. Uses ranks only, so score scales do not matter."""
+    weights = weights or [1.0] * len(rankings)
+    if len(weights) != len(rankings):
+        raise ValueError("one weight per ranking")
     scores: dict[str, float] = {}
     hits: dict[str, Hit] = {}
-    for ranking in rankings:
+    for ranking, weight in zip(rankings, weights, strict=True):
+        if weight <= 0:
+            continue
         for rank, hit in enumerate(ranking, start=1):
-            scores[hit.chunk.id] = scores.get(hit.chunk.id, 0.0) + 1.0 / (rrf_k + rank)
+            scores[hit.chunk.id] = scores.get(hit.chunk.id, 0.0) + weight / (rrf_k + rank)
             # Keep the version that carries a highlight.
             if hit.chunk.id not in hits or (hit.highlight and not hits[hit.chunk.id].highlight):
                 hits[hit.chunk.id] = hit
@@ -82,6 +94,11 @@ class Retriever:
     # When set, every path below is limited to documents these groups may read. It lives here
     # and not in a tool argument, so that an agent cannot widen its own access.
     groups: frozenset[str] | None = None
+    # Only used by mode "smart". The defaults are what the third evaluation froze.
+    routing: str = "none"
+    routing_power: float = 1.0
+    synonyms: bool = False
+    refs: bool = False
 
     def _scoped(self, filters: Filters | None) -> Filters | None:
         if self.groups is None:
@@ -97,6 +114,8 @@ class Retriever:
         if not query.strip():
             return []
         filters = self._scoped(filters)
+        if mode == "smart":
+            return self._smart(query, filters)
         lexical: list[Hit] = []
         dense: list[Hit] = []
         if mode != "dense":
@@ -111,6 +130,24 @@ class Retriever:
         if mode == "rrf":
             return rrf_fuse([lexical, dense], self.rrf_k)
         return linear_fuse(lexical, dense, self.alpha)
+
+    def _smart(self, query: str, filters: Filters | None) -> list[Hit]:
+        """RRF that adapts to the query: routing, synonyms and exact citations. Each is optional."""
+        weight = lexical_weight(
+            query, self.routing, self.backend.term_coverage, self.routing_power
+        )
+        vector = self.embedder.embed_query(query)
+        rankings = [self.backend.dense(vector, self.candidates, filters)]
+        weights = [1.0]
+        if weight > 0:
+            text = expand(query) if self.synonyms else query
+            rankings.append(self.backend.lexical(text, self.candidates, filters))
+            weights.append(weight)
+        cited = article_refs(extract_refs(query)) if self.refs else []
+        if cited:
+            rankings.append(self.backend.by_refs(cited, self.candidates, filters))
+            weights.append(1.0)
+        return rrf_fuse(rankings, self.rrf_k, weights)
 
     def search(
         self, query: str, mode: str = "rrf", k: int = 10, filters: Filters | None = None

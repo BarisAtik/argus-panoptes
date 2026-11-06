@@ -53,6 +53,7 @@ def _chunk(doc: Document, position: int, section: str, text: str) -> Chunk:
         subjects=list(doc.subjects),
         url=doc.url,
         acl=list(doc.acl),
+        refs=list(doc.refs),
     )
 
 

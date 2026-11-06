@@ -31,6 +31,7 @@ class Document:
     url: str = ""
     sections: list[Section] = field(default_factory=list)
     acl: list[str] = field(default_factory=lambda: [PUBLIC])
+    refs: list[str] = field(default_factory=list)  # canonical citations, see citations.py
 
     @property
     def text(self) -> str:
@@ -57,6 +58,7 @@ class Chunk:
     subjects: list[str] = field(default_factory=list)
     url: str = ""
     acl: list[str] = field(default_factory=list)
+    refs: list[str] = field(default_factory=list)
 
     def source(self) -> dict:
         return asdict(self)

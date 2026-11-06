@@ -87,6 +87,24 @@ class LocalBackend:
                 break
         return hits
 
+    def by_refs(self, refs: list[str], k: int, filters: Filters | None = None) -> list[Hit]:
+        """First chunk of each document citing a ref, with most matching refs first."""
+        wanted = set(refs)
+        scored = [
+            (len(wanted.intersection(chunk.refs)), index)
+            for index, chunk in enumerate(self.chunks)
+            if chunk.position == 0 and (filters is None or filters.matches(chunk))
+        ]
+        best = sorted((item for item in scored if item[0]), key=lambda i: (-i[0], i[1]))[:k]
+        return [Hit(self.chunks[index], float(score)) for score, index in best]
+
+    def term_coverage(self, query: str) -> float:
+        """Share of the query's terms that occur anywhere in the index."""
+        terms = set(tokens(query, self.decompounder))
+        if not terms:
+            return 0.0
+        return sum(1 for term in terms if term in self.postings) / len(terms)
+
     def document_chunks(self, doc_id: str) -> list[Chunk]:
         return sorted(
             (chunk for chunk in self.chunks if chunk.doc_id == doc_id),

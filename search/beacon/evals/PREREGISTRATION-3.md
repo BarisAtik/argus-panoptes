@@ -25,6 +25,10 @@ queries have now been seen, so they can only be used for tuning.
   the queries, so this test is partly circular. It shows that the plumbing and the wording variants
   work, and not that citation extraction is correct in general.
 
+Two fresh queries turned out to repeat tuning queries word for word: `f-en-14` (AI literacy for
+staff) and `f-nl-05` (verboden AI-praktijken). Found before scoring, so they are dropped from the
+test, which leaves n=29 non-Dutch and n=23 Dutch.
+
 ## Fixed config
 
 Embedder: quantised `multilingual-e5-small`. Local backend, `max_words=220`, `overlap_words=40`,
@@ -46,8 +50,8 @@ looking at fresh-query rankings.
 
 ## Hypotheses, on nDCG@10
 
-1. On non-Dutch queries (n=30), the frozen router beats `rrf`.
-2. On Dutch queries (n=24), the frozen router is not worse than `rrf`: the 95% interval of the
+1. On non-Dutch queries (n=29), the frozen router beats `rrf`.
+2. On Dutch queries (n=23), the frozen router is not worse than `rrf`: the 95% interval of the
    difference stays above -0.03.
 3. On abbreviation queries (n=10), `synonyms` beats `rrf`.
 4. On statute-lookup test queries, `refs` beats `rrf`.

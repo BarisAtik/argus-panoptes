@@ -29,6 +29,7 @@ from pathlib import Path
 
 import yaml
 
+from ..citations import extract_refs
 from ..models import Document, Section, write_jsonl
 
 log = logging.getLogger(__name__)
@@ -57,6 +58,7 @@ _ADMONITION = re.compile(r'^\s*(!!!|\?\?\?\+?)\s+\w+(\s+"(.*)")?\s*$')
 _IMAGE = re.compile(r"!\[[^\]]*\]\([^)]*\)")
 _LINK = re.compile(r"\[([^\]]*)\]\([^)]*\)")
 _TAG = re.compile(r"</?[a-zA-Z][^>]*>")
+_SOURCES = re.compile(r"^#{1,6}\s+Bronnen.*?\n(?P<list>.*?)(?=^#{1,6}\s|\Z)", re.M | re.S | re.I)
 _INVISIBLE = re.compile("[­​-‏⁠﻿]")
 
 
@@ -126,6 +128,14 @@ def _text_list(value) -> list[str]:
     return [str(v) for v in (value if isinstance(value, list) else [value])]
 
 
+def source_refs(body: str) -> list[str]:
+    """Citations listed under `Bronnen`. They go to a separate field, never the indexed text."""
+    match = _SOURCES.search(body)
+    if not match:
+        return []
+    return extract_refs(clean_inline(match["list"].replace("\n", " ; ")))
+
+
 def parse_page(path: Path, folder: str) -> tuple[Document, dict]:
     meta, body = split_front_matter(path.read_text(encoding="utf-8"))
     kind = KINDS[folder]
@@ -138,6 +148,9 @@ def parse_page(path: Path, folder: str) -> tuple[Document, dict]:
         summary=" ".join(str(meta.get("toelichting") or "").split()),
         url=f"{SITE}/voldoen-aan-wetten-en-regels/{folder}/{path.stem}/",
         sections=body_sections(body),
+        # Requirement pages only. Measures are the answers in the labelled tasks, and their
+        # references come from the same mapping as the labels.
+        refs=source_refs(body) if kind == "vereiste" else [],
     )
     return document, meta
 
