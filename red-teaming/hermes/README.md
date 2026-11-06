@@ -89,7 +89,8 @@ needs a human or a different architecture.
 ## Limits
 
 - **Blind results for the new stacks are pending.** Controls are frozen at `33a516c` for a second blind benign holdout,
-  which I have not read or scored. `make holdout2` scores it once. No blind attack set exists for them either.
+  which I have not read or scored. It was written before `input` types existed, so it likely cannot test typed forwards.
+  `make holdout2` scores it once. No blind attack set exists for these stacks either.
 - **No blind attack set.** The separate author session was stopped by an automated safety check while writing the
   attacks, and I did not retry that content. Attack numbers are dev only. I wrote both the attacks and the controls.
 - Only the benign half was tested blind, by the same kind of system as me, which also chose its own grants.

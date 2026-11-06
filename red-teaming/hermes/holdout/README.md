@@ -23,11 +23,15 @@ It did not read `controls.py`, `frontier.py`, reports, `PREREGISTRATION.md`, pro
 
 Checked for solvability only: 20 of 20 pass with `hermes run --stacks none`. No other stack has been run. Not yet scored.
 
-## Second blind holdout
+## Scoring the second set
 
-**Benign half only.** `06_blind_controls_2.yaml` comes from a separate author. Controls were frozen for it at commit
-`33a516c`, before I saw the file, and I have not read it. `make holdout2` scores it once and writes `reports/holdout2.*`.
-It refuses to overwrite them. There is still no blind attack set, and whether to have one is the owner's decision.
+Controls are frozen at commit `33a516c`. The order matters, so here it is: the set arrived in `dfd39d5` at 07:06, before the
+addendum to the pre-registration (`651f95a`, 07:07) and before the freeze (07:13). So the file was not written after the
+freeze. What the freeze protects is that the set stays unseen and unscored: I did not open it at any point, and its author
+could not see the new controls, which did not exist yet. `make holdout2` scores it once and writes `reports/holdout2.*`,
+and refuses to overwrite them. There is still no blind attack set, and whether to have one is the owner's decision.
 
-Limits: the same as above, and the `_fwd` stacks can only differ from their base stacks if the file declares `input`
-types. The report prints how many agents do.
+Limits: the same as above. `input` types and `parallel` did not exist when the set was written, so I expect it to use
+neither. If so, the `_fwd` stacks cannot differ from their base stacks and it cannot test typed forwards or false links.
+It can only show what the new label scheme costs on ordinary sequential work. The report prints how many agents declare
+an `input` type.
