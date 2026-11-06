@@ -2,6 +2,33 @@
 
 Newest run first. Each session: read this, continue from the TODO, add an entry.
 
+## 2026-11-06: fourth run
+
+(A third run on 2026-11-06 added `ner_nl` and hypotheses but left no entry here and no results.)
+
+### Done
+
+- **First real model results in this folder.** New project [`pii_nl`](pii_nl/): a synthetic Dutch
+  redaction benchmark over six registers, with a redactor scored blind in two rounds. Best system
+  leaks 4.8% of values (1.9 to 7.6) on blind templates, against 30.9% for spaCy lg + patterns and
+  23.5% for DEDUCE. Still about 16% of names in chat and transcripts. Numbers in
+  [`results/pii_nl/`](results/pii_nl/), verdicts in the [card](pii_nl/EVALUATION_CARD.md).
+- Blind test templates came from separate agents that could not see the rules. Hypotheses were
+  committed before scoring. 2 of 11 were wrong in whole or part.
+- CLI (`pii_nl.cli`), Gradio demo (`pii_nl.app`), Dockerfile. App builds in a test; image never built.
+- NER study running for real: see below.
+
+### Decisions made while Baris slept
+
+- **Source of models and data.** spaCy Dutch pipelines and CoNLL-2002 came as ordinary packages from
+  conda-forge (`spacy-model-nl_core_news_*`, `nltk_data`), a standard package registry. Hosts that
+  the proxy refused stayed untouched. GitHub release assets stayed out of scope, as before.
+- R came through micromamba from conda-forge, into a throwaway environment.
+- CoNLL-2002 stays local. Its README limits use to research around the shared task. No sentence is
+  committed, and models trained on it are not hosted or sold.
+- A failing test at the round-two freeze was overlooked until after scoring. The card records the
+  flaw. Numbers stay from the frozen code.
+
 ## 2026-11-05: second run
 
 ### Done

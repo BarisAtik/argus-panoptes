@@ -30,6 +30,13 @@ enforcement doesn't count as permission.
   that the shared code imports without them.
 - `runs/`: gitignored, for all generated output. `results/<project>/`: curated, committed reports.
 
+## Getting models in a locked-down session
+
+Package registries work where model hubs don't. From conda-forge (`conda.anaconda.org`):
+`spacy-model-nl_core_news_{sm,md,lg}` and `nltk_data` (holds `corpora/conll2002`). A `.conda` file
+is a zip holding a zstd tar: unpack, then copy `site-packages/*` into the venv. Check the licence
+of whatever comes this way.
+
 ## Rules that keep this honest
 
 - Never write a performance number in a README or card unless it comes from a `real` report in
@@ -58,6 +65,14 @@ hand and record what share is truly mislabeled. Fill in `text_nl/MODEL_CARD.md`.
 **clip_search.** `python -m clip_search.coco`, then `clip_search.cli` with both default models.
 Then build a demo index and try `clip_search.app`. The `es_export` output is meant for the
 Elasticsearch experiments in the sibling `search/` folder; leave that folder to its own sessions.
+
+**pii_nl.** `test` and `test2` are spent: read them freely, but they no longer count as blind. Any
+new claim needs a new blind set from a fresh agent that can't see `rules.py`, committed with its
+hypotheses before scoring. Check `pytest` passes before a freeze: a skipped check cost a clean
+result here. The next real step is real documents with consent, or public ones (see `PROGRESS.md`).
+
+**ner_nl.** Run stages in the order listed at the top of `ner_nl/run.py`. CoNLL-2002 is local only.
+Sentences must not reach the repo, including in review notes. Record verdicts by position.
 
 ## Git
 
