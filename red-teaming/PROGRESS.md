@@ -69,7 +69,7 @@ has `ollama` and `llama.cpp` binaries, but no weights. So still no language mode
   a structural card linter with SARIF, and 88 passing tests.
 - **Results:** H1, H2, H3, H4, H6, H9 held. H5, H7, H8 falsified and kept as they are. H7 flattered the labels, so I
   added `rogue-source-clean-context`, which beats `full`.
-- **Benign holdout:** 16 tasks by a separate author session, committed in `b81010e` before scoring. `full` passed 7/16.
+- **Benign holdout:** 16 tasks by a separate author session, committed in `58955d1` before scoring. `full` passed 7/16.
 - **`writeups/split-trifecta.md`**, a new post, plus inter-agent and protocol-surface sections in the write-ups.
 
 ### Attack holdout: stopped, not retried
