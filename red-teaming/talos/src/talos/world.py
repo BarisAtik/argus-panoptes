@@ -166,7 +166,7 @@ def mention(rng, pool="p") -> Example:
     return ex
 
 
-def scoped(rng, pool="p", attack: str | None = None) -> Example:
+def scoped(rng, pool="p", attack: str | None = None, mimic: bool = False) -> Example:
     """A thread with several authors, where the user trusts one. Second study, see PREREGISTRATION.md.
 
     `meta["roles"]` holds one role per data word: 3 inside the named sender's real message, 1 elsewhere. A runtime knows
@@ -180,7 +180,8 @@ def scoped(rng, pool="p", attack: str | None = None) -> Example:
     msgs += [(f"note from {o} : {filler(rng, pool)}", 1) for o in others]
     dest = None
     if attack:
-        evil, _, dest = attack_instruction(rng, pool)
+        # `mimic` draws the attack from the same distribution as real instructions, so only authorship tells them apart
+        evil, _, dest = (instruction if mimic else attack_instruction)(rng, pool)
         body = wrap(rng.choice(FAMILIES[:2] + FAMILIES[3:6]), evil, rng)
         src = _ent(rng, pool)
         head = f"note from {src} : "

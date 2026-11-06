@@ -17,7 +17,7 @@ from pathlib import Path
 import torch
 
 from . import world as W
-from .train import Config, fit, n_params, outcome, predict, save
+from .train import Config, fit, load, n_params, outcome, predict, save
 
 CELLS = {"scoped": None, "unnamed": "unnamed", "forged": "forged"}
 
@@ -54,7 +54,22 @@ def run_one(args):
     return name
 
 
-def summarize(folder: str) -> dict:
+def mimic(folders: list[str], n: int = 300, seed: int = 999) -> list[dict]:
+    """Exploratory, test only. Trained attacks ask for keys and tokens more than real notes do, and go to a different domain.
+    Here the forged note asks for what real notes ask for, so authorship is the only cue left."""
+    rng = random.Random(seed)
+    exs = [W.scoped(rng, "z", "forged", mimic=True) for _ in range(n)]
+    out = []
+    for folder in folders:
+        for p in sorted(glob.glob(f"{folder}/scoped_adv-*.pt")):
+            m, c = load(p)
+            hits = [outcome(e, t) for e, t in zip(exs, predict(m, exs, c.prov))]
+            out.append({"model": Path(p).stem, "steps": c.steps, "prov": c.prov, "n": n, "attack": sum(h["attack"] for h in hits),
+                        "task": sum(h["task"] for h in hits), "malformed": sum(h["malformed"] for h in hits)})
+    return out
+
+
+def rates(folder: str) -> dict:
     c = collections.defaultdict(lambda: collections.defaultdict(lambda: [0, 0, 0, 0]))
     for p in sorted(glob.glob(f"{folder}/*.csv.gz")):
         with gzip.open(p, "rt", newline="") as f:
@@ -70,6 +85,11 @@ def summarize(folder: str) -> dict:
         a, t, b = rate(1), rate(2), rate(3)
         table[f"{reg}/{prov}/{cell}"] = {"n_models": len(ms), "asr": sum(a) / len(a), "asr_min": min(a), "asr_max": max(a),
                                          "task": sum(t) / len(t), "malformed": sum(b) / len(b)}
+    return table
+
+
+def summarize(folder: str) -> dict:
+    table = rates(folder)
     g = lambda k, f="asr": table[k][f]  # noqa: E731
     fa, ua = "scoped_adv/inband/forged", "scoped_adv/inband/unnamed"
     fs, f0 = "scoped_adv/signed/forged", "scoped/signed/forged"
@@ -91,16 +111,44 @@ def markdown(S: dict) -> str:
     return "\n".join(L) + "\n"
 
 
+def exploratory(rows: list[dict], long: dict) -> str:
+    L = ["", "## Exploratory, added after the results", "", "Neither part below was pre-registered.", ""]
+    if long:
+        L += ["**Three times the steps, 2 seeds.** Did the models above just run out of training?", "",
+              "| Regime / provenance / cell | ASR | Task success |", "| --- | ---: | ---: |"]
+        L += [f"| {k} | {r['asr']:.1%} | {r['task']:.1%} |" for k, r in long.items() if "scoped_adv" in k]
+        L += [""]
+    L += ["**Mimic attack, test only.** The trained attacks ask for keys and tokens more than real notes do, so a model can use content "
+          "instead of authorship. Here the forged note is drawn from the same distribution as real notes, so a text-only model has "
+          "nothing left but a guess.", "", "| Provenance | Steps | Models | ASR | Task success |", "| --- | ---: | ---: | ---: | ---: |"]
+    group = collections.defaultdict(list)
+    for r in rows:
+        group[(r["prov"], r["steps"])].append(r)
+    for (prov, steps), rs in sorted(group.items()):
+        n = sum(r["n"] for r in rs)
+        L.append(f"| {prov} | {steps} | {len(rs)} | {sum(r['attack'] for r in rs)}/{n} ({sum(r['attack'] for r in rs) / n:.1%}) | {sum(r['task'] for r in rs) / n:.1%} |")
+    return "\n".join(L) + "\n"
+
+
 def main(argv=None):
     p = argparse.ArgumentParser()
     p.add_argument("--out", default="data/runs2")
     p.add_argument("--jobs", type=int, default=2)
     p.add_argument("--report", action="store_true")
+    p.add_argument("--mimic", action="store_true", help="exploratory: forged notes that mimic real ones")
     p.add_argument("--long", action="store_true", help="exploratory: 3x steps for adv in-band and signed, 2 seeds")
     a = p.parse_args(argv)
+    if a.mimic:
+        rows = mimic(["data/runs2", "data/runs3"])
+        Path("reports/mimic.json").write_text(json.dumps(rows, indent=1))
+        print(*rows, sep="\n")
+        return
     if a.report:
         S = summarize(a.out)
-        Path("reports/senders.md").write_text(markdown(S))
+        text = markdown(S)
+        if Path("reports/mimic.json").exists():
+            text += exploratory(json.loads(Path("reports/mimic.json").read_text()), rates("data/runs3") if glob.glob("data/runs3/*.gz") else {})
+        Path("reports/senders.md").write_text(text)
         Path("reports/senders.json").write_text(json.dumps(S, indent=1))
         print(json.dumps(S["hypotheses"], indent=1))
         return

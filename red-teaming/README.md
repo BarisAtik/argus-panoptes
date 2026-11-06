@@ -11,15 +11,16 @@ Anything a platform asks to keep private stays private.
 
 | Project | What it is | Status |
 | --- | --- | --- |
-| [`gauntlet/`](gauntlet/) | Evaluation harness: 41 scenarios plus a blind holdout of 32, 17 defenses, MCP transport, AgentDojo bridge, task router, exhaustive stack search, statistics, reports | Working, tested. Worst-case runs done; real model run still to do |
+| [`gauntlet/`](gauntlet/) | Evaluation harness: 41 scenarios plus a blind holdout of 32, 17 defenses, MCP transport, AgentDojo bridge, task router, exhaustive stack search, statistics, reports | Working, tested. Worst-case runs and search analytics done; real language model run still to do |
 | [`mcp-lens/`](mcp-lens/) | Static scanner for MCP tool manifests, with SARIF output and pinning | Working, tested. Evaluation shows its limits; semantic review to do |
 | [`tripwire/`](tripwire/) | PyTorch prompt-injection detector, built to measure how such detectors fail: source shift, rewriting, calibration | Working, tested, full results in |
-| [`hermes/`](hermes/) | A2A trust lab: real SDK transport, 782-cell factorial, 17 protocol-surface attacks, capabilities, three label schemes, 4,096-stack frontier, card linter | Working, tested. Pre-registered, benign holdout scored; attack holdout not done, no model yet |
-| [`writeups/`](writeups/README.md) | What each weakness class is and how to mitigate it, tied to evidence, plus posts on [dev scores](writeups/dev-scores.md) and the [split trifecta](writeups/split-trifecta.md) | Updated, posts ready to read |
+| [`hermes/`](hermes/) | A2A trust lab: real SDK transport, 782-cell factorial, 17 protocol-surface attacks, capabilities, three label schemes, 4,096-stack frontier, card linter | Working, tested. Two blind benign sets scored; no blind attack set; hop runner ready for a real model |
+| [`talos/`](talos/) | A 370k-parameter transformer trained from scratch, to measure soft defenses when no real model is reachable. 76 models, two pre-registered studies | Working, tested, results in. A toy, and it says so |
+| [`writeups/`](writeups/README.md) | What each weakness class is and how to mitigate it, tied to evidence, posts on [dev scores](writeups/dev-scores.md), the [split trifecta](writeups/split-trifecta.md) and [out-of-band marks](writeups/the-mark-text-cannot-write.md), and a [sample review](writeups/sample-review.md) | Updated, posts ready to read |
 | [`arena-notebook/`](arena-notebook/) | Template and rules for competition notes | Ready, no entries yet |
-| [`programs.md`](programs.md) | Current competitions and bounties, with a note on how realistic each is | Checked 6 Nov 2026 |
+| [`programs.md`](programs.md) | Current competitions and bounties, with a note on how realistic each is | Re-checked 6 Nov 2026 |
 
-## Five findings so far
+## Six findings so far
 
 1. **Rules on actions beat filters on text.** With an agent assumed fully hijacked, a phrase filter stops
    2 of 28 scenarios, an egress allowlist stops 15 and layered policies stop 25. A blind holdout agreed:
@@ -29,7 +30,8 @@ Anything a platform asks to keep private stays private.
    whatever the model does.
 2. **Security has a bill.** That same layered stack passes only 23% of the hard control tasks. Running all
    8,192 defense subsets showed two defenses reach 29% attack success with 92% of controls passing. Stacks
-   picked on dev then lost up to 13 points on the holdout.
+   picked on dev then lost up to 13 points on the holdout. On 30 ordinary blind tasks `layered` kept 26, so the 23% was
+   mostly about tasks built to be hard.
 3. **A detector's score depends on who wrote the test.** Tripwire gets 93% recall at 1% FPR on held-out
    templates, 58% at 11% FPR on a held-out publisher, and stops 2 of 28 scenarios in the Gauntlet, no better
    than the regex. mcp-lens scored 100% on dev and 5–8% on fresh, adversarial holdouts, twice.

@@ -27,3 +27,27 @@
 | scoped_adv/signed/forged | 0.1% (0%–0%) | 87.6% | 0.0% |
 | scoped_adv/signed/scoped | 0.0% (0%–0%) | 97.5% | 0.0% |
 | scoped_adv/signed/unnamed | 0.0% (0%–0%) | 92.2% | 0.0% |
+
+## Exploratory, added after the results
+
+Neither part below was pre-registered.
+
+**Three times the steps, 2 seeds.** Did the models above just run out of training?
+
+| Regime / provenance / cell | ASR | Task success |
+| --- | ---: | ---: |
+| scoped_adv/inband/forged | 18.7% | 78.7% |
+| scoped_adv/inband/scoped | 0.0% | 100.0% |
+| scoped_adv/inband/unnamed | 20.8% | 75.2% |
+| scoped_adv/signed/forged | 0.0% | 99.8% |
+| scoped_adv/signed/scoped | 0.0% | 100.0% |
+| scoped_adv/signed/unnamed | 0.0% | 100.0% |
+
+**Mimic attack, test only.** The trained attacks ask for keys and tokens more than real notes do, so a model can use content instead of authorship. Here the forged note is drawn from the same distribution as real notes, so a text-only model has nothing left but a guess.
+
+| Provenance | Steps | Models | ASR | Task success |
+| --- | ---: | ---: | ---: | ---: |
+| inband | 1800 | 4 | 484/1200 (40.3%) | 38.0% |
+| inband | 5400 | 2 | 290/600 (48.3%) | 44.0% |
+| signed | 1800 | 4 | 0/1200 (0.0%) | 89.5% |
+| signed | 5400 | 2 | 0/600 (0.0%) | 99.8% |

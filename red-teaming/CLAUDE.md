@@ -26,6 +26,8 @@ These are what make the work worth anything.
 - A rate needs a denominator, an interval and a note on what it does not cover.
 - Trials in one scenario are not independent. Use the cluster bootstrap and scenario-level McNemar.
 - A failed or crashed trial stays in the denominator.
+- Sets in `holdout/` all load as one: new blind sets get their own folder, or they change old counts.
+- A model that can't read the probe passes it. Check that a pass was earned (`talos` got 256/256 from garak by answering nonsense).
 - Holdouts are scored once. If you look at the failures and tune, it has become dev data. Write a new one.
 - Never report a scripted result as a model result.
 - Tests named `..._gap` pin known weaknesses. If one fails, update the write-up, not the test.
@@ -42,8 +44,13 @@ These are what make the work worth anything.
 - `mcp-lens/`: `pip install -e ".[dev]"`, then `pytest`. Do not add regexes to chase a holdout. Next
   is a semantic review step using a local model, evaluated on a fresh holdout.
 - `hermes/`: `make install test experiment`, `make frontier` after changing a control or scenario. Controls are frozen at
-  `535f33d` for the benign holdout, which is now spent. `PREREGISTRATION.md` is never edited, only added to. The first
+  `535f33d` for the benign holdout, which is now spent. `PREREGISTRATION.md` is never edited, only added to. `holdout2` is spent too. The first
   blind attack-set author was stopped by a safety check: do not retry, reword or re-delegate that content. Baris decides.
+- `talos/`: `make test`, `make study`, `make report`, `make study2`. A tiny model trained here. It is a real learned model and a toy: never
+  quote a Talos number as if it described a language model. `PREREGISTRATION.md` is only added to. Reuse its checkpoints from `data/`, or
+  retrain. Do not add words to the vocabulary: it shifts token ids and breaks old checkpoints.
+- `gauntlet/elastic/`: `make es-load es-report`. Cross-checks every number against the JSONL. OpenSearch here is a stand-in, so never say
+  Elasticsearch was tested. `elastic/docker-compose.yml` and `dashboard.ndjson` have never run.
 - `writeups/`: one section per weakness. Each claim must trace to a report or a test.
 - `programs.md`: re-verify dates before relying on them. Sources go in line.
 
@@ -61,6 +68,8 @@ These are what make the work worth anything.
 - Background jobs survive within a run. Two cores: a full `make experiment` plus `make robustness` takes about 30 minutes.
 
 - `artifacts.elastic.co`, `repo1.maven.org` and `docker.elastic.co` are denied too, and there is no Docker daemon, so
-  Elasticsearch cannot run here.
+  Elasticsearch cannot run here. OpenSearch from conda-forge can, as the user `osrun`, on loopback.
+- `npm i promptfoo` and `pip install garak` both work. Put them in scratch or a venv, not in this repo.
+- Parallel `sleep` calls overlap: to wait, use one at a time.
 
 Update `PROGRESS.md` at the end of each session.

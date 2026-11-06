@@ -25,6 +25,12 @@ straight past it. Egress rules stopped 15 whatever the wording. A trained detect
 [Tripwire](../tripwire/). For the cost side, and which defenses earn their place, see
 [frontier.md](../gauntlet/reports/frontier.md) and the longer read in [dev-scores.md](dev-scores.md).
 
+## Blended actions
+
+Not every injection hijacks. In a [small trained model](../talos/reports/blend.md), 7% of injected trials went to the attacker, and 24% mixed the two tasks,
+such as the user's recipient getting the attacker's item. A destination or canary oracle calls that safe. **Mitigation:** check values as well as
+destinations, and score against the exact action expected. This comes from a toy, and Gauntlet's oracles have not been changed for it yet.
+
 ## Indirect prompt injection
 
 Instructions arrive inside content the agent was asked to read: mail, a doc, a web page. The model
