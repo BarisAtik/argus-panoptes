@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: talos
+Version: 0.1.0
+Summary: A tiny transformer agent trained from scratch to study the instruction/data boundary
+Requires-Python: >=3.11
+Requires-Dist: torch
+Requires-Dist: numpy
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"

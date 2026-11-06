@@ -1,0 +1,14 @@
+pyproject.toml
+src/talos/__init__.py
+src/talos/model.py
+src/talos/study.py
+src/talos/tok.py
+src/talos/train.py
+src/talos/world.py
+src/talos.egg-info/PKG-INFO
+src/talos.egg-info/SOURCES.txt
+src/talos.egg-info/dependency_links.txt
+src/talos.egg-info/entry_points.txt
+src/talos.egg-info/requires.txt
+src/talos.egg-info/top_level.txt
+tests/test_talos.py

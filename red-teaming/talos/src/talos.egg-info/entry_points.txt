@@ -1,0 +1,2 @@
+[console_scripts]
+talos = talos.cli:main

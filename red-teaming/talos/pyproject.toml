@@ -1,0 +1,22 @@
+[project]
+name = "talos"
+version = "0.1.0"
+description = "A tiny transformer agent trained from scratch to study the instruction/data boundary"
+requires-python = ">=3.11"
+dependencies = ["torch", "numpy"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+talos = "talos.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
