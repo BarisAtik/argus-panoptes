@@ -79,6 +79,11 @@ weighted by that design, so compare stacks and do not quote it. The blind set ha
 All nine predictions for these two findings (H10 to H18) held exactly. I made them by reading my own deterministic mesh,
 so that shows the code does what I reasoned, not that the design holds up.
 
+11. **A second blind set was harder still.** On 20 ordinary mesh tasks from a new author ([report](reports/holdout2.md)), `full`
+   kept 4/20 (8 to 42%), and `caps` and `identity` 11/20. All nine `caps` breaks are `caps:dest`: the destination was
+   not named in the user's words or the contact book. `taint_inferred` kept 9/20. Inference cost no more than the
+   other label schemes here: `full`, `full_lineage` and `full_inferred` all kept 4/20.
+
 ## Nothing here stops
 
 `full` loses to five surface attacks, pinned by `_gap` tests: injection that leaks into a granted internal mailbox,
@@ -86,11 +91,17 @@ memory worms (labels only mark them), leaks through the final reply, a value cho
 clean-context rogue above. Replies need rendering controls and types need range checks against the task. The rest
 needs a human or a different architecture.
 
+## A real model, when there is one
+
+[`hops.py`](src/hermes/hops.py) puts the open question to a local OpenAI-style model: does it obey a relayed instruction
+less at each hop? It also asks whether the model still follows a delegated instruction at that hop, since a model that
+simply loses the thread is not defended. Its path has run once end to end, against one small [Talos](../talos/) model
+through its loopback server. That proves the plumbing and nothing about a language model.
+
 ## Limits
 
-- **Blind results for the new stacks are pending.** Controls are frozen at `33a516c` for a second blind benign holdout,
-  which I have not read or scored. It was written before `input` types existed, so it likely cannot test typed forwards.
-  `make holdout2` scores it once. No blind attack set exists for these stacks either.
+- **The second blind set cannot test the new ideas.** It has no `input` types and no `parallel` steps, so `_fwd` stacks equal
+  their base stacks there, and it says nothing about typed forwards or false links. It does show ordinary cost.
 - **No blind attack set.** The separate author session was stopped by an automated safety check while writing the
   attacks, and I did not retry that content. Attack numbers are dev only. I wrote both the attacks and the controls.
 - Only the benign half was tested blind, by the same kind of system as me, which also chose its own grants.
@@ -108,7 +119,8 @@ make experiment                        # seconds
 make inference                         # seconds, H10 to H18
 make frontier                          # 4,096 stacks, about 8 minutes on two cores
 make wire                              # surface scenarios over real A2A on loopback
-make holdout2                          # once, when the second blind file is in place
+make holdout2                          # spent: refuses to overwrite its report
+make hops MODEL=name                   # hop attenuation on a real local model
 hermes lint card.json --sarif out.sarif
 hermes run --scenarios my.yaml --stacks none,full
 ```

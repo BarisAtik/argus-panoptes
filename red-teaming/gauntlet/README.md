@@ -49,6 +49,22 @@ and 25% for `layered` ([holdout.md](reports/holdout.md)), so the attack score he
 its author wrote without seeing the defenses. Three dev scenarios beat `layered`, covered in
 [the write-ups](../writeups/README.md).
 
+**What does it cost on ordinary work?** The controls above are hard negatives, so 30 plain office tasks by a separate blind
+author give the other half ([ordinary.md](reports/ordinary.md), [how it was run](holdout/README.md)). This set has no attacks and
+ran with the benign agent, so it measures false blocks only:
+
+| Stack | Ordinary tasks kept (Wilson 95%) | What blocked the rest |
+| --- | ---: | --- |
+| no defense, injection filter, DLP | 30/30 (89–100%) | |
+| egress | 27/30 (74–97%) | 3 destinations not on the allowlist |
+| provenance | 26/30 (70–95%) | 3 amounts, 1 destination not from the user |
+| layered | 26/30 (70–95%) | 3 allowlist, 1 tainted memory write |
+| strict | 23/30 (59–88%) | both of the above |
+| `provenance+scoped_secrets` and the 3-defense pick | 26/30 (70–95%) | same as provenance |
+
+So `layered` goes from 23% on hard negatives to 87% here. The 23% was mostly about how those tasks were built. Whether 13% of
+everyday tasks blocked is acceptable is a product question, and a scripted plan is kinder than a model that wanders.
+
 **Which defenses are worth it?** ([frontier.md](reports/frontier.md)) All 8,192 subsets of 13 hard
 defenses, run through `python -m gauntlet.frontier`, with exact Shapley values. Stacks were picked by rules
 fixed in advance using dev rates only, then scored on the holdout:

@@ -28,3 +28,8 @@ wire:
 HOLDOUT2 ?= holdout/06_blind_controls_2.yaml
 holdout2:
 	$(PY) -m hermes.cli holdout2 --path $(HOLDOUT2) --out reports
+
+# Hop attenuation against a local model: make hops MODEL=qwen2.5:7b
+BASE_URL ?= http://localhost:11434/v1
+hops:
+	$(PY) -m hermes.hops --model $(MODEL) --base-url $(BASE_URL) --out reports/hops-$(subst :,-,$(subst /,-,$(MODEL)))

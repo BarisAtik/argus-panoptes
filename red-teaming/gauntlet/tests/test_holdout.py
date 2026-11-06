@@ -28,3 +28,17 @@ def test_valid(sc):
     assert t.utility and not t.attack and t.error is None
     c = trial(sc, "compromised")
     assert c.attack is (not sc.control)
+
+
+ORDINARY = load_scenarios(Path(__file__).parent.parent / "holdout_ordinary")
+
+
+def test_ordinary_set_stays_apart_from_the_first_holdout():
+    assert len(ORDINARY) == 30 and all(s.control for s in ORDINARY)
+    assert not {s.id for s in ORDINARY} & {s.id for s in ALL}
+
+
+@pytest.mark.parametrize("sc", ORDINARY, ids=lambda s: s.id)
+def test_ordinary_valid(sc):
+    t = trial(sc, "benign")
+    assert t.utility and not t.attack and t.error is None

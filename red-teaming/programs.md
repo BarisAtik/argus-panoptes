@@ -1,6 +1,6 @@
 # 💰 Paid programs and competitions
 
-Checked on 6 November 2026. A later run the same day found nothing new by search and could not re-read the Arena page.
+Checked on 6 November 2026, most recently in the fourth run, which re-read the Arena and IPI Black rules pages.
 Rules and dates change, so read the official page before acting.
 Nothing here has been entered; see "Needs Baris" in [PROGRESS.md](PROGRESS.md).
 
@@ -8,13 +8,15 @@ Nothing here has been entered; see "Needs Baris" in [PROGRESS.md](PROGRESS.md).
 
 | What | Prize | Status | Notes |
 | --- | ---: | --- | --- |
-| [Gray Swan: Indirect Prompt Injection Black](https://app.grayswan.ai/arena/challenge/ipi-black-2026?panel=rules) | $300,000 total, $100,000 per wave, split evenly between white-box and black-box | **Wave 3 live, 2 to 12 Nov 2026. Ends 12 Nov, 10:00 PT** | The [Arena page](https://app.grayswan.ai/arena) shows 10 scenarios and 42 models, about a week left on 6 Nov. This settles the date conflict noted on 5 Nov. |
+| [Gray Swan: Indirect Prompt Injection Black](https://app.grayswan.ai/arena/challenge/ipi-black-2026?panel=rules) | $300,000 total, $100,000 per wave, split evenly between white-box and black-box | **Wave 3 live, 2 to 12 Nov 2026. Ends 12 Nov, 10:00 PT** | The [Arena page](https://app.grayswan.ai/arena) showed 6d 21h left on the last check: 5 white-box and 5 black-box scenarios. This settles the date conflict noted on 5 Nov. |
 | [Gray Swan: The Labyrinth, Challenge Edition](https://app.grayswan.ai/arena) | None shown | Live | 4 scenarios, 4 models. No dates or prize on the Arena page. |
 | [Gray Swan: Proving Ground](https://app.grayswan.ai/arena/challenge/proving-ground) | None listed | Free practice | Weekly drops across indirect, agent, chat and image formats. The right on-ramp. |
 | [Gray Swan: Lucky Break Agent Direct](https://app.grayswan.ai/arena) | $10,000 | Ended | Useful as a size reference: smaller pools exist between the big events. |
 | [Gray Swan × Hack The Box: Machine-in-the-Middle](https://app.grayswan.ai/arena/challenge/machine-in-the-middle/rules) | $100,000 | Closed Dec 2025 | Solving CTF targets through an AI agent. Paid the top 30 per wave plus a quantity pool, so it rewarded volume, not only first place. |
 | [CrowdStrike: Agents of Chaos](https://www.crowdstrike.com/en-us/blog/agents-of-chaos-immersive-ai-security-challenge/) | $100,000 | Closed 29 Sep 2026 | The game stays up as training. Covers direct and indirect injection and tool poisoning. |
 | [Lambda × Berkeley AgentBeats Security](https://luma.com/lambda-agentbeats) | $5,000 / $3,000 / $1,000 | Phase 2 onboarding was Feb 2026; current status unclear | Build attack and defense agents, head to head. Closest match to this lab's skills, if a new round opens. |
+
+[OWASP FinBot](https://snyk.io/articles/usd800k-up-for-grabs-12-ai-hacking-competitions-that-could-launch-your/), Hack The Box's AI range and AI Village challenges are listed there as always open and unpaid, so they suit practice. The same list shows yearly events worth watching for a new edition: Singapore AI CTF (SGD 19,000 in Oct 2025) and MITRE eCTF ($25,000+, kicked off Jan 2026). Neither 2026-27 edition was confirmed, and that list is undated.
 
 **Nothing else is on the calendar yet.** Two deadline directories ([one](https://agentdeadlines.com/), [two](https://epochal-intelligence.com/Competitions.html)) list no dedicated AI security competition after November 2026. The nearest neighbours are [SANS NetWars](https://www.sans.org/cyber-ranges/upcoming-netwars-tournament) (14 to 19 Dec, general, now with AI challenges) and the [DevFest Münster hackathon](https://devfest-ai-hackathon.devpost.com/) (21 Nov, in person, no cash). Absence from two directories is weak evidence, so check the Arena page again after 12 Nov.
 

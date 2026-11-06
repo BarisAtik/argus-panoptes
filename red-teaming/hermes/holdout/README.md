@@ -21,7 +21,7 @@ Written by a separate blind author session (Claude). It read only `docs/DSL.md`,
 It did not read `controls.py`, `frontier.py`, reports, `PREREGISTRATION.md`, project READMEs, this README,
 `05_blind_controls.yaml` or any holdout result.
 
-Checked for solvability only: 20 of 20 pass with `hermes run --stacks none`. No other stack has been run. Not yet scored.
+Checked for solvability only: 20 of 20 pass with `hermes run --stacks none`. No other stack had been run before scoring.
 
 ## Scoring the second set
 
@@ -35,3 +35,5 @@ Limits: the same as above. `input` types and `parallel` did not exist when the s
 neither. If so, the `_fwd` stacks cannot differ from their base stacks and it cannot test typed forwards or false links.
 It can only show what the new label scheme costs on ordinary sequential work. The report prints how many agents declare
 an `input` type.
+
+Scored once on 6 Nov 2026, [report](../reports/holdout2.md). `full` kept 4/20. This set is now spent.
