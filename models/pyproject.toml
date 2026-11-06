@@ -14,12 +14,13 @@ asr = ["torch>=2.2", "transformers>=4.56", "soundfile>=0.12", "accelerate>=0.33"
 asr-fast = ["faster-whisper>=1.0"]
 asr-onnx = ["sherpa-onnx>=1.12", "soundfile>=0.12"]
 text = ["torch>=2.2", "transformers>=4.56", "datasets>=2.20", "scikit-learn>=1.4", "accelerate>=0.33"]
+ner = ["torch>=2.2", "spacy>=3.8,<3.9", "nltk>=3.9"]
 vision = ["torch>=2.2", "transformers>=4.56", "pillow>=10", "open_clip_torch>=2.24"]
 demo = ["gradio>=4.44"]
 dev = ["pytest>=8", "ruff>=0.5", "jiwer>=3", "scikit-learn>=1.4"]
 
 [tool.setuptools.packages.find]
-include = ["forge*", "asr_nl*", "text_nl*", "clip_search*"]
+include = ["forge*", "asr_nl*", "text_nl*", "clip_search*", "ner_nl*"]
 
 [tool.setuptools.package-data]
 text_nl = ["challenge/*.jsonl"]
