@@ -8,11 +8,11 @@ and images. The rule here: **a number only counts if it comes with how it could 
 | [`asr_nl/`](asr_nl/) | 🎙️ audio | Where does Whisper break on Dutch: accents, noise, compounds, silence? | Pipeline tested; first real run pending |
 | [`text_nl/`](text_nl/) | 📝 text | Can a small Dutch classifier be trusted beyond its accuracy score? | Pipeline tested; first real run pending |
 | [`clip_search/`](clip_search/) | 🖼️ image | How much worse is image search when you ask in Dutch? | Pipeline tested; first real run pending |
-| [`ner_nl/`](ner_nl/) | 🏷️ text | How far does a Dutch tagger travel beyond its home corpus? | Real run in progress on CoNLL-2002 |
+| [`ner_nl/`](ner_nl/) | 🏷️ text | How far does a Dutch tagger travel beyond its home corpus? | **Real results**: spaCy lg F1 0.70 on clean text, 0.42 as transcript; a 41-point name gap by naming tradition |
 | [`pii_nl/`](pii_nl/) | 🕵️ text | How much personal data survives Dutch redaction in chat, calls and notes? | **First real results**: 4.8% of values leak on blind synthetic templates, against 30.9% for spaCy lg |
 | [`forge/`](forge/) | 🧰 shared | Cluster bootstrap and t intervals, calibration, ranking metrics, stamped reports | Done |
 
-**Status means what it says.** `pii_nl` and `ner_nl` run real models; their numbers live in
+**Status means what it says.** `pii_nl` and `ner_nl` ran real models; their numbers live in
 [`results/`](results/). Speech, classifier and image projects are tested against tiny random
 models only, and so have no performance results yet. The design behind them comes from a
 [simulation](docs/ci_coverage_simulation.md) behind the

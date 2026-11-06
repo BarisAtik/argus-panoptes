@@ -1,0 +1,708 @@
+{
+"reviewer": "Claude, reading each sentence; not a trained annotator",
+"pool": 119,
+"sample": 100,
+"note": "Positions in ned.testb only. No text is stored here.",
+"items": [
+{
+"sentence": 4424,
+"start": 2,
+"end": 3,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 2646,
+"start": 6,
+"end": 7,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 1174,
+"start": 8,
+"end": 9,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 5006,
+"start": 11,
+"end": 12,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 97,
+"start": 7,
+"end": 10,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 543,
+"start": 9,
+"end": 10,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 404,
+"start": 7,
+"end": 8,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 495,
+"start": 16,
+"end": 17,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 3166,
+"start": 22,
+"end": 24,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 972,
+"start": 3,
+"end": 5,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 135,
+"start": 31,
+"end": 33,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 3543,
+"start": 6,
+"end": 7,
+"predicted": "LOC",
+"verdict": "defensible"
+},
+{
+"sentence": 4479,
+"start": 26,
+"end": 27,
+"predicted": "PER",
+"verdict": "defensible"
+},
+{
+"sentence": 1909,
+"start": 18,
+"end": 19,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 4603,
+"start": 40,
+"end": 41,
+"predicted": "LOC",
+"verdict": "defensible"
+},
+{
+"sentence": 4419,
+"start": 0,
+"end": 1,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 3637,
+"start": 14,
+"end": 15,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 5140,
+"start": 2,
+"end": 3,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 4394,
+"start": 2,
+"end": 3,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 3599,
+"start": 12,
+"end": 13,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 3037,
+"start": 16,
+"end": 19,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 4364,
+"start": 12,
+"end": 15,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 527,
+"start": 8,
+"end": 9,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 1084,
+"start": 21,
+"end": 22,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 3600,
+"start": 3,
+"end": 4,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 290,
+"start": 13,
+"end": 16,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 1486,
+"start": 9,
+"end": 10,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 3187,
+"start": 0,
+"end": 1,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 2196,
+"start": 46,
+"end": 48,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 3618,
+"start": 27,
+"end": 28,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 3515,
+"start": 11,
+"end": 13,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 292,
+"start": 31,
+"end": 34,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 1986,
+"start": 0,
+"end": 2,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 262,
+"start": 14,
+"end": 15,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 290,
+"start": 8,
+"end": 10,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 1271,
+"start": 6,
+"end": 7,
+"predicted": "LOC",
+"verdict": "defensible"
+},
+{
+"sentence": 541,
+"start": 0,
+"end": 1,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 515,
+"start": 5,
+"end": 6,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 2517,
+"start": 10,
+"end": 11,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 2999,
+"start": 20,
+"end": 24,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 4901,
+"start": 19,
+"end": 20,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 133,
+"start": 27,
+"end": 28,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 954,
+"start": 11,
+"end": 12,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 3635,
+"start": 8,
+"end": 12,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 4210,
+"start": 0,
+"end": 2,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 2196,
+"start": 12,
+"end": 14,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 2783,
+"start": 0,
+"end": 2,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 4495,
+"start": 0,
+"end": 2,
+"predicted": "PER",
+"verdict": "defensible"
+},
+{
+"sentence": 133,
+"start": 9,
+"end": 10,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 2312,
+"start": 28,
+"end": 30,
+"predicted": "ORG",
+"verdict": "gold_error"
+},
+{
+"sentence": 3500,
+"start": 7,
+"end": 9,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 1759,
+"start": 1,
+"end": 2,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 495,
+"start": 9,
+"end": 11,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 974,
+"start": 5,
+"end": 7,
+"predicted": "PER",
+"verdict": "defensible"
+},
+{
+"sentence": 123,
+"start": 13,
+"end": 14,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 1122,
+"start": 10,
+"end": 12,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 4392,
+"start": 2,
+"end": 3,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 3626,
+"start": 10,
+"end": 11,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 1776,
+"start": 2,
+"end": 3,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 511,
+"start": 4,
+"end": 5,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 4043,
+"start": 10,
+"end": 11,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 972,
+"start": 28,
+"end": 29,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 3440,
+"start": 3,
+"end": 4,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 514,
+"start": 1,
+"end": 2,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 136,
+"start": 31,
+"end": 32,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 2613,
+"start": 8,
+"end": 9,
+"predicted": "LOC",
+"verdict": "defensible"
+},
+{
+"sentence": 2742,
+"start": 11,
+"end": 12,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 932,
+"start": 23,
+"end": 24,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 3598,
+"start": 0,
+"end": 1,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 2331,
+"start": 19,
+"end": 20,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 531,
+"start": 7,
+"end": 8,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 4624,
+"start": 12,
+"end": 13,
+"predicted": "ORG",
+"verdict": "defensible"
+},
+{
+"sentence": 3577,
+"start": 4,
+"end": 6,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 4486,
+"start": 28,
+"end": 30,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 1938,
+"start": 10,
+"end": 11,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 75,
+"start": 9,
+"end": 12,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 2490,
+"start": 8,
+"end": 9,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 2967,
+"start": 42,
+"end": 43,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 2512,
+"start": 2,
+"end": 3,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 1911,
+"start": 14,
+"end": 15,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 4446,
+"start": 14,
+"end": 15,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 965,
+"start": 7,
+"end": 9,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 2106,
+"start": 7,
+"end": 8,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 1978,
+"start": 8,
+"end": 10,
+"predicted": "LOC",
+"verdict": "defensible"
+},
+{
+"sentence": 4507,
+"start": 9,
+"end": 10,
+"predicted": "PER",
+"verdict": "defensible"
+},
+{
+"sentence": 4806,
+"start": 10,
+"end": 16,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 5033,
+"start": 5,
+"end": 6,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 1542,
+"start": 8,
+"end": 9,
+"predicted": "LOC",
+"verdict": "defensible"
+},
+{
+"sentence": 2502,
+"start": 15,
+"end": 16,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 299,
+"start": 0,
+"end": 3,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 5157,
+"start": 10,
+"end": 11,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 987,
+"start": 28,
+"end": 29,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 5044,
+"start": 14,
+"end": 15,
+"predicted": "LOC",
+"verdict": "model_error"
+},
+{
+"sentence": 3620,
+"start": 3,
+"end": 4,
+"predicted": "PER",
+"verdict": "model_error"
+},
+{
+"sentence": 1930,
+"start": 17,
+"end": 18,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 2369,
+"start": 23,
+"end": 24,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 439,
+"start": 19,
+"end": 20,
+"predicted": "LOC",
+"verdict": "defensible"
+},
+{
+"sentence": 3067,
+"start": 11,
+"end": 12,
+"predicted": "ORG",
+"verdict": "model_error"
+},
+{
+"sentence": 1422,
+"start": 29,
+"end": 30,
+"predicted": "PER",
+"verdict": "gold_error"
+},
+{
+"sentence": 4494,
+"start": 35,
+"end": 36,
+"predicted": "PER",
+"verdict": "defensible"
+}
+]
+}

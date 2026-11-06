@@ -80,6 +80,40 @@ Own models use seeds 0, 1 and 2. Follow-up analyses use the seed with the best d
 Metric for 12: `missed_tokens`, the share of gold PER tokens that no predicted PER, LOC or ORG span
 covers, because a redactor doesn't care about the label.
 
+## Results
+
+Added after the runs, commit `000e588`, 6 Nov 2026. Hypotheses above are unchanged. All intervals
+95%, over articles. Follow-up analyses use the best-dev seeds, `own_s1` and `own_aug_s1`.
+
+| # | Verdict | Evidence |
+| --- | --- | --- |
+| 1 | Supported | `lg` minus `sm`: 14.7 points (12.0 to 17.4), Holm p 0.001 |
+| 2 | **Wrong** on the primary scope | Shared F1 0.704 is 6.0 points below 0.764. Only on all four labels (0.655) is the drop over 10 |
+| 3 | Supported | `own` minus `lg`: 17.7 points (14.1 to 21.7). Best-dev seed all-label F1 0.858 |
+| 4 | Supported | 27.6 points (24.6 to 30.6) |
+| 5 | Supported, and an underestimate for `own` | `lg` loses 28.3 points, `own` 87.0 |
+| 6 | Supported | `own_aug` wins back 80% of the loss. Clean cost 0.0 points (-0.9 to 0.8) |
+| 7 | Supported | Recall 0.945 on seen against 0.770 on unseen mentions, gap 17.5 |
+| 8 | Supported, with a caveat | ECE 0.040 to 0.017. Transcript ECE after scaling is 2.9 times clean for `own_aug`. `own` only made 15 spans there, so its figure means nothing |
+| 9 | Supported | `lg` worst gap 40.8 points, `own` 8.8. R agrees on direction for every gap that is clear in both |
+| 10 | Supported | Article interval 1.58 times as wide as the sentence one |
+| 11 | Met exactly, weak | 25 of 100, 2 true gold errors, 23 defensible, 16 distinct strings. Reviewer knew the threshold |
+| 12 | Supported | Name tokens left visible on clean text: DEDUCE 27.4%, `lg` 8.7%. DEDUCE any-overlap recall: Dutch list 1.000, others 0.556 to 0.889 |
+
+**Surprises.** Hypothesis 5 undersold it badly: without capital letters `own` tags almost nothing.
+Augmentation had no measurable clean cost, where a small one was expected. `sm` is no better than
+the lookup baseline on clean text, a warning against small pipelines off their home corpus. On name swaps
+`sm` recalls the Turkish list better than the Dutch one (+5.5 points), so the gaps are not one
+simple story about familiarity. They may depend on the hand-picked names.
+
+**Deviations and things to know.**
+- The corpus is UTF-8 in the NLTK copy, not Latin-1. The parser crashed on this before any score.
+- `evaluate` crashed once on sentences emptied by transcript style, before any score was printed.
+  The fix touched only that path.
+- `names_why` and the person baseline are post hoc, and labelled so.
+- Hypothesis 2 didn't name a scope. The card calls `shared` primary, so that decides it.
+- Hypothesis 12 was added during training, before any test score. Own dev F1 was already visible.
+
 ## Known limits
 
 - One newspaper, one region, one year. Nothing here says how Dutch from the Netherlands, social

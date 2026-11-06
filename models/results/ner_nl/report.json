@@ -1,0 +1,1642 @@
+{
+  "meta": {
+    "provenance": "real",
+    "created_utc": "2026-11-06T03:31:35+00:00",
+    "git_sha": "000e588",
+    "python": "3.12.16",
+    "platform": "Linux-6.18.44-fc-v242-x86_64-with-glibc2.39",
+    "packages": {
+      "torch": "2.14.1",
+      "spacy": "3.8.16",
+      "nltk": "3.10.4",
+      "nl_core_news_lg": "3.8.0"
+    },
+    "best_seed": "own_s1",
+    "best_seed_aug": "own_aug_s1"
+  },
+  "audit": {
+    "splits": {
+      "train": {
+        "articles": 287,
+        "sentences": 15806,
+        "tokens": 202644,
+        "mentions": 13344,
+        "invalid_bio_tags": 0,
+        "share_PER": 0.3534172661870504,
+        "share_LOC": 0.24040767386091128,
+        "share_ORG": 0.1560251798561151,
+        "share_MISC": 0.25014988009592326,
+        "largest_article_share": 0.02606605086675946
+      },
+      "dev": {
+        "articles": 74,
+        "sentences": 2895,
+        "tokens": 37687,
+        "mentions": 2616,
+        "invalid_bio_tags": 0,
+        "share_PER": 0.2687308868501529,
+        "share_LOC": 0.1831039755351682,
+        "share_ORG": 0.2622324159021407,
+        "share_MISC": 0.28593272171253825,
+        "largest_article_share": 0.03557858376511226
+      },
+      "test": {
+        "articles": 119,
+        "sentences": 5195,
+        "tokens": 68875,
+        "mentions": 3941,
+        "invalid_bio_tags": 0,
+        "share_PER": 0.27860948997716317,
+        "share_LOC": 0.19639685359045927,
+        "share_ORG": 0.22380106571936056,
+        "share_MISC": 0.301192590713017,
+        "largest_article_share": 0.02078922040423484
+      }
+    },
+    "dev_vs_train": {
+      "test_sentences_5plus_tokens": 1989,
+      "exact_repeats_of_train_sentences": 10,
+      "repeat_share": 0.005027652086475616,
+      "test_mentions": 2616,
+      "mentions_seen_in_train": 1050,
+      "seen_share": 0.4013761467889908
+    },
+    "test_vs_train": {
+      "test_sentences_5plus_tokens": 3694,
+      "exact_repeats_of_train_sentences": 14,
+      "repeat_share": 0.003789929615592853,
+      "test_mentions": 3941,
+      "mentions_seen_in_train": 1804,
+      "seen_share": 0.4577518396346105
+    },
+    "label_conflicts_train": {
+      "strings_seen_3plus": 1009,
+      "strings_with_two_or_more_labels": 21,
+      "share_of_strings": 0.02081268582755203,
+      "minority_label_mentions": 23,
+      "minority_share_of_mentions": 0.0028959959707882147
+    }
+  },
+  "tables": {
+    "all": [
+      {
+        "model": "gazetteer",
+        "F1": 0.5824515708937001,
+        "95% CI": "0.550 to 0.615",
+        "P": 0.8124432334241598,
+        "R": 0.453945699061152
+      },
+      {
+        "model": "deduce",
+        "F1": 0.2542777556705133,
+        "95% CI": "0.222 to 0.288",
+        "P": 0.5889400921658986,
+        "R": 0.16214158842933266
+      },
+      {
+        "model": "nl_core_news_sm",
+        "F1": 0.5274278748476229,
+        "95% CI": "0.495 to 0.560",
+        "P": 0.5656595002905288,
+        "R": 0.494037046434915
+      },
+      {
+        "model": "nl_core_news_md",
+        "F1": 0.6110515021459227,
+        "95% CI": "0.583 to 0.641",
+        "P": 0.6480796586059744,
+        "R": 0.5780258817558995
+      },
+      {
+        "model": "nl_core_news_lg",
+        "F1": 0.6551772063933287,
+        "95% CI": "0.628 to 0.684",
+        "P": 0.724339274738783,
+        "R": 0.598071555442781
+      },
+      {
+        "model": "own_aug_s0",
+        "F1": 0.859046642747309,
+        "95% CI": "0.838 to 0.880",
+        "P": 0.8677193890758478,
+        "R": 0.8505455468155291
+      },
+      {
+        "model": "own_aug_s1",
+        "F1": 0.8581323755772191,
+        "95% CI": "0.836 to 0.880",
+        "P": 0.867704280155642,
+        "R": 0.8487693478812484
+      },
+      {
+        "model": "own_aug_s2",
+        "F1": 0.8544804697472556,
+        "95% CI": "0.833 to 0.875",
+        "P": 0.8597482661186745,
+        "R": 0.8492768332910429
+      },
+      {
+        "model": "own_s0",
+        "F1": 0.8345970954890117,
+        "95% CI": "0.811 to 0.859",
+        "P": 0.8455729166666667,
+        "R": 0.8239025628013195
+      },
+      {
+        "model": "own_s1",
+        "F1": 0.8583877995642701,
+        "95% CI": "0.837 to 0.880",
+        "P": 0.8671672708441223,
+        "R": 0.8497843187008374
+      },
+      {
+        "model": "own_s2",
+        "F1": 0.8569585966722559,
+        "95% CI": "0.836 to 0.878",
+        "P": 0.8714585519412382,
+        "R": 0.842933265668612
+      }
+    ],
+    "shared": [
+      {
+        "model": "gazetteer",
+        "F1": 0.579363179315298,
+        "95% CI": "0.543 to 0.615",
+        "P": 0.8503162333099087,
+        "R": 0.439360929557008
+      },
+      {
+        "model": "deduce",
+        "F1": 0.3328991924980464,
+        "95% CI": "0.296 to 0.369",
+        "P": 0.5889400921658986,
+        "R": 0.23202614379084968
+      },
+      {
+        "model": "nl_core_news_sm",
+        "F1": 0.5571955719557196,
+        "95% CI": "0.517 to 0.594",
+        "P": 0.5663915978994749,
+        "R": 0.5482933914306464
+      },
+      {
+        "model": "nl_core_news_md",
+        "F1": 0.6715192235908921,
+        "95% CI": "0.641 to 0.702",
+        "P": 0.6908602150537635,
+        "R": 0.6532316630355846
+      },
+      {
+        "model": "nl_core_news_lg",
+        "F1": 0.7036966824644549,
+        "95% CI": "0.674 to 0.733",
+        "P": 0.7362157873859579,
+        "R": 0.6739288307915758
+      },
+      {
+        "model": "own_aug_s0",
+        "F1": 0.8789625360230547,
+        "95% CI": "0.857 to 0.900",
+        "P": 0.8720514653323803,
+        "R": 0.8859840232389252
+      },
+      {
+        "model": "own_aug_s1",
+        "F1": 0.8761972330613693,
+        "95% CI": "0.854 to 0.898",
+        "P": 0.8564493758668515,
+        "R": 0.896877269426289
+      },
+      {
+        "model": "own_aug_s2",
+        "F1": 0.87546900125067,
+        "95% CI": "0.854 to 0.897",
+        "P": 0.8617657404150545,
+        "R": 0.8896151053013798
+      },
+      {
+        "model": "own_s0",
+        "F1": 0.8576984267279477,
+        "95% CI": "0.834 to 0.883",
+        "P": 0.8356872201171203,
+        "R": 0.8809005083514887
+      },
+      {
+        "model": "own_s1",
+        "F1": 0.8806394316163411,
+        "95% CI": "0.861 to 0.902",
+        "P": 0.8619610570236439,
+        "R": 0.9001452432824982
+      },
+      {
+        "model": "own_s2",
+        "F1": 0.880334120210641,
+        "95% CI": "0.860 to 0.902",
+        "P": 0.8804940065383219,
+        "R": 0.8801742919389978
+      }
+    ]
+  },
+  "evaluate_rows": [
+    {
+      "model": "gazetteer",
+      "condition": "clean",
+      "f1": 0.579363179315298,
+      "precision": 0.8503162333099087,
+      "recall": 0.439360929557008
+    },
+    {
+      "model": "gazetteer",
+      "condition": "lowercase",
+      "f1": 0.001451378809869376,
+      "precision": 1.0,
+      "recall": 0.0007262164124909223
+    },
+    {
+      "model": "gazetteer",
+      "condition": "transcript",
+      "f1": 0.001451378809869376,
+      "precision": 1.0,
+      "recall": 0.0007262164124909223
+    },
+    {
+      "model": "deduce",
+      "condition": "clean",
+      "f1": 0.3328991924980464,
+      "precision": 0.5889400921658986,
+      "recall": 0.23202614379084968
+    },
+    {
+      "model": "deduce",
+      "condition": "lowercase",
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    },
+    {
+      "model": "deduce",
+      "condition": "transcript",
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    },
+    {
+      "model": "nl_core_news_sm",
+      "condition": "clean",
+      "f1": 0.5571955719557196,
+      "precision": 0.5663915978994749,
+      "recall": 0.5482933914306464
+    },
+    {
+      "model": "nl_core_news_sm",
+      "condition": "lowercase",
+      "f1": 0.3025210084033613,
+      "precision": 0.6617647058823529,
+      "recall": 0.19607843137254902
+    },
+    {
+      "model": "nl_core_news_sm",
+      "condition": "transcript",
+      "f1": 0.264893001735107,
+      "precision": 0.6505681818181818,
+      "recall": 0.16630355846042122
+    },
+    {
+      "model": "nl_core_news_md",
+      "condition": "clean",
+      "f1": 0.6715192235908921,
+      "precision": 0.6908602150537635,
+      "recall": 0.6532316630355846
+    },
+    {
+      "model": "nl_core_news_md",
+      "condition": "lowercase",
+      "f1": 0.42916361862960256,
+      "precision": 0.6533036377134372,
+      "recall": 0.31953522149600583
+    },
+    {
+      "model": "nl_core_news_md",
+      "condition": "transcript",
+      "f1": 0.40439890027493125,
+      "precision": 0.648757016840417,
+      "recall": 0.2937545388525781
+    },
+    {
+      "model": "nl_core_news_lg",
+      "condition": "clean",
+      "f1": 0.7036966824644549,
+      "precision": 0.7362157873859579,
+      "recall": 0.6739288307915758
+    },
+    {
+      "model": "nl_core_news_lg",
+      "condition": "lowercase",
+      "f1": 0.4669187145557656,
+      "precision": 0.6684709066305818,
+      "recall": 0.3587509077705156
+    },
+    {
+      "model": "nl_core_news_lg",
+      "condition": "transcript",
+      "f1": 0.4206678040458201,
+      "precision": 0.6397331356560415,
+      "recall": 0.31336238198983296
+    },
+    {
+      "model": "own_aug_s0",
+      "condition": "clean",
+      "f1": 0.8789625360230547,
+      "precision": 0.8720514653323803,
+      "recall": 0.8859840232389252
+    },
+    {
+      "model": "own_aug_s0",
+      "condition": "lowercase",
+      "f1": 0.7584513692162418,
+      "precision": 0.7902400629673357,
+      "recall": 0.729121278140886
+    },
+    {
+      "model": "own_aug_s0",
+      "condition": "transcript",
+      "f1": 0.7025822032323983,
+      "precision": 0.7192848992012172,
+      "recall": 0.686637618010167
+    },
+    {
+      "model": "own_aug_s1",
+      "condition": "clean",
+      "f1": 0.8761972330613693,
+      "precision": 0.8564493758668515,
+      "recall": 0.896877269426289
+    },
+    {
+      "model": "own_aug_s1",
+      "condition": "lowercase",
+      "f1": 0.7039800995024875,
+      "precision": 0.8202898550724638,
+      "recall": 0.616557734204793
+    },
+    {
+      "model": "own_aug_s1",
+      "condition": "transcript",
+      "f1": 0.7101367809630879,
+      "precision": 0.7336430507162215,
+      "recall": 0.6880900508351488
+    },
+    {
+      "model": "own_aug_s2",
+      "condition": "clean",
+      "f1": 0.87546900125067,
+      "precision": 0.8617657404150545,
+      "recall": 0.8896151053013798
+    },
+    {
+      "model": "own_aug_s2",
+      "condition": "lowercase",
+      "f1": 0.7484088356420816,
+      "precision": 0.7724111282843895,
+      "recall": 0.7258533042846769
+    },
+    {
+      "model": "own_aug_s2",
+      "condition": "transcript",
+      "f1": 0.7142327650111193,
+      "precision": 0.7293716881150644,
+      "recall": 0.6997095134350036
+    },
+    {
+      "model": "own_s0",
+      "condition": "clean",
+      "f1": 0.8576984267279477,
+      "precision": 0.8356872201171203,
+      "recall": 0.8809005083514887
+    },
+    {
+      "model": "own_s0",
+      "condition": "lowercase",
+      "f1": 0.015124234785740008,
+      "precision": 0.9130434782608695,
+      "recall": 0.007625272331154684
+    },
+    {
+      "model": "own_s0",
+      "condition": "transcript",
+      "f1": 0.006512301013024602,
+      "precision": 0.9,
+      "recall": 0.0032679738562091504
+    },
+    {
+      "model": "own_s1",
+      "condition": "clean",
+      "f1": 0.8806394316163411,
+      "precision": 0.8619610570236439,
+      "recall": 0.9001452432824982
+    },
+    {
+      "model": "own_s1",
+      "condition": "lowercase",
+      "f1": 0.011552346570397111,
+      "precision": 1.0,
+      "recall": 0.005809731299927378
+    },
+    {
+      "model": "own_s1",
+      "condition": "transcript",
+      "f1": 0.010834236186348862,
+      "precision": 1.0,
+      "recall": 0.0054466230936819175
+    },
+    {
+      "model": "own_s2",
+      "condition": "clean",
+      "f1": 0.880334120210641,
+      "precision": 0.8804940065383219,
+      "recall": 0.8801742919389978
+    },
+    {
+      "model": "own_s2",
+      "condition": "lowercase",
+      "f1": 0.025787965616045846,
+      "precision": 0.9473684210526315,
+      "recall": 0.013071895424836602
+    },
+    {
+      "model": "own_s2",
+      "condition": "transcript",
+      "f1": 0.0014508523757707653,
+      "precision": 0.6666666666666666,
+      "recall": 0.0007262164124909223
+    }
+  ],
+  "comparisons": {
+    "lg_vs_sm": {
+      "a": 0.7036966824644549,
+      "b": 0.5571955719557196,
+      "difference": 0.14650111050873538,
+      "low": 0.12034508131405978,
+      "high": 0.17414679675841233,
+      "p_value": 0.0002,
+      "n_clusters": 119,
+      "p_holm": 0.001
+    },
+    "own_vs_lg": {
+      "a": 0.8806394316163411,
+      "b": 0.7036966824644549,
+      "difference": 0.17694274915188613,
+      "low": 0.14052885081535182,
+      "high": 0.21672838533671743,
+      "p_value": 0.0002,
+      "n_clusters": 119,
+      "p_holm": 0.001
+    },
+    "own_vs_gazetteer": {
+      "a": 0.8583877995642701,
+      "b": 0.5824515708937001,
+      "difference": 0.27593622867057,
+      "low": 0.24594472173252413,
+      "high": 0.305574101958276,
+      "p_value": 0.0002,
+      "n_clusters": 119,
+      "p_holm": 0.001
+    },
+    "aug_vs_own_clean": {
+      "a": 0.8581323755772191,
+      "b": 0.8583877995642701,
+      "difference": -0.00025542398705102887,
+      "low": -0.009311889331246912,
+      "high": 0.00846550744507672,
+      "p_value": 0.9328,
+      "n_clusters": 119,
+      "p_holm": 0.9328
+    },
+    "aug_vs_own_transcript": {
+      "a": 0.7006507592190889,
+      "b": 0.007583417593528817,
+      "difference": 0.6930673416255602,
+      "low": 0.6515100576358086,
+      "high": 0.7289825859685712,
+      "p_value": 0.0002,
+      "n_clusters": 119,
+      "p_holm": 0.001
+    }
+  },
+  "robustness": [
+    {
+      "model": "nl_core_news_lg",
+      "condition": "lowercase",
+      "clean F1": 0.7036966824644549,
+      "changed F1": 0.4669187145557656,
+      "loss": 0.23677796790868932,
+      "95% CI changed": "0.429 to 0.505"
+    },
+    {
+      "model": "nl_core_news_lg",
+      "condition": "transcript",
+      "clean F1": 0.7036966824644549,
+      "changed F1": 0.4206678040458201,
+      "loss": 0.28302887841863483,
+      "95% CI changed": "0.378 to 0.465"
+    },
+    {
+      "model": "own_s1",
+      "condition": "lowercase",
+      "clean F1": 0.8806394316163411,
+      "changed F1": 0.011552346570397111,
+      "loss": 0.8690870850459439,
+      "95% CI changed": "0.003 to 0.023"
+    },
+    {
+      "model": "own_s1",
+      "condition": "transcript",
+      "clean F1": 0.8806394316163411,
+      "changed F1": 0.010834236186348862,
+      "loss": 0.8698051954299922,
+      "95% CI changed": "0.002 to 0.022"
+    },
+    {
+      "model": "own_aug_s1",
+      "condition": "lowercase",
+      "clean F1": 0.8761972330613693,
+      "changed F1": 0.7039800995024875,
+      "loss": 0.1722171335588818,
+      "95% CI changed": "0.671 to 0.735"
+    },
+    {
+      "model": "own_aug_s1",
+      "condition": "transcript",
+      "clean F1": 0.8761972330613693,
+      "changed F1": 0.7101367809630879,
+      "loss": 0.16606045209828146,
+      "95% CI changed": "0.657 to 0.755"
+    }
+  ],
+  "recall_by_seen": [
+    {
+      "model": "gazetteer",
+      "seen_mentions": 1804,
+      "unseen_mentions": 2137,
+      "recall_seen": 0.9916851441241685,
+      "recall_unseen": 0.0,
+      "gap": 0.9916851441241685
+    },
+    {
+      "model": "nl_core_news_lg",
+      "seen_mentions": 1804,
+      "unseen_mentions": 2137,
+      "recall_seen": 0.6701773835920177,
+      "recall_unseen": 0.5372016846045858,
+      "gap": 0.1329756989874319
+    },
+    {
+      "model": "own_s1",
+      "seen_mentions": 1804,
+      "unseen_mentions": 2137,
+      "recall_seen": 0.9445676274944568,
+      "recall_unseen": 0.7697707065980346,
+      "gap": 0.17479692089642218
+    }
+  ],
+  "name_tokens_left_unmasked": [
+    {
+      "model": "nl_core_news_sm",
+      "condition": "clean",
+      "name tokens": 1905,
+      "share unmasked": 0.1889763779527559,
+      "95% CI": "0.148 to 0.230"
+    },
+    {
+      "model": "nl_core_news_sm",
+      "condition": "transcript",
+      "name tokens": 1905,
+      "share unmasked": 0.7847769028871391,
+      "95% CI": "0.747 to 0.823"
+    },
+    {
+      "model": "nl_core_news_md",
+      "condition": "clean",
+      "name tokens": 1905,
+      "share unmasked": 0.09868766404199475,
+      "95% CI": "0.074 to 0.127"
+    },
+    {
+      "model": "nl_core_news_md",
+      "condition": "transcript",
+      "name tokens": 1905,
+      "share unmasked": 0.5559055118110237,
+      "95% CI": "0.508 to 0.600"
+    },
+    {
+      "model": "nl_core_news_lg",
+      "condition": "clean",
+      "name tokens": 1905,
+      "share unmasked": 0.08661417322834646,
+      "95% CI": "0.064 to 0.115"
+    },
+    {
+      "model": "nl_core_news_lg",
+      "condition": "transcript",
+      "name tokens": 1905,
+      "share unmasked": 0.43832020997375326,
+      "95% CI": "0.393 to 0.481"
+    },
+    {
+      "model": "deduce",
+      "condition": "clean",
+      "name tokens": 1905,
+      "share unmasked": 0.2740157480314961,
+      "95% CI": "0.235 to 0.315"
+    },
+    {
+      "model": "deduce",
+      "condition": "transcript",
+      "name tokens": 1905,
+      "share unmasked": 1.0,
+      "95% CI": "1.000 to 1.000"
+    }
+  ],
+  "interval_width": {
+    "article_width": 0.042467523509073346,
+    "sentence_width": 0.02692013657609149,
+    "n_articles": 119
+  },
+  "seed_f1": {
+    "own": [
+      0.8345970954890117,
+      0.8583877995642701,
+      0.8569585966722559
+    ],
+    "own_aug": [
+      0.859046642747309,
+      0.8581323755772191,
+      0.8544804697472556
+    ]
+  },
+  "names": [
+    {
+      "model": "nl_core_news_sm",
+      "metric": "exact",
+      "group": "dutch",
+      "recall": 0.5163934426229508,
+      "mentions": 5490
+    },
+    {
+      "model": "nl_core_news_sm",
+      "metric": "exact",
+      "group": "hindustani",
+      "recall": 0.47741347905282333,
+      "mentions": 5490,
+      "gap_vs_ref": -0.03897996357012751,
+      "gap_low": -0.06071142549060049,
+      "gap_high": -0.01864532086967782
+    },
+    {
+      "model": "nl_core_news_sm",
+      "metric": "exact",
+      "group": "moroccan",
+      "recall": 0.37194899817850635,
+      "mentions": 5490,
+      "gap_vs_ref": -0.1444444444444445,
+      "gap_low": -0.1733882300238135,
+      "gap_high": -0.12055246067628263
+    },
+    {
+      "model": "nl_core_news_sm",
+      "metric": "exact",
+      "group": "polish",
+      "recall": 0.4510018214936248,
+      "mentions": 5490,
+      "gap_vs_ref": -0.06539162112932606,
+      "gap_low": -0.08768395256320673,
+      "gap_high": -0.04247864988438094
+    },
+    {
+      "model": "nl_core_news_sm",
+      "metric": "exact",
+      "group": "turkish",
+      "recall": 0.5714025500910747,
+      "mentions": 5490,
+      "gap_vs_ref": 0.05500910746812382,
+      "gap_low": 0.02846381816307591,
+      "gap_high": 0.08104927698198922
+    },
+    {
+      "model": "nl_core_news_md",
+      "metric": "exact",
+      "group": "dutch",
+      "recall": 0.7872495446265938,
+      "mentions": 5490
+    },
+    {
+      "model": "nl_core_news_md",
+      "metric": "exact",
+      "group": "hindustani",
+      "recall": 0.46229508196721314,
+      "mentions": 5490,
+      "gap_vs_ref": -0.32495446265938066,
+      "gap_low": -0.3508088531235326,
+      "gap_high": -0.3012130667697576
+    },
+    {
+      "model": "nl_core_news_md",
+      "metric": "exact",
+      "group": "moroccan",
+      "recall": 0.7775956284153005,
+      "mentions": 5490,
+      "gap_vs_ref": -0.0096539162112933,
+      "gap_low": -0.031116509495106668,
+      "gap_high": 0.013800275319356077
+    },
+    {
+      "model": "nl_core_news_md",
+      "metric": "exact",
+      "group": "polish",
+      "recall": 0.7169398907103826,
+      "mentions": 5490,
+      "gap_vs_ref": -0.07030965391621125,
+      "gap_low": -0.08810181675279781,
+      "gap_high": -0.05420095583224766
+    },
+    {
+      "model": "nl_core_news_md",
+      "metric": "exact",
+      "group": "turkish",
+      "recall": 0.5950819672131148,
+      "mentions": 5490,
+      "gap_vs_ref": -0.192167577413479,
+      "gap_low": -0.22062555826281824,
+      "gap_high": -0.16181943483333494
+    },
+    {
+      "model": "nl_core_news_lg",
+      "metric": "exact",
+      "group": "dutch",
+      "recall": 0.8708561020036429,
+      "mentions": 5490
+    },
+    {
+      "model": "nl_core_news_lg",
+      "metric": "exact",
+      "group": "hindustani",
+      "recall": 0.4628415300546448,
+      "mentions": 5490,
+      "gap_vs_ref": -0.40801457194899815,
+      "gap_low": -0.449757414091961,
+      "gap_high": -0.35812338455195597
+    },
+    {
+      "model": "nl_core_news_lg",
+      "metric": "exact",
+      "group": "moroccan",
+      "recall": 0.7617486338797814,
+      "mentions": 5490,
+      "gap_vs_ref": -0.10910746812386152,
+      "gap_low": -0.13312386212136418,
+      "gap_high": -0.08649047551855507
+    },
+    {
+      "model": "nl_core_news_lg",
+      "metric": "exact",
+      "group": "polish",
+      "recall": 0.7723132969034608,
+      "mentions": 5490,
+      "gap_vs_ref": -0.0985428051001821,
+      "gap_low": -0.12361918631530283,
+      "gap_high": -0.07712798517798677
+    },
+    {
+      "model": "nl_core_news_lg",
+      "metric": "exact",
+      "group": "turkish",
+      "recall": 0.573224043715847,
+      "mentions": 5490,
+      "gap_vs_ref": -0.29763205828779593,
+      "gap_low": -0.3346901797918568,
+      "gap_high": -0.2607939009950741
+    },
+    {
+      "model": "deduce",
+      "metric": "exact",
+      "group": "dutch",
+      "recall": 0.8850637522768671,
+      "mentions": 5490
+    },
+    {
+      "model": "deduce",
+      "metric": "exact",
+      "group": "hindustani",
+      "recall": 0.7908925318761384,
+      "mentions": 5490,
+      "gap_vs_ref": -0.09417122040072867,
+      "gap_low": -0.11147962204886588,
+      "gap_high": -0.07742356510171629
+    },
+    {
+      "model": "deduce",
+      "metric": "exact",
+      "group": "moroccan",
+      "recall": 0.7371584699453552,
+      "mentions": 5490,
+      "gap_vs_ref": -0.1479052823315119,
+      "gap_low": -0.18204225346336841,
+      "gap_high": -0.11428521478521472
+    },
+    {
+      "model": "deduce",
+      "metric": "exact",
+      "group": "polish",
+      "recall": 0.4852459016393443,
+      "mentions": 5490,
+      "gap_vs_ref": -0.3998178506375228,
+      "gap_low": -0.4576214882753552,
+      "gap_high": -0.34051962458766605
+    },
+    {
+      "model": "deduce",
+      "metric": "exact",
+      "group": "turkish",
+      "recall": 0.763752276867031,
+      "mentions": 5490,
+      "gap_vs_ref": -0.12131147540983611,
+      "gap_low": -0.14528998359488654,
+      "gap_high": -0.09645017599223207
+    },
+    {
+      "model": "own_s1",
+      "metric": "exact",
+      "group": "dutch",
+      "recall": 0.973952641165756,
+      "mentions": 5490
+    },
+    {
+      "model": "own_s1",
+      "metric": "exact",
+      "group": "hindustani",
+      "recall": 0.885792349726776,
+      "mentions": 5490,
+      "gap_vs_ref": -0.08816029143897997,
+      "gap_low": -0.10881576354679803,
+      "gap_high": -0.06855631333319868
+    },
+    {
+      "model": "own_s1",
+      "metric": "exact",
+      "group": "moroccan",
+      "recall": 0.9475409836065574,
+      "mentions": 5490,
+      "gap_vs_ref": -0.02641165755919861,
+      "gap_low": -0.03626908760698504,
+      "gap_high": -0.01766722412807317
+    },
+    {
+      "model": "own_s1",
+      "metric": "exact",
+      "group": "polish",
+      "recall": 0.9599271402550091,
+      "mentions": 5490,
+      "gap_vs_ref": -0.014025500910746835,
+      "gap_low": -0.02185379306908495,
+      "gap_high": -0.00695805618072628
+    },
+    {
+      "model": "own_s1",
+      "metric": "exact",
+      "group": "turkish",
+      "recall": 0.9389799635701275,
+      "mentions": 5490,
+      "gap_vs_ref": -0.0349726775956285,
+      "gap_low": -0.04618203463203455,
+      "gap_high": -0.02436880861935075
+    },
+    {
+      "model": "own_aug_s1",
+      "metric": "exact",
+      "group": "dutch",
+      "recall": 0.9748633879781421,
+      "mentions": 5490
+    },
+    {
+      "model": "own_aug_s1",
+      "metric": "exact",
+      "group": "hindustani",
+      "recall": 0.9340619307832423,
+      "mentions": 5490,
+      "gap_vs_ref": -0.040801457194899804,
+      "gap_low": -0.056257532021268784,
+      "gap_high": -0.026654837337709292
+    },
+    {
+      "model": "own_aug_s1",
+      "metric": "exact",
+      "group": "moroccan",
+      "recall": 0.9648451730418943,
+      "mentions": 5490,
+      "gap_vs_ref": -0.010018214936247771,
+      "gap_low": -0.018308771831144446,
+      "gap_high": -0.0021256038647343685
+    },
+    {
+      "model": "own_aug_s1",
+      "metric": "exact",
+      "group": "polish",
+      "recall": 0.9692167577413479,
+      "mentions": 5490,
+      "gap_vs_ref": -0.005646630236794237,
+      "gap_low": -0.013758747980863554,
+      "gap_high": 0.002108777971968108
+    },
+    {
+      "model": "own_aug_s1",
+      "metric": "exact",
+      "group": "turkish",
+      "recall": 0.9690346083788707,
+      "mentions": 5490,
+      "gap_vs_ref": -0.005828779599271416,
+      "gap_low": -0.014583535992217959,
+      "gap_high": 0.0019844821775504428
+    },
+    {
+      "model": "nl_core_news_sm",
+      "metric": "any_overlap",
+      "group": "dutch",
+      "recall": 0.7400728597449909,
+      "mentions": 5490
+    },
+    {
+      "model": "nl_core_news_sm",
+      "metric": "any_overlap",
+      "group": "hindustani",
+      "recall": 0.8165755919854281,
+      "mentions": 5490,
+      "gap_vs_ref": 0.07650273224043713,
+      "gap_low": 0.049936331676976725,
+      "gap_high": 0.10367930403671426
+    },
+    {
+      "model": "nl_core_news_sm",
+      "metric": "any_overlap",
+      "group": "moroccan",
+      "recall": 0.8570127504553734,
+      "mentions": 5490,
+      "gap_vs_ref": 0.11693989071038247,
+      "gap_low": 0.08270154158104118,
+      "gap_high": 0.15153774567855732
+    },
+    {
+      "model": "nl_core_news_sm",
+      "metric": "any_overlap",
+      "group": "polish",
+      "recall": 0.7466302367941712,
+      "mentions": 5490,
+      "gap_vs_ref": 0.006557377049180246,
+      "gap_low": -0.018111922890196724,
+      "gap_high": 0.03309217012060095
+    },
+    {
+      "model": "nl_core_news_sm",
+      "metric": "any_overlap",
+      "group": "turkish",
+      "recall": 0.7679417122040073,
+      "mentions": 5490,
+      "gap_vs_ref": 0.02786885245901638,
+      "gap_low": 0.003909048921300493,
+      "gap_high": 0.05273211134267943
+    },
+    {
+      "model": "nl_core_news_md",
+      "metric": "any_overlap",
+      "group": "dutch",
+      "recall": 0.8945355191256831,
+      "mentions": 5490
+    },
+    {
+      "model": "nl_core_news_md",
+      "metric": "any_overlap",
+      "group": "hindustani",
+      "recall": 0.9005464480874317,
+      "mentions": 5490,
+      "gap_vs_ref": 0.006010928961748596,
+      "gap_low": -0.009577589784517134,
+      "gap_high": 0.021607172020662757
+    },
+    {
+      "model": "nl_core_news_md",
+      "metric": "any_overlap",
+      "group": "moroccan",
+      "recall": 0.9775956284153006,
+      "mentions": 5490,
+      "gap_vs_ref": 0.08306010928961749,
+      "gap_low": 0.06095219727235148,
+      "gap_high": 0.10639968282181334
+    },
+    {
+      "model": "nl_core_news_md",
+      "metric": "any_overlap",
+      "group": "polish",
+      "recall": 0.8919854280510018,
+      "mentions": 5490,
+      "gap_vs_ref": -0.0025500910746812933,
+      "gap_low": -0.01335964165753761,
+      "gap_high": 0.008584489404795656
+    },
+    {
+      "model": "nl_core_news_md",
+      "metric": "any_overlap",
+      "group": "turkish",
+      "recall": 0.8828779599271402,
+      "mentions": 5490,
+      "gap_vs_ref": -0.011657559198542833,
+      "gap_low": -0.0320816413050518,
+      "gap_high": 0.010470690747782065
+    },
+    {
+      "model": "nl_core_news_lg",
+      "metric": "any_overlap",
+      "group": "dutch",
+      "recall": 0.9298724954462659,
+      "mentions": 5490
+    },
+    {
+      "model": "nl_core_news_lg",
+      "metric": "any_overlap",
+      "group": "hindustani",
+      "recall": 0.8306010928961749,
+      "mentions": 5490,
+      "gap_vs_ref": -0.09927140255009104,
+      "gap_low": -0.12197161664263767,
+      "gap_high": -0.07721001252074067
+    },
+    {
+      "model": "nl_core_news_lg",
+      "metric": "any_overlap",
+      "group": "moroccan",
+      "recall": 0.9473588342440802,
+      "mentions": 5490,
+      "gap_vs_ref": 0.01748633879781425,
+      "gap_low": -0.004932807598298716,
+      "gap_high": 0.0472245761320979
+    },
+    {
+      "model": "nl_core_news_lg",
+      "metric": "any_overlap",
+      "group": "polish",
+      "recall": 0.9154826958105646,
+      "mentions": 5490,
+      "gap_vs_ref": -0.014389799635701306,
+      "gap_low": -0.030073999013346384,
+      "gap_high": 0.0022081667565091103
+    },
+    {
+      "model": "nl_core_news_lg",
+      "metric": "any_overlap",
+      "group": "turkish",
+      "recall": 0.9076502732240437,
+      "mentions": 5490,
+      "gap_vs_ref": -0.022222222222222254,
+      "gap_low": -0.043102505741350015,
+      "gap_high": 0.002412442316107816
+    },
+    {
+      "model": "deduce",
+      "metric": "any_overlap",
+      "group": "dutch",
+      "recall": 1.0,
+      "mentions": 5490
+    },
+    {
+      "model": "deduce",
+      "metric": "any_overlap",
+      "group": "hindustani",
+      "recall": 0.8887067395264117,
+      "mentions": 5490,
+      "gap_vs_ref": -0.11129326047358834,
+      "gap_low": -0.13033909872135052,
+      "gap_high": -0.09194915764420193
+    },
+    {
+      "model": "deduce",
+      "metric": "any_overlap",
+      "group": "moroccan",
+      "recall": 0.8373406193078324,
+      "mentions": 5490,
+      "gap_vs_ref": -0.16265938069216757,
+      "gap_low": -0.19943355642977573,
+      "gap_high": -0.12605321659360672
+    },
+    {
+      "model": "deduce",
+      "metric": "any_overlap",
+      "group": "polish",
+      "recall": 0.5562841530054645,
+      "mentions": 5490,
+      "gap_vs_ref": -0.4437158469945355,
+      "gap_low": -0.5063100190557985,
+      "gap_high": -0.37606632593931816
+    },
+    {
+      "model": "deduce",
+      "metric": "any_overlap",
+      "group": "turkish",
+      "recall": 0.8579234972677595,
+      "mentions": 5490,
+      "gap_vs_ref": -0.14207650273224048,
+      "gap_low": -0.16985063691571975,
+      "gap_high": -0.11279366885479149
+    },
+    {
+      "model": "own_s1",
+      "metric": "any_overlap",
+      "group": "dutch",
+      "recall": 0.9967213114754099,
+      "mentions": 5490
+    },
+    {
+      "model": "own_s1",
+      "metric": "any_overlap",
+      "group": "hindustani",
+      "recall": 0.9863387978142076,
+      "mentions": 5490,
+      "gap_vs_ref": -0.010382513661202242,
+      "gap_low": -0.016026720606579066,
+      "gap_high": -0.005440829710411972
+    },
+    {
+      "model": "own_s1",
+      "metric": "any_overlap",
+      "group": "moroccan",
+      "recall": 0.9954462659380692,
+      "mentions": 5490,
+      "gap_vs_ref": -0.0012750455373407021,
+      "gap_low": -0.003649213918577407,
+      "gap_high": 0.0007990014649805467
+    },
+    {
+      "model": "own_s1",
+      "metric": "any_overlap",
+      "group": "polish",
+      "recall": 0.9939890710382514,
+      "mentions": 5490,
+      "gap_vs_ref": -0.002732240437158473,
+      "gap_low": -0.006218008757076549,
+      "gap_high": 0.0005737521870409859
+    },
+    {
+      "model": "own_s1",
+      "metric": "any_overlap",
+      "group": "turkish",
+      "recall": 0.9974499089253187,
+      "mentions": 5490,
+      "gap_vs_ref": 0.0007285974499088299,
+      "gap_low": -0.0013618677042801508,
+      "gap_high": 0.0031424224802176727
+    },
+    {
+      "model": "own_aug_s1",
+      "metric": "any_overlap",
+      "group": "dutch",
+      "recall": 0.9979963570127505,
+      "mentions": 5490
+    },
+    {
+      "model": "own_aug_s1",
+      "metric": "any_overlap",
+      "group": "hindustani",
+      "recall": 0.995264116575592,
+      "mentions": 5490,
+      "gap_vs_ref": -0.002732240437158473,
+      "gap_low": -0.0064465441501390915,
+      "gap_high": 0.000798092561883315
+    },
+    {
+      "model": "own_aug_s1",
+      "metric": "any_overlap",
+      "group": "moroccan",
+      "recall": 0.9983606557377049,
+      "mentions": 5490,
+      "gap_vs_ref": 0.00036429872495447047,
+      "gap_low": -0.0011331605352245173,
+      "gap_high": 0.0024390243902439046
+    },
+    {
+      "model": "own_aug_s1",
+      "metric": "any_overlap",
+      "group": "polish",
+      "recall": 0.9979963570127505,
+      "mentions": 5490,
+      "gap_vs_ref": 0.0,
+      "gap_low": -0.0026073775881119894,
+      "gap_high": 0.0027238017117591456
+    },
+    {
+      "model": "own_aug_s1",
+      "metric": "any_overlap",
+      "group": "turkish",
+      "recall": 0.9983606557377049,
+      "mentions": 5490,
+      "gap_vs_ref": 0.00036429872495447047,
+      "gap_low": -0.001816571711667106,
+      "gap_high": 0.0028776978417266452
+    }
+  ],
+  "names_mixed_model": {
+    "nl_core_news_sm": {
+      "term": [
+        "hindustani",
+        "moroccan",
+        "polish",
+        "turkish"
+      ],
+      "odds_ratio": [
+        0.8119,
+        0.4596,
+        0.7085,
+        1.3477
+      ],
+      "low": [
+        0.4824,
+        0.2729,
+        0.421,
+        0.8008
+      ],
+      "high": [
+        1.3664,
+        0.7741,
+        1.1924,
+        2.2683
+      ],
+      "p": [
+        0.4327,
+        0.0035,
+        0.1945,
+        0.2612
+      ],
+      "sd_doc": 0.6305,
+      "sd_name": 0.8288
+    },
+    "nl_core_news_md": {
+      "term": [
+        "hindustani",
+        "moroccan",
+        "polish",
+        "turkish"
+      ],
+      "odds_ratio": [
+        0.1416,
+        0.882,
+        0.6493,
+        0.3068
+      ],
+      "low": [
+        0.0697,
+        0.4335,
+        0.3191,
+        0.1509
+      ],
+      "high": [
+        0.2877,
+        1.7947,
+        1.321,
+        0.6236
+      ],
+      "p": [
+        6.5254e-08,
+        0.729,
+        0.2333,
+        0.0011
+      ],
+      "sd_doc": 0.5932,
+      "sd_name": 1.1305
+    },
+    "nl_core_news_lg": {
+      "term": [
+        "hindustani",
+        "moroccan",
+        "polish",
+        "turkish"
+      ],
+      "odds_ratio": [
+        0.0789,
+        0.3973,
+        0.4341,
+        0.1386
+      ],
+      "low": [
+        0.0439,
+        0.2205,
+        0.2409,
+        0.077
+      ],
+      "high": [
+        0.142,
+        0.7157,
+        0.7824,
+        0.2494
+      ],
+      "p": [
+        2.3771e-17,
+        0.0021,
+        0.0055,
+        4.2683e-11
+      ],
+      "sd_doc": 0.7673,
+      "sd_name": 0.9277
+    },
+    "deduce": {
+      "term": [
+        "hindustani",
+        "moroccan",
+        "polish",
+        "turkish"
+      ],
+      "odds_ratio": [
+        0.5648,
+        0.3926,
+        0.0906,
+        0.4987
+      ],
+      "low": [
+        0.3346,
+        0.2328,
+        0.0538,
+        0.2955
+      ],
+      "high": [
+        0.9533,
+        0.6621,
+        0.1525,
+        0.8415
+      ],
+      "p": [
+        0.0324,
+        0.0005,
+        1.5848e-19,
+        0.0092
+      ],
+      "sd_doc": 1.3146,
+      "sd_name": 0.8222
+    },
+    "own_s1": {
+      "term": [
+        "hindustani",
+        "moroccan",
+        "polish",
+        "turkish"
+      ],
+      "odds_ratio": [
+        0.1591,
+        0.4313,
+        0.6592,
+        0.3801
+      ],
+      "low": [
+        0.0999,
+        0.2682,
+        0.4061,
+        0.2366
+      ],
+      "high": [
+        0.2535,
+        0.6936,
+        1.0701,
+        0.6105
+      ],
+      "p": [
+        1.0361e-14,
+        0.0005,
+        0.0918,
+        0.0001
+      ],
+      "sd_doc": 1.9892,
+      "sd_name": 0.6686
+    },
+    "own_aug_s1": {
+      "term": [
+        "hindustani",
+        "moroccan",
+        "polish",
+        "turkish"
+      ],
+      "odds_ratio": [
+        0.3309,
+        0.6982,
+        0.8386,
+        0.8314
+      ],
+      "low": [
+        0.2265,
+        0.4715,
+        0.5632,
+        0.5587
+      ],
+      "high": [
+        0.4834,
+        1.0339,
+        1.2487,
+        1.2373
+      ],
+      "p": [
+        1.0729e-08,
+        0.0729,
+        0.3863,
+        0.3627
+      ],
+      "sd_doc": 2.7175,
+      "sd_name": 0.4994
+    }
+  },
+  "names_why": [
+    {
+      "model": "nl_core_news_md",
+      "group": "dutch",
+      "fully_masked": 0.8861566484517304,
+      "top_labels": "PERSON 0.81, none 0.11, GPE 0.07, WORK_OF_ART 0.01"
+    },
+    {
+      "model": "nl_core_news_md",
+      "group": "turkish",
+      "fully_masked": 0.7371584699453552,
+      "top_labels": "PERSON 0.68, GPE 0.10, none 0.09, ORG 0.05"
+    },
+    {
+      "model": "nl_core_news_md",
+      "group": "moroccan",
+      "fully_masked": 0.9183970856102004,
+      "top_labels": "PERSON 0.83, GPE 0.10, ORG 0.03, none 0.02"
+    },
+    {
+      "model": "nl_core_news_md",
+      "group": "polish",
+      "fully_masked": 0.819672131147541,
+      "top_labels": "PERSON 0.76, none 0.10, GPE 0.05, NORP 0.04"
+    },
+    {
+      "model": "nl_core_news_md",
+      "group": "hindustani",
+      "fully_masked": 0.6801457194899818,
+      "top_labels": "PERSON 0.52, ORG 0.18, none 0.10, WORK_OF_ART 0.05"
+    },
+    {
+      "model": "nl_core_news_lg",
+      "group": "dutch",
+      "fully_masked": 0.9249544626593806,
+      "top_labels": "PERSON 0.89, none 0.07, ORG 0.03, GPE 0.01"
+    },
+    {
+      "model": "nl_core_news_lg",
+      "group": "turkish",
+      "fully_masked": 0.795264116575592,
+      "top_labels": "PERSON 0.65, ORG 0.20, none 0.09, GPE 0.05"
+    },
+    {
+      "model": "nl_core_news_lg",
+      "group": "moroccan",
+      "fully_masked": 0.8867030965391621,
+      "top_labels": "PERSON 0.81, GPE 0.07, none 0.05, ORG 0.04"
+    },
+    {
+      "model": "nl_core_news_lg",
+      "group": "polish",
+      "fully_masked": 0.9003642987249545,
+      "top_labels": "PERSON 0.80, ORG 0.10, none 0.08, GPE 0.01"
+    },
+    {
+      "model": "nl_core_news_lg",
+      "group": "hindustani",
+      "fully_masked": 0.6998178506375228,
+      "top_labels": "PERSON 0.50, none 0.17, ORG 0.15, GPE 0.09"
+    }
+  ],
+  "person_baseline": [
+    {
+      "model": "nl_core_news_sm",
+      "original_person_recall": 0.5956284153005464
+    },
+    {
+      "model": "nl_core_news_md",
+      "original_person_recall": 0.7495446265938069
+    },
+    {
+      "model": "nl_core_news_lg",
+      "original_person_recall": 0.75591985428051
+    },
+    {
+      "model": "deduce",
+      "original_person_recall": 0.5264116575591985
+    },
+    {
+      "model": "own_s1",
+      "original_person_recall": 0.930783242258652
+    },
+    {
+      "model": "own_aug_s1",
+      "original_person_recall": 0.9398907103825137
+    }
+  ],
+  "calibration": [
+    {
+      "model": "own_s1",
+      "condition": "clean",
+      "calibration": "raw",
+      "temperature": 1.0,
+      "spans": 3862,
+      "precision": 0.8671672708441223,
+      "mean_confidence": 0.9070383091469245,
+      "ece": 0.04008283490408644,
+      "threshold_for_dev_95": 0.8218578696250916,
+      "test_coverage_at_threshold": 0.80864836872087,
+      "test_precision_at_threshold": 0.9446045469100224
+    },
+    {
+      "model": "own_s1",
+      "condition": "clean",
+      "calibration": "scaled",
+      "temperature": 1.414213562373095,
+      "spans": 3862,
+      "precision": 0.8671672708441223,
+      "mean_confidence": 0.8537071289283386,
+      "ece": 0.016585170258085452,
+      "threshold_for_dev_95": 0.7043014168739319,
+      "test_coverage_at_threshold": 0.8034697048161574,
+      "test_precision_at_threshold": 0.9461811150499516
+    },
+    {
+      "model": "own_s1",
+      "condition": "transcript",
+      "calibration": "raw",
+      "temperature": 1.0,
+      "spans": 15,
+      "precision": 1.0,
+      "mean_confidence": 0.8432520469029744,
+      "ece": 0.15674795309702555,
+      "threshold_for_dev_95": 0.8218578696250916,
+      "test_coverage_at_threshold": 0.7333333333333333,
+      "test_precision_at_threshold": 1.0
+    },
+    {
+      "model": "own_s1",
+      "condition": "transcript",
+      "calibration": "scaled",
+      "temperature": 1.414213562373095,
+      "spans": 15,
+      "precision": 1.0,
+      "mean_confidence": 0.7523431777954102,
+      "ece": 0.24765682220458987,
+      "threshold_for_dev_95": 0.7043014168739319,
+      "test_coverage_at_threshold": 0.6666666666666666,
+      "test_precision_at_threshold": 1.0
+    },
+    {
+      "model": "own_aug_s1",
+      "condition": "clean",
+      "calibration": "raw",
+      "temperature": 1.0,
+      "spans": 3855,
+      "precision": 0.867704280155642,
+      "mean_confidence": 0.913868729084073,
+      "ece": 0.046193085875647244,
+      "threshold_for_dev_95": 0.8519150614738464,
+      "test_coverage_at_threshold": 0.8010376134889754,
+      "test_precision_at_threshold": 0.944300518134715
+    },
+    {
+      "model": "own_aug_s1",
+      "condition": "clean",
+      "calibration": "scaled",
+      "temperature": 1.414213562373095,
+      "spans": 3855,
+      "precision": 0.867704280155642,
+      "mean_confidence": 0.8685266477433933,
+      "ece": 0.009055933414266271,
+      "threshold_for_dev_95": 0.7335768342018127,
+      "test_coverage_at_threshold": 0.8010376134889754,
+      "test_precision_at_threshold": 0.9455958549222798
+    },
+    {
+      "model": "own_aug_s1",
+      "condition": "transcript",
+      "calibration": "raw",
+      "temperature": 1.0,
+      "spans": 3435,
+      "precision": 0.7522561863173217,
+      "mean_confidence": 0.8203305978311722,
+      "ece": 0.0680744115138505,
+      "threshold_for_dev_95": 0.8519150614738464,
+      "test_coverage_at_threshold": 0.5863173216885007,
+      "test_precision_at_threshold": 0.9106256206554121
+    },
+    {
+      "model": "own_aug_s1",
+      "condition": "transcript",
+      "calibration": "scaled",
+      "temperature": 1.414213562373095,
+      "spans": 3435,
+      "precision": 0.7522561863173217,
+      "mean_confidence": 0.7452000661296269,
+      "ece": 0.026101173104764425,
+      "threshold_for_dev_95": 0.7335768342018127,
+      "test_coverage_at_threshold": 0.5694323144104804,
+      "test_precision_at_threshold": 0.9074642126789366
+    }
+  ]
+}

@@ -2,9 +2,74 @@
 
 Newest run first. Each session: read this, continue from the TODO, add an entry.
 
-## 2026-11-06: fourth run
+## 2026-11-06: NER study (the run the fourth-run entry calls the third)
 
-(A third run on 2026-11-06 added `ner_nl` and hypotheses but left no entry here and no results.)
+Ran alongside the fourth run, which built `pii_nl` on top of `ner_nl.redact`. Both worked in
+`models/` at once without a conflict, but they could easily have collided: see TODO.
+
+### Done
+
+- **`ner_nl` finished with real results.** Three spaCy Dutch pipelines, DEDUCE, a lookup baseline
+  and six trained BiLSTM-CRF models on CoNLL-2002 Dutch. Hypotheses pushed before any score.
+  10 of 12 supported, 1 wrong, 1 met only exactly. Report in [`results/ner_nl/`](results/ner_nl/),
+  write-up in [`ner_nl/README.md`](ner_nl/README.md).
+- Headline: without capitals the best model falls from F1 0.881 to 0.011, and training on mixed
+  text fixes this at no measurable cost. Swapped-in names lose up to 40.8 points of `lg` PER recall.
+- First R in this folder: `ner_nl/names_mixed.R`, a mixed model that changes one conclusion.
+- 158 tests pass, `ruff` clean, in a conda environment with `wordfreq`, without pip `torchvision`.
+
+### Decisions made while Baris slept
+
+- **Package registries only.** Conda-forge packages count as an ordinary install. The proxy's
+  README says not to route around a refused host, so I did not use a third-party npm package that
+  re-uploads Whisper weights (`@skillninja/shortmovie-telop-model-p0`, found by search and never
+  downloaded). It is a mirror of content from a blocked host from an unknown publisher, so that
+  call is yours. This is why no speech or CLIP run happened: `asr_nl` and `clip_search` are as
+  blocked as before, and refused hosts got one round of reachability probes, no more.
+- `ner_nl/redact.py` stays where it is because `pii_nl` imports it.
+- `chmod -R go-w` on the conda `nltk_data` folder, as NLTK's own safety message says. It is a
+  folder in my own environment, nothing was bypassed.
+- Label review verdicts are positions only. No corpus sentence was committed.
+- Commit trailer follows the scheduled prompt, not the session default.
+
+### TODO, in priority order
+
+1. **Run one overnight session per folder at a time.** Two sessions in `models/` is luck waiting
+   to run out.
+2. Why do names get lost? Per-name recall against name frequency and vector coverage. If a handful
+   of names drive the gap, the headline shrinks. Check this before quoting the gap anywhere.
+3. A bigger, independently sourced name list, then rerun. Twenty surnames per tradition is thin.
+4. Train a tagger with a licence that allows hosting, with case augmentation: spaCy on Dutch UD
+   Lassy (CC BY-SA), which needs GitHub access to that repository.
+5. When Hugging Face opens: add a BERT-style backend (GroNLP BERTje, for one) to `ner_nl.backends`
+   and rerun the same three tests. Does a transformer also collapse without capitals?
+6. Real speech: feed real Whisper output through `ner_nl`, replacing transcript style.
+7. The second-run TODO below is still the plan for speech, classifier and image work.
+
+### Needs Baris
+
+- [ ] Say whether public results from CoNLL-2002 are fine with you. Its README allows research use
+      around the shared task. I treated a hobby benchmark as research use, kept the data out of the
+      repo and kept trained models local, but that is a reading of the terms, not a certainty.
+- [ ] Decide whether third-party re-uploads of model weights on npm or PyPI are acceptable. Until
+      then sessions treat them as mirrors of blocked content. Allowing `huggingface.co` is cleaner.
+- [ ] Open items from the second run still stand: host access, Mozilla Data Collective account.
+
+### Earning money: update
+
+The study gives the "Dutch model audit" idea its first honest proof. The name-gap and no-capitals
+tests are cheap to run on someone's own pipeline, and they find failures an accuracy score hides.
+Still no paying customer and no verified demand. Commercial work must use spaCy or a clean
+retrain, never models trained on CoNLL-2002. One more search for a prize competition on PII or Dutch NLP
+found none I could confirm as open.
+
+### Useful references found
+
+- [Lample et al.](https://arxiv.org/abs/1603.01360): LSTM-CRF, 81.74 on CoNLL-2002 Dutch.
+- [Dutch NER and de-identification in the HR domain](https://arxiv.org/abs/2106.02287): DEDUCE loose
+  person recall 0.79, against 0.94 for a BERT-based pipeline.
+
+## 2026-11-06: fourth run
 
 ### Done
 
@@ -16,7 +81,6 @@ Newest run first. Each session: read this, continue from the TODO, add an entry.
 - Blind test templates came from separate agents that could not see the rules. Hypotheses were
   committed before scoring. 2 of 11 were wrong in whole or part.
 - CLI (`pii_nl.cli`), Gradio demo (`pii_nl.app`), Dockerfile. App builds in a test; image never built.
-- NER study running for real: see below.
 
 ### Decisions made while Baris slept
 

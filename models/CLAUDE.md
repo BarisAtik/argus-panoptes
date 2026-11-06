@@ -34,8 +34,10 @@ enforcement doesn't count as permission.
 
 Package registries work where model hubs don't. From conda-forge (`conda.anaconda.org`):
 `spacy-model-nl_core_news_{sm,md,lg}` and `nltk_data` (holds `corpora/conll2002`). A `.conda` file
-is a zip holding a zstd tar: unpack, then copy `site-packages/*` into the venv. Check the licence
-of whatever comes this way.
+is a zip holding a zstd tar: unpack, then copy `site-packages/*` into the venv. Or take
+`micromamba` from the same channel and solve one environment, which also brings PyTorch CPU and R.
+Check the licence of whatever comes this way. Third-party re-uploads of weights from a blocked hub
+are not package installs: leave those alone until Baris decides.
 
 ## Rules that keep this honest
 
@@ -71,8 +73,12 @@ new claim needs a new blind set from a fresh agent that can't see `rules.py`, co
 hypotheses before scoring. Check `pytest` passes before a freeze: a skipped check cost a clean
 result here. The next real step is real documents with consent, or public ones (see `PROGRESS.md`).
 
-**ner_nl.** Run stages in the order listed at the top of `ner_nl/run.py`. CoNLL-2002 is local only.
-Sentences must not reach the repo, including in review notes. Record verdicts by position.
+**ner_nl.** Run stages in the order listed at the top of `ner_nl/run.py`, or `scripts/ner_study.sh`,
+in the environment from `ner_nl/environment.yml` (DEDUCE's `regex` pin clashes with `transformers`).
+CoNLL-2002 is local only. Sentences must not reach the repo, including in review notes. Record
+verdicts by position. Models trained on it are never hosted or sold. Before quoting the name gap,
+do the per-name analysis in `PROGRESS.md`: twenty surnames per list is thin. `run.py` needs the
+own-model runs before `evaluate`. A new backend goes in `backends.py` and gets all three tests.
 
 ## Git
 
