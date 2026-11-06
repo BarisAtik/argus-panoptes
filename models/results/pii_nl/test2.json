@@ -1,0 +1,167 @@
+{
+  "meta": {
+    "provenance": "real",
+    "created_utc": "2026-11-06T03:19:21+00:00",
+    "git_sha": "965281a",
+    "python": "3.13.18",
+    "platform": "Linux-6.18.44-fc-v242-x86_64-with-glibc2.39",
+    "packages": {
+      "spacy": "3.8.18",
+      "deduce": "3.0.6",
+      "nl_core_news_lg": "3.8.0"
+    },
+    "split": "test2"
+  },
+  "overall": [
+    {
+      "system": "deduce",
+      "all personal data": "0.235 (0.134 to 0.336)",
+      "persons": "0.246 (0.129 to 0.363)",
+      "ordinary words masked": "0.008 (0.003 to 0.013)",
+      "distractors masked": "0.459 (0.388 to 0.530)"
+    },
+    {
+      "system": "rules_lg",
+      "all personal data": "0.060 (0.026 to 0.095)",
+      "persons": "0.085 (0.024 to 0.146)",
+      "ordinary words masked": "0.018 (0.009 to 0.026)",
+      "distractors masked": "0.107 (0.067 to 0.147)"
+    },
+    {
+      "system": "rules_lg_tc",
+      "all personal data": "0.048 (0.019 to 0.076)",
+      "persons": "0.056 (0.020 to 0.091)",
+      "ordinary words masked": "0.024 (0.015 to 0.033)",
+      "distractors masked": "0.107 (0.066 to 0.149)"
+    },
+    {
+      "system": "spacy_lg",
+      "all personal data": "0.309 (0.225 to 0.394)",
+      "persons": "0.271 (0.203 to 0.338)",
+      "ordinary words masked": "0.010 (0.005 to 0.016)",
+      "distractors masked": "0.059 (0.035 to 0.083)"
+    }
+  ],
+  "by_kind": [
+    {
+      "system": "deduce",
+      "PERSOON": "0.246 (0.129 to 0.363)",
+      "ADRES": "0.200 (0.000 to 0.406)",
+      "POSTCODE": "0.138 (0.000 to 0.370)",
+      "TELEFOON": "0.375 (0.229 to 0.521)",
+      "E-MAIL": "0.167 (0.000 to 0.414)",
+      "IBAN": "0.222 (0.000 to 0.561)",
+      "BSN": "0.143 (0.000 to 0.492)",
+      "GEBOORTEDATUM": "0.000 (0.000 to 0.000)",
+      "KENTEKEN": "1.000 (1.000 to 1.000)"
+    },
+    {
+      "system": "rules_lg",
+      "PERSOON": "0.085 (0.024 to 0.146)",
+      "ADRES": "0.000 (0.000 to 0.000)",
+      "POSTCODE": "0.037 (0.000 to 0.122)",
+      "TELEFOON": "0.000 (0.000 to 0.000)",
+      "E-MAIL": "0.000 (0.000 to 0.000)",
+      "IBAN": "0.000 (0.000 to 0.000)",
+      "BSN": "0.000 (0.000 to 0.000)",
+      "GEBOORTEDATUM": "0.333 (0.000 to 0.718)",
+      "KENTEKEN": "0.000 (0.000 to 0.000)"
+    },
+    {
+      "system": "rules_lg_tc",
+      "PERSOON": "0.056 (0.020 to 0.091)",
+      "ADRES": "0.000 (0.000 to 0.000)",
+      "POSTCODE": "0.037 (0.000 to 0.122)",
+      "TELEFOON": "0.000 (0.000 to 0.000)",
+      "E-MAIL": "0.000 (0.000 to 0.000)",
+      "IBAN": "0.000 (0.000 to 0.000)",
+      "BSN": "0.000 (0.000 to 0.000)",
+      "GEBOORTEDATUM": "0.333 (0.000 to 0.718)",
+      "KENTEKEN": "0.000 (0.000 to 0.000)"
+    },
+    {
+      "system": "spacy_lg",
+      "PERSOON": "0.271 (0.203 to 0.338)",
+      "ADRES": "0.505 (0.345 to 0.665)",
+      "POSTCODE": "0.138 (0.000 to 0.370)",
+      "TELEFOON": "0.125 (0.000 to 0.307)",
+      "E-MAIL": "0.167 (0.000 to 0.414)",
+      "IBAN": "0.222 (0.000 to 0.561)",
+      "BSN": "0.143 (0.000 to 0.492)",
+      "GEBOORTEDATUM": "0.986 (0.954 to 1.000)",
+      "KENTEKEN": "0.875 (0.337 to 1.000)"
+    }
+  ],
+  "person_by_register": [
+    {
+      "system": "deduce",
+      "brief": "0.059 (0.000 to 0.150)",
+      "mail": "0.033 (0.012 to 0.053)",
+      "chat": "0.547 (0.400 to 0.694)",
+      "transcript": "1.000 (1.000 to 1.000)",
+      "beschikking": "0.111 (0.005 to 0.217)",
+      "notitie": "0.070 (0.000 to 0.214)"
+    },
+    {
+      "system": "rules_lg",
+      "brief": "0.000 (0.000 to 0.000)",
+      "mail": "0.048 (0.000 to 0.097)",
+      "chat": "0.281 (0.000 to 0.566)",
+      "transcript": "0.266 (0.000 to 0.653)",
+      "beschikking": "0.011 (0.000 to 0.030)",
+      "notitie": "0.003 (0.000 to 0.010)"
+    },
+    {
+      "system": "rules_lg_tc",
+      "brief": "0.000 (0.000 to 0.000)",
+      "mail": "0.050 (0.003 to 0.097)",
+      "chat": "0.156 (0.007 to 0.306)",
+      "transcript": "0.159 (0.000 to 0.392)",
+      "beschikking": "0.011 (0.000 to 0.030)",
+      "notitie": "0.003 (0.000 to 0.010)"
+    },
+    {
+      "system": "spacy_lg",
+      "brief": "0.136 (0.066 to 0.207)",
+      "mail": "0.181 (0.096 to 0.267)",
+      "chat": "0.472 (0.330 to 0.613)",
+      "transcript": "0.641 (0.483 to 0.798)",
+      "beschikking": "0.114 (0.048 to 0.180)",
+      "notitie": "0.245 (0.101 to 0.389)"
+    }
+  ],
+  "person_by_tradition": [
+    {
+      "system": "deduce",
+      "dutch": "0.200 (0.080 to 0.319)",
+      "turkish": "0.216 (0.095 to 0.336)",
+      "moroccan": "0.234 (0.110 to 0.357)",
+      "polish": "0.329 (0.206 to 0.452)",
+      "hindustani": "0.252 (0.136 to 0.368)"
+    },
+    {
+      "system": "rules_lg",
+      "dutch": "0.052 (0.015 to 0.090)",
+      "turkish": "0.105 (0.025 to 0.185)",
+      "moroccan": "0.075 (0.008 to 0.141)",
+      "polish": "0.065 (0.007 to 0.122)",
+      "hindustani": "0.129 (0.047 to 0.211)"
+    },
+    {
+      "system": "rules_lg_tc",
+      "dutch": "0.048 (0.016 to 0.081)",
+      "turkish": "0.073 (0.019 to 0.126)",
+      "moroccan": "0.052 (0.004 to 0.101)",
+      "polish": "0.008 (0.000 to 0.021)",
+      "hindustani": "0.097 (0.039 to 0.155)"
+    },
+    {
+      "system": "spacy_lg",
+      "dutch": "0.129 (0.060 to 0.198)",
+      "turkish": "0.341 (0.255 to 0.426)",
+      "moroccan": "0.270 (0.194 to 0.347)",
+      "polish": "0.175 (0.097 to 0.254)",
+      "hindustani": "0.438 (0.361 to 0.514)"
+    }
+  ]
+}

@@ -151,7 +151,7 @@ def _spoken_plates(text: str) -> list[Hit]:
     hits = []
     for match in SPOKEN_PLATE.finditer(text):
         letters = [w for w in match.group().split() if w not in DIGITS]
-        if not any(w in STOP or _common(w) for w in letters):
+        if not any(w in STOP or (len(w) > 2 and _common(w)) for w in letters):
             hits.append(Hit(match.start(), match.end(), "KENTEKEN", "pattern"))
     return hits
 

@@ -132,3 +132,13 @@ def test_spoken_plate_needs_uncommon_letters():
 
     assert any(h.kind == "KENTEKEN" for h in rule_hits("met de auto vt vier nul een b dus"))
     assert not any(h.kind == "KENTEKEN" for h in rule_hits("ik heb er twee drie maal in gezien"))
+
+
+def test_cli_json_lists_hits_with_offsets():
+    from pii_nl.cli import redact_json
+
+    text = "Mevrouw Yilmaz, IBAN NL91ABNA0417164300"
+    out = redact_json(text)
+    assert "[IBAN]" in out["text"]
+    for hit in out["hits"]:
+        assert text[hit["start"] : hit["end"]] == hit["value"]

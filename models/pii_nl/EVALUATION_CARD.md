@@ -101,3 +101,23 @@ them. Words rare in general Dutch (by `wordfreq`) get a capital. Offsets don't c
 11. **Common-word surnames stay hard.** On `test2` with `rules_lg_tc`, the Dutch list, whose surnames
     are often ordinary words, leaks more persons than the mean of the other four lists in `chat`
     plus `transcript`.
+
+### Results, second round (2026-11-06)
+
+`test2`, seed 1, 36 templates, 5720 values, rules frozen in commit `965281a`. Tables:
+[test2](../results/pii_nl/test2.md).
+
+| # | Prediction | Outcome | Verdict |
+| --- | --- | --- | --- |
+| 9 | `rules_lg` all-kinds leak inside 2.5% to 12.4% | 6.0% (2.6 to 9.5) | Confirmed |
+| 10 | Truecasing cuts lowercase-register person leak by at least 10 points, masking up at most 1 | 27.3% to 15.8%, paired cut 11.6 points (2.9 to 20.2); masking 1.8% to 2.4% | Confirmed |
+| 11 | Dutch list leaks more than the mean of the others in lowercase registers | 14.1% against 16.2% | **Wrong** |
+
+Best system: `rules_lg_tc` leaks 4.8% of all values (1.9 to 7.6) and 5.6% of persons (2.0 to 9.1).
+For comparison `spacy_lg` leaks 30.9% and DEDUCE 23.5% on the same documents. The lowercase
+registers still leak about 16%.
+
+**A flaw in the freeze.** The commit that froze round two had one failing new test, which was
+overlooked and seen only after scoring. The spoken-plate rule treated single letters as common
+words, so it hardly ever fired. The fix came after scoring, so the numbers above are from the
+buggy version, which understates plate handling. A new blind set would be needed to quote the fix.
