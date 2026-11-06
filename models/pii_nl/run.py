@@ -56,7 +56,7 @@ def build(name: str):
         import spacy
 
         nlp = spacy.load(SPACY["spacy_lg"])
-        return lambda text: _spans(rule_hits(text) + model_hits(text, nlp))
+        return lambda text: _spans(rule_hits(text, nlp))
     raise ValueError(f"unknown system {name}")
 
 
