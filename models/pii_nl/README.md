@@ -26,7 +26,7 @@ names in chat and transcripts, so a person still has to review the output.
 
 ## Why these numbers can be believed a bit
 
-- Hypotheses were committed before any scoring. Three of eleven turned out partly or fully wrong,
+- Hypotheses were committed before any scoring. Two of eleven turned out partly or fully wrong,
   and stay in [the card](EVALUATION_CARD.md).
 - Test templates came from a separate agent with no access to the rules. The first blind round
   confirmed that tuning flatters: leak on test was 2.3 times dev.
