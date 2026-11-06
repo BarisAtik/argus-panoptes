@@ -1,4 +1,4 @@
-.PHONY: install up up-kibana down test lint demo fetch ingest eval
+.PHONY: install up up-kibana down test lint demo fetch ingest eval real-data
 
 install:
 	pip install -e ".[dev]"
@@ -31,3 +31,9 @@ ingest:
 
 eval:
 	beacon eval --backend local --embedder hash --demo
+
+# Real Dutch text and independent labels, no Docker and no torch.
+real-data:
+	pip install -e ".[onnx,compounds]"
+	beacon fetch-ak
+	beacon fetch-model

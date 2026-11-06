@@ -71,3 +71,7 @@ def test_index_body_switches_analyzer_only_with_a_word_list():
     body = index_body(8, ["register"])
     assert body["mappings"]["properties"]["text"]["analyzer"] == "dutch_compound"
     assert "analysis" not in index_body(8)["settings"]
+
+
+def test_a_linker_alone_is_not_a_compound():
+    assert Decompounder({"aanbieder": 5}).split("aanbieders") == []

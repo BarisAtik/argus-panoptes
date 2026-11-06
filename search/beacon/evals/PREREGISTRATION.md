@@ -41,9 +41,9 @@ the test run. Later ideas need new data, or get reported as exploratory.
 
 ## Hand-written queries
 
-41 queries in `hand-queries.jsonl`, written before seeing any ranking, including 10 in English
+41 queries in `hand-labels.jsonl`, written before seeing any ranking, including 10 in English
 to test the cross-lingual claim. Labelled from a pool of the top 10 of each run, by one AI
-annotator (Claude) who saw document text but not which run returned it. That is the weakest of
+annotator (Claude) who saw titles and summaries but not which run returned them. That is the weakest of
 the three label sets: one annotator, no agreement measure, and not a person. Baris should
 re-judge a sample with `beacon label`.
 
@@ -55,3 +55,15 @@ re-judge a sample with `beacon label`.
 - 198 pages is small. Latency and any effect of HNSW approximation are out of scope.
 - All of this runs on the in-process backend, with Lucene checks on OpenSearch where stated.
   Elasticsearch itself could not be reached from the sandbox.
+
+## Deviations, added after the runs
+
+- Hand labels cover document titles and summaries, not full page text.
+- `statute-02` has one label from outside the pool. No run returned the right page, `aia-09`, in
+  its top 10. Leaving it out would have scored a miss as a success for the other documents.
+- `frozen` stayed in the hand report as a fourth run, though it was not in the pool.
+- The decompounder had a bug, found after the holdout. See `PROGRESS.md` and
+  `reports/ak-ablation.md`. The holdout report is unchanged. `experiment.py dev` would now
+  give a different frozen config, so `frozen.json` is the record of what was scored.
+- `ablation` on test queries and the common-word list on dev queries were not in this plan.
+  Both are labelled exploratory.

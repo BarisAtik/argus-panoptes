@@ -13,7 +13,7 @@ from . import evaluate as ev
 from . import quality
 from .backends import Backend, get_backend
 from .chunking import DEFAULT_MAX_WORDS, DEFAULT_OVERLAP_WORDS, chunk_document
-from .compounds import Decompounder, build_vocabulary
+from .compounds import Decompounder, compound_vocabulary
 from .config import Settings, load_dotenv
 from .embeddings import Embedder, get_embedder
 from .models import Chunk, Document, Filters, read_corpus, read_jsonl
@@ -69,6 +69,7 @@ def add_stack_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--embedding-cache", help="directory that keeps passage vectors on disk")
     parser.add_argument("--corpus", help="JSONL corpus; the local backend loads it at start")
     parser.add_argument("--demo", action="store_true", help="use the synthetic demo corpus")
+    parser.add_argument("--title-prefix", action="store_true", help="repeat titles in chunks")
 
 
 def build_stack(args, include_summary: bool = True) -> tuple[Retriever, list[Document]]:
@@ -82,9 +83,15 @@ def build_stack(args, include_summary: bool = True) -> tuple[Retriever, list[Doc
         if not documents:
             sys.exit("the local backend needs --corpus or --demo")
         if getattr(args, "compounds", False):
-            backend.decompounder = Decompounder(build_vocabulary(d.text for d in documents))
-        index_documents(backend, embedder, documents, include_summary=include_summary)
-    return Retriever(backend, embedder, groups=groups_from(args, settings)), documents
+            backend.decompounder = Decompounder(compound_vocabulary(d.text for d in documents))
+        index_documents(
+            backend, embedder, documents, include_summary=include_summary,
+            title_prefix=getattr(args, "title_prefix", False),
+        )  # fmt: skip
+    retriever = Retriever(
+        backend, embedder, rrf_k=settings.rrf_k, groups=groups_from(args, settings)
+    )
+    return retriever, documents
 
 
 def groups_from(args, settings: Settings) -> frozenset[str] | None:
@@ -139,10 +146,12 @@ def cmd_ingest(args) -> None:
     backend = get_backend(args.backend or settings.backend, settings)
     documents = read_corpus(args.corpus)
     if args.compounds:
-        backend.compound_words = list(build_vocabulary(d.text for d in documents))[:10_000]
+        vocabulary = compound_vocabulary(d.text for d in documents)
+        backend.compound_words = sorted(vocabulary, key=lambda w: -vocabulary[w])[:30_000]
     count = index_documents(
-        backend, embedder, documents, args.recreate, include_summary=not args.no_summaries
-    )
+        backend, embedder, documents, args.recreate, include_summary=not args.no_summaries,
+        title_prefix=args.title_prefix,
+    )  # fmt: skip
     print(f"indexed {count} chunks from {len(documents)} documents with {embedder.name}")
     print(json.dumps(backend.stats()))
 

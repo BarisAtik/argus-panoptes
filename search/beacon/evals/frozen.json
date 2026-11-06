@@ -1,0 +1,32 @@
+{
+  "config": {
+    "max_words": 220,
+    "overlap_words": 40,
+    "title_prefix": true,
+    "compounds": true,
+    "rrf_k": 30
+  },
+  "decisions": [
+    {
+      "best": "chunks-350",
+      "gain": -0.002226245136250915,
+      "kept": false
+    },
+    {
+      "best": "title-prefix",
+      "gain": 0.03589438652078891,
+      "kept": true
+    },
+    {
+      "best": "compounds",
+      "gain": 0.01031362679910286,
+      "kept": true
+    },
+    {
+      "best": "rrf-k-30",
+      "gain": 0.0051618315465070674,
+      "kept": true
+    }
+  ],
+  "dev_rrf_ndcg10_combined": 0.6059678130065402
+}

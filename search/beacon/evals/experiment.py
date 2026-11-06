@@ -2,6 +2,7 @@
 
     python evals/experiment.py dev
     python evals/experiment.py holdout
+    python evals/experiment.py hand
 """
 
 from __future__ import annotations
@@ -188,7 +189,70 @@ def holdout() -> None:
     print(markdown)
 
 
+def ablation() -> None:
+    """Which parts of the frozen config carried the gain? Exploratory, and on test queries.
+
+    Added after the holdout, because a bug fix in the decompounder took away the dev gain that
+    had earned it a place in the config. Nothing here may be used to pick a new config and then
+    claim the holdout number for it.
+    """
+    documents = read_corpus(CORPUS)
+    embedder = get_embedder(EMBEDDER, "data/embeddings")
+    queries = load("test")
+    frozen = Config(**json.loads((HERE / "frozen.json").read_text())["config"])
+    configs = {"default": Config(), "title prefix": Config(title_prefix=True),
+               "title prefix, k=30": Config(title_prefix=True, rrf_k=30),
+               "frozen, decompounder fixed": frozen}  # fmt: skip
+    base = None
+    lines = ["# Which part of the frozen config helped? Exploratory", "",
+             f"Post-hoc look at the {len(queries)} test queries, rrf mode, code after the "
+             "decompounder fix. Not a second holdout. p-values are unadjusted.", "",
+             "| Config | nDCG@10 | recall@10 | diff vs default | p |",
+             "| --- | --- | --- | --- | --- |"]  # fmt: skip
+    ids = [q.id for q in queries]
+    for name, config in configs.items():
+        run = score(build(config, documents, embedder), "rrf", queries)
+        if base is None:
+            base = run
+        difference = mean(run) - mean(base)
+        p = ev.permutation_test(run.values("ndcg@10", ids), base.values("ndcg@10", ids))
+        lines.append(f"| {name} | {mean(run):.3f} | {mean(run, 'recall@10'):.3f} "
+                     f"| {difference:+.3f} | {p:.3f} |")  # fmt: skip
+    (REPORTS / "ak-ablation.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print("\n".join(lines))
+
+
+def hand() -> None:
+    """Short, human-style queries over the whole corpus. Weaker labels, see the plan."""
+    frozen = Config(**json.loads((HERE / "frozen.json").read_text())["config"])
+    documents = read_corpus(CORPUS)
+    embedder = get_embedder(EMBEDDER, "data/embeddings")
+    queries = ev.load_queries(HERE / "hand-labels.jsonl")
+    default = build(Config(), documents, embedder)
+    tuned = build(frozen, documents, embedder)
+
+    def run(retriever: Retriever, mode: str, name: str) -> ev.RunResult:
+        return ev.evaluate_run(name, ranker(retriever, mode), queries)
+
+    runs = [run(default, "bm25", "bm25"), run(default, "dense", "dense"),
+            run(default, "rrf", "rrf"), run(tuned, "rrf", "frozen")]  # fmt: skip
+    summary = ev.summarise(runs, queries, baseline="bm25")
+    notes = [
+        f"{len(queries)} queries written before any ranking was seen, all page types ranked.",
+        "Labels: one AI annotator (Claude), from a pool of bm25, dense and rrf at the defaults. "
+        "`frozen` was not in the pool, which can only hurt it.",
+        "Not a holdout: the same author wrote queries and labels, and tuning was done on other "
+        "queries. Read this as a sanity check on short queries.",
+    ]
+    out = REPORTS / "ak-hand-queries.md"
+    markdown = ev.to_markdown(summary, "Hand-written queries on the Algoritmekader", notes)
+    out.write_text(markdown, encoding="utf-8")
+    ev.save(summary, out.with_suffix(".json"))
+    print(markdown)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("step", choices=["dev", "holdout"])
-    {"dev": dev, "holdout": holdout}[parser.parse_args().step]()
+    parser.add_argument("step", choices=["dev", "holdout", "hand", "ablation"])
+    steps = {"dev": dev, "holdout": holdout, "hand": hand, "ablation": ablation}
+    steps[parser.parse_args().step]()

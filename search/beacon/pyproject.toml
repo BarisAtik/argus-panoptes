@@ -23,6 +23,8 @@ dependencies = [
 embed = ["sentence-transformers>=3"]
 # The same model family without torch: quantised ONNX, about 130 MB. See `beacon fetch-model`.
 onnx = ["onnxruntime>=1.20", "tokenizers>=0.20"]
+# Common Dutch words for compound splitting.
+compounds = ["wordfreq>=3"]
 # Light alternative: Dutch word vectors, no torch.
 # Also run: python -m spacy download nl_core_news_md
 spacy = ["spacy>=3.8"]

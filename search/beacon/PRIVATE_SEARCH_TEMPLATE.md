@@ -8,7 +8,7 @@ runs on the owner's machine, which is the part hosted assistants cannot offer.
 | Layer | Private setup |
 | --- | --- |
 | Engine | Self-managed Elasticsearch, bound to localhost or an internal network |
-| Embeddings | Run locally with `st:` or `spacy:` |
+| Embeddings | Run locally with `st:`, `onnx:` (no torch) or `spacy:` |
 | Answers | `extractive` or `ollama:<model>`. **Do not use `anthropic:` on private documents**, since passages leave the machine |
 | Agents | MCP over stdio, read-only tools |
 
@@ -19,17 +19,29 @@ runs on the owner's machine, which is the part hosted assistants cannot offer.
 2. Run `beacon quality`, and adapt its checks to the collection.
 3. Label 50 to 100 real queries with the people who will use the system, then run `beacon eval`.
    Choose the embedder and fusion from that data, not from defaults.
-4. Add access control before real use.
+4. Give each `Document` its `acl` groups, and start every server with `--groups` or
+   `BEACON_GROUPS`.
 
 ## Missing before this is a product
 
-- **Document-level permissions.** There are none. Everyone who can search can see everything.
-  Filter per user in `filter_clauses`, and test that it cannot be bypassed.
+- **Per-user permissions.** Group filters now hold on every path, tested in `tests/test_acl.py`.
+  But one MCP process serves one set of groups, chosen when it starts. Serving many users from
+  one process needs real authentication, and groups synced from the client's directory.
 - **A user interface.** There is a CLI and MCP only.
-- **File parsing and OCR.** Only rechtspraak XML is implemented.
+- **File parsing and OCR.** Only rechtspraak XML and Markdown with front matter are implemented.
 - **Incremental sync, deletion and audit logging.** Deletion matters for GDPR requests.
 - **TLS and a real secrets setup** for anything beyond one machine.
 - **Evaluation on real user questions.**
+
+## What a client demo can show today
+
+Run it on the Algoritmekader, because it is public, Dutch and shareable:
+
+- Search in English over Dutch text, side by side with BM25, which cannot do it.
+- `reports/ak-holdout.md`: a one-shot score against labels the builder did not write. This is
+  the part most vendors cannot show.
+- `tests/test_acl.py`: a user without the right group gets the same answer as for a missing file.
+- `reports/ak-injection.md`: the honest limits of filtering planted instructions.
 
 ## Licensing notes (not legal advice)
 

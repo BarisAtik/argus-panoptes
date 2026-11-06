@@ -7,7 +7,7 @@ Each experiment has its own folder. See [`PROGRESS.md`](PROGRESS.md) for where t
 
 | Experiment | What it does | Dataset | Status |
 | --- | --- | --- | --- |
-| [`beacon/`](beacon/) | Hybrid search, RAG with checked citations, retrieval evaluation and an MCP server on single-node Elasticsearch | Dutch court decisions from rechtspraak.nl, downloaded at run time; synthetic demo set included | Works end to end on the demo set; first run on real data and real Elasticsearch still to do |
+| [`beacon/`](beacon/) | Hybrid search, RAG with checked citations, access control, prompt-injection tests, retrieval evaluation and an MCP server on single-node Elasticsearch | Dutch government guidance (Algoritmekader) and court decisions (rechtspraak.nl), downloaded at run time; synthetic demo set included | Scored on real Dutch text with independent labels and a one-shot holdout. First run on real Elasticsearch still to do |
 
 ## Quick start
 
@@ -17,11 +17,12 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pytest
 make demo
+make real-data    # real Dutch text and labels, no Docker
 ```
 
 ## Ideas on the list
 
-- Dutch compound splitting for BM25
+- Route queries by language, because BM25 hurts English queries on Dutch text
 - A cross-encoder reranker, measured against plain hybrid
-- A/B of chunk sizes on known-item queries
+- Keep statute references as a separate exact-match field
 - Search over other Dutch open data

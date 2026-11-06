@@ -1,8 +1,10 @@
 """Split Dutch compounds, so that `register` can find `algoritmeregister`.
 
-Dutch writes compounds as one word, and BM25 sees them as unrelated terms. This module learns a
-vocabulary from the corpus itself and splits a word only when every part is a known word. It
-needs no external dictionary, and it reads no queries or labels, so it cannot leak them.
+Dutch writes compounds as one word, and BM25 sees them as unrelated terms. A word is split only
+when every part is a known word. Known words come from the corpus and, if `wordfreq` is
+installed, a list of common Dutch words. A small corpus alone is not enough: `register` hardly
+occurs by itself in the test corpus, so `algoritmeregister` stayed whole. Neither source reads
+queries or labels, so they cannot leak them.
 
 Two implementations exist on purpose. `Decompounder` is used by the local backend. For
 Elasticsearch, `analysis_settings` in `backends/elastic.py` passes the same word list to Lucene's
@@ -40,6 +42,32 @@ def build_vocabulary(
     return dict(sorted(known.items(), key=lambda item: (-item[1], item[0]))[:max_words])
 
 
+def dutch_lexicon(top_n: int = 30_000) -> dict[str, int]:
+    """Common Dutch words from `wordfreq`, for parts that a small corpus never has on their own.
+
+    Needs `pip install wordfreq`. Its word lists are CC-BY-SA 4.0, and nothing from them is
+    stored in this repository.
+    """
+    from wordfreq import top_n_list
+
+    words = top_n_list("nl", top_n)
+    # Rank stands in for frequency, so that common words win ties when splitting.
+    return {
+        word: top_n - rank
+        for rank, word in enumerate(words)
+        if len(word) >= MIN_PART and word.isalpha() and word not in STOPWORDS
+    }
+
+
+def compound_vocabulary(texts: Iterable[str]) -> dict[str, int]:
+    """Corpus words plus the common-word lexicon when `wordfreq` is installed."""
+    vocabulary = build_vocabulary(texts)
+    try:
+        return {**dutch_lexicon(), **vocabulary}
+    except ImportError:
+        return vocabulary
+
+
 class Decompounder:
     def __init__(self, vocabulary: Mapping[str, int]):
         self.vocabulary = dict(vocabulary)
@@ -67,7 +95,8 @@ class Decompounder:
                     candidate = [part, *rest]
                     if best[start] is None or self._better(candidate, best[start]):
                         best[start] = candidate
-        return best[0] or []
+        parts = best[0] or []
+        return parts if len(parts) >= 2 else []  # one part with a linker is just an inflection
 
     def _better(self, candidate: list[str], current: list[str]) -> bool:
         """Fewer parts first, then the parts that are more common in the corpus."""

@@ -75,3 +75,10 @@ def test_ingest_is_idempotent(retriever):
     before = retriever.backend.stats()["chunks"]
     embed_and_add(retriever.backend, retriever.embedder, chunks)
     assert retriever.backend.stats()["chunks"] == before
+
+
+def test_access_filter_runs_on_the_engine(retriever):
+    nobody = Filters(groups=frozenset({"some-other-group"}))
+    assert retriever.search("woning", "rrf", 5, nobody) == []
+    everyone = Filters(groups=frozenset({"public"}))
+    assert retriever.search("woning", "rrf", 5, everyone)

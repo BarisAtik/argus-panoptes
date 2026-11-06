@@ -29,6 +29,7 @@ class Settings:
     backend: str = "elastic"
     embedder: str = "st:intfloat/multilingual-e5-small"
     groups: str | None = None  # comma-separated; unset means no access control
+    rrf_k: int = 60
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -40,4 +41,5 @@ class Settings:
             backend=os.getenv("BEACON_BACKEND", cls.backend),
             embedder=os.getenv("BEACON_EMBEDDER", cls.embedder),
             groups=os.getenv("BEACON_GROUPS"),
+            rrf_k=int(os.getenv("BEACON_RRF_K", str(cls.rrf_k))),
         )
