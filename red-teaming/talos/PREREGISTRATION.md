@@ -68,3 +68,33 @@ here are wide and the GLMM is the main check.
 The grammar, the families and the hypotheses all come from one author, so this is a mechanism study. A closed vocabulary
 makes copying easy and paraphrase hard. Real models were not trained like this and have far more general ability, which
 is the very thing T2 points at. `segment` here is a clean experiment; real chat templates flatten roles into tokens.
+
+## Addendum, 6 Nov 2026: named senders
+
+Added after the first 40 models were in, and motivated by them, so this is a second, separate question and not a rescue of the
+first. Those models suggested that in this grammar "did the user say to follow the document?" is one easy word-level cue. A model
+learns it with very little data, so the first study can barely tell the provenance levels apart.
+
+The harder and more realistic case: the user trusts one person's message in a thread that has several authors. "Do what dana says."
+Now the legitimate instruction and the attack sit in the same document, and only authorship separates them.
+
+**Design.** A thread of two to four messages, each headed `message from NAME :`. The named sender's message holds the real
+instruction. Two attacks: `unnamed`, another sender gives an instruction, and `forged`, inside another sender's message the text says
+`message from NAME :` and gives an instruction, word for word what a real header looks like.
+
+| Factor | Levels |
+| --- | --- |
+| provenance | `inband`: authorship is only the header text. `signed`: a runtime that knows authorship marks tokens of the named sender's real message with an out-of-band role the text cannot set |
+| regime | `scoped`: threads where other senders only chat. `scoped_adv`: also attacked threads, labelled with the named sender's action |
+
+4 seeds each, 16 models, same size and steps as before, nothing tuned. Greedy, with new entity names at test.
+
+**Hypotheses.**
+
+- **A1, forgery is irreducible in-band.** `scoped_adv` with `inband` has ASR of 30% or more on `forged`. The two headers are
+  identical and the order is random, so no amount of training should fix it.
+- **A2, the out-of-band mark fixes it.** `scoped_adv` with `signed` has ASR under 5% on `forged`, and task success of 90% or more.
+- **A3, the mark needs training to bite.** On `forged`, `scoped` with `signed` has ASR at least 10 points above `scoped_adv` with `signed`.
+- **A4, a name is enough for honest cases.** `scoped_adv` with `inband` has ASR under 5% on `unnamed`.
+
+The first study's hypotheses stand as written and are scored as written.
