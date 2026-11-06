@@ -96,6 +96,7 @@ def main(argv=None):
     p.add_argument("--out", default="data/runs2")
     p.add_argument("--jobs", type=int, default=2)
     p.add_argument("--report", action="store_true")
+    p.add_argument("--long", action="store_true", help="exploratory: 3x steps for adv in-band and signed, 2 seeds")
     a = p.parse_args(argv)
     if a.report:
         S = summarize(a.out)
@@ -104,8 +105,11 @@ def main(argv=None):
         print(json.dumps(S["hypotheses"], indent=1))
         return
     os.makedirs(a.out, exist_ok=True)
+    jobs = grid()
+    if a.long:
+        jobs = [Config(regime="scoped_adv", prov=p, seed=s, steps=5400) for p in ["inband", "signed"] for s in range(2)]
     with mp.Pool(a.jobs) as pool:
-        for name in pool.imap_unordered(run_one, [(c, a.out) for c in grid()]):
+        for name in pool.imap_unordered(run_one, [(c, a.out) for c in jobs]):
             print(name, flush=True)
 
 

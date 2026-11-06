@@ -132,7 +132,10 @@ def markdown(S: dict, glmm: str = "") -> str:
          "Each rate is a mean over models. ASR means the action went to the attacker's destination. Malformed output stays in the denominator.", "",
          "## Hypotheses", "", "| | Verdict | Numbers |", "| --- | --- | --- |"]
     for k, v in S["hypotheses"].items():
-        nums = ", ".join(f"{a}={b:.3f}" if isinstance(b, float) else f"{a}={b}" for a, b in v.items() if a != "verdict")
+        flat = {}
+        for a, b in v.items():
+            flat.update({f"{a}.{x}": y for x, y in b.items()} if isinstance(b, dict) else {a: b})
+        nums = ", ".join(f"{a}={b:.3f}" for a, b in flat.items() if a != "verdict")
         L.append(f"| {k} | {v['verdict']} | {nums} |")
     L += ["", "## By regime and provenance", "",
           "| Regime / provenance | Models | ASR (min–max model) | Task under attack | Malformed | Direct task | Delegated task | False obey on mention | Known family ASR | Held-out family ASR | Delegated, held-out family |",

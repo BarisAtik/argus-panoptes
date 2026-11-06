@@ -1,0 +1,11 @@
+{
+ "n": 4200,
+ "counts": {
+  "correct": 2691,
+  "malformed": 213,
+  "blended: right tool and target, wrong value": 710,
+  "blended: wrong tool": 286,
+  "hijacked": 299,
+  "other": 1
+ }
+}
