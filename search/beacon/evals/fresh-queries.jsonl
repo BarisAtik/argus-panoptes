@@ -1,0 +1,64 @@
+{"id":"f-en-01","kind":"en","query":"how do I test an algorithm for discrimination"}
+{"id":"f-en-02","kind":"en","query":"human oversight of high-risk AI systems"}
+{"id":"f-en-03","kind":"en","query":"what must be logged by an AI system"}
+{"id":"f-en-04","kind":"en","query":"data quality requirements for training data"}
+{"id":"f-en-05","kind":"en","query":"public register of government algorithms"}
+{"id":"f-en-06","kind":"en","query":"which AI practices are prohibited"}
+{"id":"f-en-07","kind":"en","query":"security testing against adversarial attacks"}
+{"id":"f-en-08","kind":"en","query":"explaining automated decisions to citizens"}
+{"id":"f-en-09","kind":"en","query":"contract terms when buying an algorithm from a vendor"}
+{"id":"f-en-10","kind":"en","query":"retiring an algorithm safely"}
+{"id":"f-en-11","kind":"en","query":"monitoring model drift after deployment"}
+{"id":"f-en-12","kind":"en","query":"who owns the risk of an AI system"}
+{"id":"f-en-13","kind":"en","query":"keeping records and archiving model outputs"}
+{"id":"f-en-14","kind":"en","query":"AI literacy for staff"}
+{"id":"f-en-15","kind":"en","query":"can citizens object to an algorithmic decision"}
+{"id":"f-en-16","kind":"en","query":"conformity assessment and CE marking"}
+{"id":"f-en-17","kind":"en","query":"technical documentation of a model"}
+{"id":"f-en-18","kind":"en","query":"environmental impact of training models"}
+{"id":"f-en-19","kind":"en","query":"using generative AI at work"}
+{"id":"f-en-20","kind":"en","query":"personal data minimisation in machine learning"}
+{"id":"f-en-21","kind":"en","query":"reporting serious incidents to the regulator"}
+{"id":"f-en-22","kind":"en","query":"involving stakeholders and affected people in design"}
+{"id":"f-en-23","kind":"en","query":"accessibility of digital government services"}
+{"id":"f-en-24","kind":"en","query":"open source publication of government code"}
+{"id":"f-other-01","kind":"other","query":"menschliche Aufsicht über KI-Systeme"}
+{"id":"f-other-02","kind":"other","query":"Diskriminierung durch Algorithmen vermeiden"}
+{"id":"f-other-03","kind":"other","query":"transparence des décisions automatisées"}
+{"id":"f-other-04","kind":"other","query":"protection des données personnelles dans les algorithmes"}
+{"id":"f-other-05","kind":"other","query":"registro público de algoritmos"}
+{"id":"f-other-06","kind":"other","query":"evaluación de riesgos de sistemas de inteligencia artificial"}
+{"id":"f-nl-01","kind":"nl","query":"hoe voorkom ik discriminatie door een algoritme"}
+{"id":"f-nl-02","kind":"nl","query":"menselijk toezicht op AI"}
+{"id":"f-nl-03","kind":"nl","query":"welke gegevens moeten we loggen"}
+{"id":"f-nl-04","kind":"nl","query":"kwaliteit van trainingsdata controleren"}
+{"id":"f-nl-05","kind":"nl","query":"verboden AI-praktijken"}
+{"id":"f-nl-06","kind":"nl","query":"beveiliging van algoritmes testen"}
+{"id":"f-nl-07","kind":"nl","query":"uitleg geven aan burgers over een besluit"}
+{"id":"f-nl-08","kind":"nl","query":"afspraken met een leverancier vastleggen"}
+{"id":"f-nl-09","kind":"nl","query":"algoritme uitfaseren"}
+{"id":"f-nl-10","kind":"nl","query":"prestaties monitoren na ingebruikname"}
+{"id":"f-nl-11","kind":"nl","query":"rollen en verantwoordelijkheden beschrijven"}
+{"id":"f-nl-12","kind":"nl","query":"AI-geletterdheid medewerkers"}
+{"id":"f-nl-13","kind":"nl","query":"bezwaar maken tegen een geautomatiseerd besluit"}
+{"id":"f-nl-14","kind":"nl","query":"conformiteitsbeoordeling hoog-risico"}
+{"id":"f-nl-15","kind":"nl","query":"energieverbruik van AI-modellen"}
+{"id":"f-nl-16","kind":"nl","query":"generatieve AI gebruiken op het werk"}
+{"id":"f-nl-17","kind":"nl","query":"dataminimalisatie"}
+{"id":"f-nl-18","kind":"nl","query":"ernstig incident melden"}
+{"id":"f-nl-19","kind":"nl","query":"betrokkenen en belanghebbenden raadplegen"}
+{"id":"f-nl-20","kind":"nl","query":"digitale toegankelijkheid"}
+{"id":"f-nl-21","kind":"nl","query":"broncode openbaar maken"}
+{"id":"f-nl-22","kind":"nl","query":"wanneer is een systeem hoog risico"}
+{"id":"f-nl-23","kind":"nl","query":"bias meten in de testfase"}
+{"id":"f-nl-24","kind":"nl","query":"bewaartermijn van data en modellen"}
+{"id":"f-abbr-01","kind":"abbr","query":"DPIA"}
+{"id":"f-abbr-02","kind":"abbr","query":"wanneer moet een DPIA"}
+{"id":"f-abbr-03","kind":"abbr","query":"IAMA uitvoeren"}
+{"id":"f-abbr-04","kind":"abbr","query":"FRIA fundamental rights impact assessment"}
+{"id":"f-abbr-05","kind":"abbr","query":"GDPR legal basis"}
+{"id":"f-abbr-06","kind":"abbr","query":"AI Act obligations for deployers"}
+{"id":"f-abbr-07","kind":"abbr","query":"BIO informatiebeveiliging"}
+{"id":"f-abbr-08","kind":"abbr","query":"Woo openbaarmaking"}
+{"id":"f-abbr-09","kind":"abbr","query":"AIA verplichtingen gebruiksverantwoordelijke"}
+{"id":"f-abbr-10","kind":"abbr","query":"PIA privacy impact assessment"}
