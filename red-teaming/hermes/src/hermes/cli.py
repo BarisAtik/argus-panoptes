@@ -29,6 +29,9 @@ def main(argv: list[str] | None = None) -> int:
     h = sub.add_parser("holdout", help="score the blind holdout. Once.")
     h.add_argument("--path", default="holdout/05_blind.yaml")
     h.add_argument("--out", default="reports")
+    h2 = sub.add_parser("holdout2", help="score the second blind holdout. Once.")
+    h2.add_argument("--path", default="holdout/06_blind_controls_2.yaml")
+    h2.add_argument("--out", default="reports")
     inf = sub.add_parser("inference", help="gateway inference and typed forwards, H10 to H18")
     inf.add_argument("--out", default="reports")
     li = sub.add_parser("lint", help="check Agent Card JSON files")
@@ -64,6 +67,9 @@ def main(argv: list[str] | None = None) -> int:
     elif a.cmd == "holdout":
         from .holdout import score
         print(score(Path(a.path), Path(a.out)))
+    elif a.cmd == "holdout2":
+        from .holdout import score_second
+        print(score_second(Path(a.path), Path(a.out)))
     elif a.cmd == "inference":
         from .inference import run as go
         s = go(Path(a.out))
