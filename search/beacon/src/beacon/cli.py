@@ -175,6 +175,8 @@ def cmd_ask(args) -> None:
     )  # fmt: skip
     print(result.text)
     print(f"\ngenerator={result.generator} abstained={result.abstained} grounded={result.grounded}")
+    for claim in result.flagged_claims:
+        print(f"check this claim: {claim.claim} ({'; '.join(claim.reasons)})")
     for number, hit in enumerate(result.contexts, start=1):
         print(f"[{number}] {hit.chunk.doc_id}: {hit.chunk.title}")
 

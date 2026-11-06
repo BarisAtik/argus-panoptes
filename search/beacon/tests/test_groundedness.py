@@ -29,7 +29,8 @@ def test_flipped_negation_is_flagged():
 
 
 def test_can_turned_into_must_is_flagged():
-    check = check_claim("Een organisatie moet een extern bureau inschakelen", [PASSAGE])
+    strict = Thresholds(check_modality=True)
+    check = check_claim("Een organisatie moet een extern bureau inschakelen", [PASSAGE], strict)
     assert any("weaker" in reason for reason in check.reasons)
 
 

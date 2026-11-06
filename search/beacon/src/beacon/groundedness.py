@@ -25,10 +25,12 @@ _WEAK = frozenset("kan kunnen mag mogen eventueel desgewenst aanbevolen".split()
 
 @dataclass(frozen=True)
 class Thresholds:
-    # Tuned on the dev half of the claims. See evals/frozen-grounded.json.
-    min_terms: float = 0.5
-    min_similarity: float = 0.0
-    check_modality: bool = True
+    # Defaults are the values frozen on dev claims, see evals/frozen-grounded.json. Similarity
+    # needs an embedder and is skipped without one. Modality checks are kept for those who want
+    # them, but they did not earn their false alarms.
+    min_terms: float = 0.4
+    min_similarity: float = 0.9
+    check_modality: bool = False
     check_negation: bool = True
 
 

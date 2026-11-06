@@ -15,6 +15,7 @@ from typing import Protocol
 
 import httpx
 
+from .groundedness import ClaimCheck, check_answer
 from .models import Filters, Hit
 from .retrieval import Retriever, collapse
 from .text import sentences, tokens
@@ -162,6 +163,11 @@ class Answer:
     invalid_citations: list[int] = field(default_factory=list)
     generator: str = ""
     quarantined: int = 0  # passages the guard kept away from the model
+    claims: list[ClaimCheck] = field(default_factory=list)  # each claim against its source
+
+    @property
+    def flagged_claims(self) -> list[ClaimCheck]:
+        return [claim for claim in self.claims if not claim.supported]
 
 
 def answer(
@@ -185,6 +191,11 @@ def answer(
     text = generator.generate(question, contexts)
     abstained = ABSTAIN.lower() in text.lower()
     valid, invalid = check_citations(text, len(contexts))
+    claims = []
+    if not abstained:
+        claims = check_answer(
+            text, [hit.chunk.text for hit in contexts], embed=retriever.embedder.embed_passages
+        )
     return Answer(
         question=question,
         text=text,
@@ -196,4 +207,5 @@ def answer(
         invalid_citations=invalid,
         generator=generator.name,
         quarantined=quarantined,
+        claims=claims,
     )
