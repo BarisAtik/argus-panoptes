@@ -132,7 +132,7 @@ gauntlet gate runs/x.jsonl --defense layered --max-asr 0.2   # exit 1 in CI on r
 gauntlet power --asr-a 0.5 --asr-b 0.25 --seeds 5            # how many scenarios do I need?
 gauntlet repro 7 10 --threshold 0.5   # does a 7/10 finding clear a 50% reproducibility bar?
 python -m gauntlet.mcp_bridge --scenario sc-rug-pull         # poisoned mock MCP server on stdio
-python adapters/make_promptfoo_config.py && npx promptfoo eval  # promptfoo matrix on top
+python adapters/make_promptfoo_config.py && PROMPTFOO_PYTHON=$(which python) npx promptfoo eval  # none 13/41, layered 28/41 pass
 python -m gauntlet.agentdojo_bridge --model qwen2.5:7b --limit 20  # real model on AgentDojo
 ```
 

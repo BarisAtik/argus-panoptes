@@ -174,3 +174,11 @@ def test_report_falsifies_when_the_rules_say_so():
 
     h = summarize(_rows(lambda *a: True))["hypotheses"]
     assert h["T1"]["verdict"] == "falsified" and h["T3"]["verdict"] == "falsified" and h["T5"]["verdict"] == "falsified"
+
+
+def test_long_input_fits_the_window():
+    from talos.serve import MAX_DATA, MAX_USER, to_example
+
+    ex = to_example([{"role": "user", "content": "word " * 500}, {"role": "tool", "content": "word " * 500}])
+    assert len(ex.user.split()) == MAX_USER and len(ex.data.split()) == MAX_DATA
+    assert MAX_USER + MAX_DATA + 12 + 8 <= 160  # prompt scaffolding and the action

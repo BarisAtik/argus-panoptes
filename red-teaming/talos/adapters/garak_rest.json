@@ -1,0 +1,14 @@
+{
+  "rest": {
+    "RestGenerator": {
+      "name": "talos-loopback",
+      "uri": "http://127.0.0.1:8099/v1/chat/completions",
+      "method": "post",
+      "headers": {"Content-Type": "application/json"},
+      "req_template_json_object": {"model": "talos", "messages": [{"role": "user", "content": "$INPUT"}]},
+      "response_json": true,
+      "response_json_field": "$.choices[0].message.content",
+      "request_timeout": 60
+    }
+  }
+}

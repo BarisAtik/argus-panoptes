@@ -16,10 +16,15 @@ from . import world as W
 from .train import load, predict
 
 
+MAX_USER, MAX_DATA = 30, 110
+
+
 def to_example(messages: list[dict]) -> W.Example:
     user = [str(m.get("content") or "") for m in messages if m.get("role") == "user"]
     data = [str(m.get("content") or "") for m in messages if m.get("role") == "tool"]
-    return W.Example("serve", user[-1] if user else "", " ".join(data))
+    # The model has a fixed window. Long input is cut, keeping the end of each part, so a long page cannot crash it.
+    task = (user[-1] if user else "").split()[-MAX_USER:]
+    return W.Example("serve", " ".join(task), " ".join(" ".join(data).split()[-MAX_DATA:]))
 
 
 def to_message(text: str) -> tuple[dict, str]:
@@ -31,7 +36,7 @@ def to_message(text: str) -> tuple[dict, str]:
     args = {"send_email": {"to": a["dest"], "body": a["value"]}, "pay": {"to": a["dest"], "amount": a["value"]},
             "read_doc": {"id": a["value"]}}[a["tool"]]
     call = {"id": uuid.uuid4().hex[:8], "type": "function", "function": {"name": a["tool"], "arguments": json.dumps(args)}}
-    return {"role": "assistant", "content": None, "tool_calls": [call]}, "tool_calls"
+    return {"role": "assistant", "content": text, "tool_calls": [call]}, "tool_calls"
 
 
 def make_handler(model, prov: str):
