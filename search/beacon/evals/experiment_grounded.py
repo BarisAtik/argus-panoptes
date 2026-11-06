@@ -17,7 +17,7 @@ import random
 import sys
 from collections import defaultdict
 from dataclasses import asdict
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 
 import numpy as np
@@ -70,7 +70,7 @@ def add_mechanical(rows, passages):
 def make_embed():
     embedder = get_embedder("onnx:data/models/multilingual-e5-small", "data/cache")
 
-    @lru_cache(maxsize=None)
+    @cache
     def one(text: str) -> tuple:
         return tuple(embedder.embed_passages([text])[0])
 

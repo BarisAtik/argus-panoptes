@@ -1,0 +1,14 @@
+{
+  "min_terms": 0.4,
+  "min_similarity": 0.9,
+  "check_modality": false,
+  "check_negation": true,
+  "dev": {
+    "changed_number": 1.0,
+    "faithful": 0.2,
+    "faithful_close": 0.057,
+    "hallucinated": 0.914,
+    "subtle_false": 0.371,
+    "wrong_source": 1.0
+  }
+}
