@@ -72,6 +72,32 @@ so report them as one finding, not five. R's mixed model agrees: with speed and 
 included, neither coefficient clears zero (speed 0.38, 95% CI −0.01 to 0.78), even though the fake
 effect is real. Correlated metrics need to be combined or tested one at a time.
 
+## A public stand-in, ready but not run
+
+`combinelink.public_proxy` runs the same chain on public season tables: stopwatch combine results
+against average separation for receivers and tight ends. It would show how big a link to expect
+before the real data arrives. The plan and predictions in
+[`reports/public_proxy_plan.md`](reports/public_proxy_plan.md) were fixed before any outcome was
+seen.
+
+It has **not been run on the real tables**. nflverse gives no licence for the data, which it says
+belongs to its owners, so this lab hasn't analysed it. The code is tested on fake tables in the same
+format, and it recovers a planted link (0.149 yards per SD against 0.15 planted, R checks 0.148).
+
+```bash
+PYTHONPATH=src python -m combinelink.public_proxy --synth --out artifacts/public   # code check only
+./scripts/download_public.sh    # your decision, after reading the plan's status note
+PYTHONPATH=src python -m combinelink.public_proxy --data data/public --out artifacts/public
+Rscript R/02_public_proxy_mixed.R artifacts/public/player_seasons.csv
+```
+
+## Scope to check once the data is here
+
+The NFL's page says the data covers the 2023 to 2025 Combines and five position groups: receivers,
+tight ends, defensive backs, offensive and defensive linemen. This project's outcome is separation,
+which only fits receivers and tight ends, so linemen and defensive backs need another outcome or
+need leaving out on purpose. Say which in the write-up.
+
 ## Data rules
 
 CC BY-NC 4.0, about 2.3 GB, stays out of git. Non-commercial means no selling anything built on it.

@@ -14,6 +14,7 @@ The questions are about method, not about the competition's score:
     balance   Does forcing even class shares help, and what if the shares are not even?
     selection Does OOF pick the right blend across resampled splits?
     alarm     Would adversarial validation or topic-held-out folds have warned about shift?
+    partial   What happens to assignment when test prompts are not complete grids?
 """
 from __future__ import annotations
 
@@ -233,6 +234,46 @@ def assign_exp(grid: pd.DataFrame, seeds: int = 3) -> dict:
     return {"runs": rows}
 
 
+def thin_prompts(test: pd.DataFrame, most: int, seed: int) -> pd.DataFrame:
+    """Keep 1 to `most` random passages per prompt, so test stops being a complete grid."""
+    rng = np.random.default_rng(seed)
+    parts = [part.sample(int(rng.integers(1, most + 1)), random_state=int(rng.integers(1 << 31)))
+             for _, part in test.groupby(PROMPT)]
+    return pd.concat(parts).reset_index(drop=True)
+
+
+def partial_exp(grid: pd.DataFrame, seeds: int = 3) -> dict:
+    """Public reports: test prompts have 1 to 8 of the 18 authors, and assignment lost score there.
+    3 of 7 authors is about the same share. Both sizes run, so the drop can be seen directly."""
+    rows = []
+    for seed in range(seeds):
+        train, full = make_split(grid, 150, 660, seed)  # thinning needs more prompts to keep rows up
+        classes = np.array(sorted(train[LABEL].unique()))
+        cap = len(classes)
+        curve = tune_threshold(train[TEXT].tolist(), train[PROMPT].to_numpy(), cap)
+        threshold = max(curve, key=curve.get)
+        for most in (cap, 3):
+            keep = full[PROMPT].drop_duplicates().to_numpy()[:220]
+            test = (full[full[PROMPT].isin(keep)].reset_index(drop=True) if most == cap
+                    else thin_prompts(full, most, seed))
+            p = holdout_proba("tfidf_lr", train, test, classes)
+            y = test[LABEL].to_numpy()
+            base = classes[p.argmax(axis=1)]
+            clusters = cluster_passages(test[TEXT].tolist(), cap, threshold)
+            assigned = classes[assign_within_clusters(p, clusters)]
+            oracle = classes[assign_within_clusters(p, pd.factorize(test[PROMPT])[0])]
+            row = {"seed": seed, "most_per_prompt": most, "rows": len(test),
+                   "test_ari": float(adjusted_rand_score(test[PROMPT], clusters)),
+                   "argmax": balanced_accuracy(y, base),
+                   "assigned": balanced_accuracy(y, assigned),
+                   "oracle_prompts": balanced_accuracy(y, oracle),
+                   "assigned_vs_argmax": paired_prompt_bootstrap(y, assigned, base, test[PROMPT],
+                                                                 n_boot=300)}
+            rows.append(row)
+            print(row, flush=True)
+    return {"runs": rows}
+
+
 def style_with_test_scaling(train: pd.DataFrame, test: pd.DataFrame,
                             classes: np.ndarray) -> np.ndarray:
     """Style model where test is scaled by its own mean and SD, which removes a uniform shift."""
@@ -354,7 +395,7 @@ def alarm_exp(grid: pd.DataFrame, seeds: int = 3) -> dict:
 
 EXPERIMENTS = {"honesty": honesty, "models": models_exp, "genre": genre_exp, "curve": curve_exp,
                "assign": assign_exp, "shift": shift_exp, "balance": balance_exp,
-               "selection": selection_exp, "alarm": alarm_exp}
+               "selection": selection_exp, "alarm": alarm_exp, "partial": partial_exp}
 
 
 def main() -> None:

@@ -1,7 +1,45 @@
 # Validation notes and failure analysis
 
-This file has two parts. The first uses real text from a public stand-in. The second uses fake data
-and is kept for its reasoning, with corrections marked where real text disagreed.
+Part 0 collects what other competitors report about the real data. Part 1 uses real text from a
+public stand-in. Part 2 uses fake data and is kept for its reasoning, with corrections marked where
+real text disagreed.
+
+## Part 0: what public reports say about the real competition
+
+I still haven't seen the data. These come from competitors' public READMEs, read in November 2026
+for facts only, with no code taken from them. Every number is self-reported, some of those pages
+contradict themselves, and one is labelled as agent-written, so treat this as leads rather than
+evidence. Check each one against real data.
+
+| Claim | Reported by | What it changes here |
+| --- | --- | --- |
+| Train is 2,699 rows, 150 prompts, nearly every prompt answered by all 18 | 3 repos | Backs the grid reading in Part 2 |
+| Test is **not** a grid: prompts hold 1 to 8 passages | 3 repos | Fails check 2 on the assignment list below |
+| Hungarian assignment raised local CV but lost on the leaderboard (0.353 to 0.344; another reports +0.02 offline, −0.015 public) | 3 repos | `USE_ASSIGNMENT` stays off for good |
+| Grouped CV about 0.36–0.38 against public about 0.35; random folds about 0.21 | 1 repo | The surprising direction seen on the proxy holds on real data, if this is right |
+| Classical TF-IDF and style models stall around 0.34–0.36 public | 3 repos | The current kernel is probably a 0.35 entry |
+| A fine-tuned small LLM with LoRA went from 0.355 to 0.539, two reached 0.600, a six-model ensemble 0.661 | 1 repo | The GPU track is where the score is, so it moves to the top of the list |
+| External text pools of about 120k to 245k rows helped | 2 repos | Their source, labels and licence aren't stated. Don't use one until all three are known and the rules allow it |
+| Reference cutoffs: rank 1 at 0.732, rank 10 at 0.692, rank 20 at 0.677 (undated) | 1 repo | A prize needs about twice the current baseline |
+
+Two of these hold up well against this project's own proxy work. Random folds under-reporting was
+predicted from the proxy before I read any of this, and so was the warning about assignment: the
+checklist below kept it off, which now looks right.
+
+### Assignment on incomplete prompts, tested on the proxy
+
+Reported failure, so I reproduced it. Test prompts thinned to 1–3 of 7 authors, which is about the
+same share as 1–8 of 18. TF-IDF, three splits (`reports/proxy/partial.json`):
+
+| Test shape | Argmax | Assigned | Change | Known prompts, perfect clustering |
+| --- | --- | --- | --- | --- |
+| Complete grid | 0.495 | 0.493 | −0.002 | 0.573 |
+| 1–3 authors per prompt | 0.481 | 0.474 | −0.007 | 0.491 |
+
+Even perfect clustering gains only 0.010 on incomplete prompts, against 0.078 on a grid. So the prize
+mostly disappears, and imperfect clustering (ARI 0.41–0.53) is enough to lose it. The −0.007 is close
+to the reported −0.009 to −0.015. No single split's CI cleared zero here, so the agreement in size is
+suggestive, not proof.
 
 ## Part 1: real text from a public stand-in
 
@@ -250,7 +288,8 @@ prompts. Real prompts also overlap in topic, unlike the fake ones (ARI 1.0).
 This uses test text jointly but no labels. That is transductive inference, not hand labelling, but
 read the rules and forum on it before relying on it.
 
-**Off by default.** Turn it on only if all of these hold:
+**Off by default, and now off for good unless real data contradicts Part 0.** Turn it on only if
+all of these hold:
 
 1. `grid.is_grid` is true on real train.
 2. `test_cluster_shape.share_rows_in_full_clusters` in the kernel log shows sizes piling up at 18.

@@ -12,7 +12,8 @@ import numpy as np
 import pandas as pd
 
 from .data import ID, LABEL, PROMPT, TEXT, load
-from .metrics import balanced_accuracy, per_model_recall
+from .labs import LAB_OF
+from .metrics import balanced_accuracy, lab_accuracy, per_model_recall
 
 META = {ID, "fold", LABEL, PROMPT}
 
@@ -56,9 +57,13 @@ def report(oof: pd.DataFrame, train: pd.DataFrame) -> str:
     y = oof[LABEL].to_numpy()
     _, pred, conf = predictions(oof)
     words = train[TEXT].str.split().str.len().to_numpy()
+    lab_line = ""
+    if set(y) <= set(LAB_OF) and set(pred) <= set(LAB_OF):
+        lab_line = (f" Right lab: **{lab_accuracy(y, pred, LAB_OF):.4f}**. The gap between the two "
+                    "is confusion among siblings.")
     parts = [
         f"# Failure analysis\n\nBalanced accuracy: **{balanced_accuracy(y, pred):.4f}** "
-        f"on {len(y)} out-of-fold rows.",
+        f"on {len(y)} out-of-fold rows.{lab_line}",
         "## Per-model recall (worst first)\n\n" + per_model_recall(y, pred).round(3)
         .rename("recall").to_markdown(),
         "## Top confusions\n\n" + top_confusions(y, pred).to_markdown(index=False),

@@ -9,7 +9,7 @@ mkdir -p "$OUT/source/ntl" "$OUT/kernel"
 cp src/ntl/*.py "$OUT/source/ntl/"
 sed "s/YOUR_KAGGLE_USERNAME/$USER_NAME/g" kernel/kernel-metadata.template.json \
   > "$OUT/kernel/kernel-metadata.json"
-cp kernel/submission_kernel.py "$OUT/kernel/"
+cp kernel/submission_kernel.py kernel/train_gpu_kernel.py "$OUT/kernel/"
 cat > "$OUT/source/dataset-metadata.json" <<JSON
 {"title": "ntl-source", "id": "$USER_NAME/ntl-source", "licenses": [{"name": "other"}]}
 JSON

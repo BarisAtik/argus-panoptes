@@ -18,9 +18,21 @@ from .data import ID, LABEL, TEXT, load
 from .models import REGISTRY
 
 
+def align(proba: np.ndarray, source: list[str], classes: np.ndarray) -> np.ndarray:
+    """Reorder columns to `classes`, refusing a model trained on another label set."""
+    if set(source) != set(classes):
+        raise ValueError(f"label sets differ: {sorted(set(source) ^ set(classes))[:5]}")
+    out = np.zeros_like(proba)
+    out[:, np.searchsorted(classes, source)] = proba
+    return out
+
+
 def predict_test(train: pd.DataFrame, test: pd.DataFrame, names: list[str],
-                 assign: bool = False, threshold: float = 0.9,
-                 balance: bool = False) -> pd.DataFrame:
+                 assign: bool = False, threshold: float = 0.9, balance: bool = False,
+                 extra: tuple[np.ndarray, list[str]] | None = None,
+                 extra_weight: float = 0.5) -> pd.DataFrame:
+    """`extra` is (proba, classes) from `hf_train.predict_folds`. `extra_weight` is its share of the
+    final blend, which should come from nested CV on OOF files, not from the leaderboard."""
     classes = np.array(sorted(train[LABEL].unique()))
     probas = []
     for name in names:
@@ -30,6 +42,9 @@ def predict_test(train: pd.DataFrame, test: pd.DataFrame, names: list[str],
         p[:, col] = model.predict_proba(test[TEXT].tolist())
         probas.append(p)
     proba = blend(probas) if len(probas) > 1 else probas[0]
+    if extra is not None:
+        proba = blend([proba, align(extra[0], extra[1], classes)],
+                      weights=[1 - extra_weight, extra_weight])
     if balance:
         proba = balance_classes(proba)
     if assign:

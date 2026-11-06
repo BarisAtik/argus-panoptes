@@ -42,9 +42,12 @@ def oof_proba(model, train: pd.DataFrame, folds: np.ndarray, classes: np.ndarray
     return proba
 
 
-def blend(probas: list[np.ndarray]) -> np.ndarray:
-    """Geometric mean; a model that is sure a label is wrong gets a veto."""
-    log = np.mean([np.log(np.clip(p, 1e-9, 1)) for p in probas], axis=0)
+def blend(probas: list[np.ndarray], weights=None) -> np.ndarray:
+    """Geometric mean; a model that is sure a label is wrong gets a veto.
+
+    Set `weights` in advance or by nested CV. Fitting them on the OOF they are scored on inflates it.
+    """
+    log = np.average([np.log(np.clip(p, 1e-9, 1)) for p in probas], axis=0, weights=weights)
     p = np.exp(log)
     return p / p.sum(axis=1, keepdims=True)
 

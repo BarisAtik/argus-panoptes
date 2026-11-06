@@ -76,11 +76,15 @@ def tuned_proba(path, tokenizer, train, tests: list[pd.DataFrame], classes) -> l
     return np.split(both, np.cumsum([len(t) for t in tests])[:-1])
 
 
-def cached(path: Path, compute) -> list[np.ndarray]:
+def sparse_proba(name, train, test, classes) -> list[np.ndarray]:
+    return [holdout_proba(name, train, test, classes)]
+
+
+def cached(path: Path, compute, *args) -> list[np.ndarray]:
     if path.exists():
         data = np.load(path)
         return [data[k] for k in data.files]
-    result = compute()
+    result = compute(*args)
     path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(path, *result)
     return result
@@ -100,12 +104,11 @@ def holdout(grid, args) -> dict:
         classes = np.array(sorted(train[LABEL].unique()))
         y, prompts = test[LABEL].to_numpy(), test[PROMPT].to_numpy()
         base = args.cache_dir / f"holdout{seed}"
-        p = {name: cached(base / f"{name}.npz", lambda n=name: [holdout_proba(n, train, test, classes)])[0]
+        p = {name: cached(base / f"{name}.npz", sparse_proba, name, train, test, classes)[0]
              for name in SPARSE}
-        p["frozen"] = cached(base / "frozen.npz",
-                             lambda: frozen_proba(args.model, tok, train, [test], classes))[0]
-        p["tuned"] = cached(base / "tuned.npz",
-                            lambda: tuned_proba(args.model, tok, train, [test], classes))[0]
+        fit = (args.model, tok, train, [test], classes)
+        p["frozen"] = cached(base / "frozen.npz", frozen_proba, *fit)[0]
+        p["tuned"] = cached(base / "tuned.npz", tuned_proba, *fit)[0]
         p["sparse_blend"] = blend([p["tfidf_lr"], p["masked_lr"]])
         p["tuned_plus_sparse"] = blend([p["tuned"], p["tfidf_lr"], p["masked_lr"]])
         ref = classes[p["sparse_blend"].argmax(axis=1)]
@@ -130,9 +133,10 @@ def genre(grid, args) -> dict:
             train, same = make_split(grid[grid["genre"] == src], 150, 220, seed)
             _, other = make_split(grid[grid["genre"] == dst], 150, 220, seed)
             classes = np.array(sorted(train[LABEL].unique()))
-            tuned = cached(args.cache_dir / f"genre{seed}_{src}.npz",
-                           lambda: tuned_proba(args.model, tok, train, [same, other], classes))
-            rows.append({"seed": seed, "train": src, "same_genre": score(same[LABEL], tuned[0], classes),
+            tuned = cached(args.cache_dir / f"genre{seed}_{src}.npz", tuned_proba, args.model, tok,
+                           train, [same, other], classes)
+            rows.append({"seed": seed, "train": src,
+                         "same_genre": score(same[LABEL], tuned[0], classes),
                          "other_genre": score(other[LABEL], tuned[1], classes)})
             print(rows[-1], flush=True)
     return {"settings": SETTINGS, "runs": rows}
@@ -148,8 +152,8 @@ def cv(grid, args) -> dict:
     proba = np.zeros((len(train), len(classes)))
     for k in range(5):
         fit, val = train[folds != k], train[folds == k]
-        proba[folds == k] = cached(args.cache_dir / f"cv{seed}_fold{k}.npz",
-                                   lambda: tuned_proba(args.model, tok, fit, [val], classes))[0]
+        proba[folds == k] = cached(args.cache_dir / f"cv{seed}_fold{k}.npz", tuned_proba, args.model,
+                                   tok, fit, [val], classes)[0]
         print(k, score(val[LABEL], proba[folds == k], classes), flush=True)
     return {"seed": seed, "grouped_oof": score(train[LABEL], proba, classes)}
 
