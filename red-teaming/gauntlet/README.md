@@ -103,7 +103,7 @@ With a local model (Ollama shown; vLLM, llama.cpp server and LM Studio work the 
 ollama pull qwen2.5:7b
 make baseline MODEL=qwen2.5:7b
 Rscript analysis/analyze.R runs/qwen2.5-7b.jsonl      # mixed-effects view
-gauntlet export-elastic runs/qwen2.5-7b.jsonl > bulk.ndjson   # index into Elasticsearch
+gauntlet export-elastic runs/qwen2.5-7b.jsonl > bulk.ndjson   # index into Elasticsearch, see "Trace analytics"
 ```
 
 Or with Docker: see the header of [`docker-compose.yml`](docker-compose.yml).
@@ -132,11 +132,31 @@ python -m gauntlet.agentdojo_bridge --model qwen2.5:7b --limit 20  # real model 
 | `src/gauntlet/oracle.py` | Canary detection through encodings and chunking; naive oracle kept for comparison |
 | `src/gauntlet/stats.py` | Wilson, exact McNemar, cluster bootstrap, power simulation, reproducibility |
 | `src/gauntlet/report.py` | Report that states its limits; Elasticsearch bulk export |
+| `elastic/` | Index template, named aggregation queries, cross-check, Elasticsearch and Kibana files |
 | `src/gauntlet/mcp_bridge.py` | The mock world over real MCP |
 | `src/gauntlet/agentdojo_bridge.py` | The policy layer on AgentDojo |
 | `analysis/analyze.R` | `glmer` with scenario as random effect (for model runs; scripted runs are too deterministic to fit) |
 | `adapters/` | promptfoo provider and config generator |
 | `ci/` | GitHub Actions workflow to copy to the repo root |
+
+## Trace analytics
+
+`make es-load es-report` runs the worst-case matrix, indexes one document per trial and writes
+[`reports/trace-analytics.md`](reports/trace-analytics.md): attack success with denominators, blocks per tool,
+scenarios that beat a stack, near misses and full-text search over final answers. Each query is a file in
+`elastic/queries/`. Every number is recomputed from the JSONL in plain Python, and the run fails if the engine
+disagrees, a `terms` size was too small or a hit total was capped.
+
+It talks to `GAUNTLET_ES_URL` on loopback only, with `GAUNTLET_ES_USER` and `GAUNTLET_ES_PASSWORD` when security
+is on. `pytest` runs the engine tests only when `GAUNTLET_ES_URL` is set.
+
+- **Verified on OpenSearch 3.9 only**, as a Lucene stand-in. That proves nothing about Elasticsearch itself.
+  Its mapping has no `runtime` section, so the loader passes the same scripts as `derived` fields.
+- **Not run:** `elastic/docker-compose.yml` (Elasticsearch and Kibana 9.5.6) needs Docker on your own machine.
+  `elastic/dashboard.ndjson` was written by hand and has never been imported into Kibana.
+- `Trial` does not store final answers, so `elastic/run_with_finals.py` catches them at the oracle call. Files from
+  plain `gauntlet run` have none and `es-report` stops with a message. Moving `final` onto `Trial` would remove the wrapper.
+- A block records only the first defense that objected, so a later defense gets no credit.
 
 ## Adding a scenario
 

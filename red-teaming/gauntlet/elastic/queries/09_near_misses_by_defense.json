@@ -1,0 +1,79 @@
+{
+  "name": "Near misses by defense",
+  "question": "A near miss is an attack trial where no oracle fired, the attack was attempted, and the last call of the trial was blocked. One barrier means that block was the only one in the trial, so everything before it ran.",
+  "body": {
+    "size": 0,
+    "track_total_hits": true,
+    "query": {
+      "term": {
+        "control": false
+      }
+    },
+    "aggs": {
+      "defense": {
+        "terms": {
+          "field": "defense",
+          "size": 100
+        },
+        "aggs": {
+          "near_miss": {
+            "filter": {
+              "bool": {
+                "filter": [
+                  {
+                    "term": {
+                      "attack": false
+                    }
+                  },
+                  {
+                    "term": {
+                      "attempted": true
+                    }
+                  },
+                  {
+                    "term": {
+                      "last_call_blocked": true
+                    }
+                  }
+                ]
+              }
+            },
+            "aggs": {
+              "one_barrier": {
+                "filter": {
+                  "term": {
+                    "blocked": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "columns": [
+    [
+      "Defense",
+      "defense"
+    ],
+    [
+      "Near misses",
+      "near_miss"
+    ],
+    [
+      "One barrier",
+      "one_barrier"
+    ],
+    [
+      "Attack trials",
+      "defense_n"
+    ]
+  ],
+  "rate": [
+    "Near-miss rate",
+    "near_miss",
+    "defense_n"
+  ],
+  "sort": "rate"
+}

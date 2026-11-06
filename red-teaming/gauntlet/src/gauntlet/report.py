@@ -167,13 +167,55 @@ def render_markdown(trials: list[dict], title: str = "Gauntlet report", baseline
     return "\n".join(L) + "\n"
 
 
+# Which defense produced each block reason. `run_trial` keeps only the reason, and only the first
+# defense in the stack that objects, so a later defense that would also have blocked gets no credit.
+BLOCK_REASONS = {
+    "tool not needed": "allowlist",
+    "destination not on the egress": "egress",
+    "destination did not come": "provenance",
+    "amount did not come": "provenance",
+    "session mixed": "trifecta",
+    "secret value in outbound": "dlp",
+    "tool description changed": "tool_pin",
+    "tool disabled by manifest": "manifest_scan",
+    "memory write from": "memory_guard",
+    "more than": "rate_limit",
+    "command shape": "exec_guard",
+    "path not named": "write_scope",
+    "credential not named": "scoped_secrets",
+}
+
+
+def _blocking_defense(reason: str | None) -> str | None:
+    if not reason:
+        return None
+    return next((d for start, d in BLOCK_REASONS.items() if reason.startswith(start)), "other")
+
+
 def bulk_ndjson(trials: list[dict], index: str = "gauntlet-trials") -> str:
-    """Elasticsearch `_bulk` body, one document per trial."""
+    """Elasticsearch `_bulk` body, one document per trial.
+
+    `events` keeps tool and blocking defense together, one nested object per call. The flat
+    `blocked_by` and `tools_called` lists cannot say which block belongs to which tool. Tool
+    arguments go into `call_text` as plain text, because their keys differ per tool.
+    """
     lines = []
     for r in trials:
+        trace = r.get("trace", [])
         doc = {k: v for k, v in r.items() if k != "trace"}
-        doc["blocked_by"] = sorted({e["blocked_by"] for e in r.get("trace", []) if e.get("blocked_by")})
-        doc["tools_called"] = sorted({e["tool"] for e in r.get("trace", [])})
+        doc["defense_label"] = _label(r["defense"])
+        doc["blocked_by"] = sorted({e["blocked_by"] for e in trace if e.get("blocked_by")})
+        doc["tools_called"] = sorted({e["tool"] for e in trace})
+        doc["destinations"] = sorted({e["destination"] for e in trace if e.get("destination")})
+        doc["call_text"] = "\n".join(str(v) for e in trace for v in e.get("args", {}).values())
+        doc["events"] = [{"step": i, "session": e["session"], "tool": e["tool"], "executed": e["executed"],
+                          "reason": e.get("blocked_by"), "defense": _blocking_defense(e.get("blocked_by")),
+                          "labels": list(e.get("labels", [])), "destination": e.get("destination")}
+                         for i, e in enumerate(trace)]
+        last = trace[-1] if trace else {}
+        doc["last_tool"] = last.get("tool")
+        doc["last_call_blocked"] = bool(last.get("blocked_by"))
+        doc["last_blocked_defense"] = _blocking_defense(last.get("blocked_by"))
         lines.append(json.dumps({"index": {"_index": index,
                                            "_id": f"{r['agent']}|{r['defense']}|{r['scenario']}|{r['seed']}"}}))
         lines.append(json.dumps(doc))

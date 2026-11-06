@@ -1,0 +1,56 @@
+{
+  "name": "Successes a substring check would miss",
+  "question": "Trials where the full oracle fired but a plain substring search for the canary did not, by encoding seen. A trial can carry several encodings, so rows can add up to more than the trials.",
+  "body": {
+    "size": 0,
+    "track_total_hits": true,
+    "query": {
+      "bool": {
+        "filter": [
+          {
+            "term": {
+              "control": false
+            }
+          },
+          {
+            "term": {
+              "attack": true
+            }
+          },
+          {
+            "term": {
+              "attack_naive": false
+            }
+          },
+          {
+            "term": {
+              "defense": "none"
+            }
+          }
+        ]
+      }
+    },
+    "aggs": {
+      "encoding": {
+        "terms": {
+          "field": "encodings",
+          "size": 100
+        }
+      }
+    }
+  },
+  "columns": [
+    [
+      "Encoding",
+      "encoding"
+    ],
+    [
+      "Trials",
+      "encoding_n"
+    ]
+  ],
+  "multi_valued": [
+    "encoding"
+  ],
+  "sort": "key"
+}

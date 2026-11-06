@@ -1,0 +1,55 @@
+{
+  "name": "Harmless tasks still completed by defense",
+  "question": "What does each stack cost? These control tasks contain no attack, and most were built to trip one defense, so this is pessimistic on purpose.",
+  "body": {
+    "size": 0,
+    "track_total_hits": true,
+    "query": {
+      "term": {
+        "control": true
+      }
+    },
+    "aggs": {
+      "defense": {
+        "terms": {
+          "field": "defense",
+          "size": 100
+        },
+        "aggs": {
+          "completed": {
+            "filter": {
+              "term": {
+                "utility": true
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "columns": [
+    [
+      "Defense",
+      "defense"
+    ],
+    [
+      "Completed",
+      "completed"
+    ],
+    [
+      "Control trials",
+      "defense_n"
+    ]
+  ],
+  "rate": [
+    "Completed rate",
+    "completed",
+    "defense_n"
+  ],
+  "ci": {
+    "by": "defense",
+    "flag": "utility",
+    "control": true
+  },
+  "sort": "rate"
+}

@@ -1,0 +1,57 @@
+# Elasticsearch and Kibana for one person's machine. NOT RUN YET: no Docker daemon and no access to
+# Elastic's hosts where this was written. See README, "Trace analytics".
+#   cp .env.example .env   # then edit it
+#   docker compose up -d
+#   GAUNTLET_ES_URL=http://127.0.0.1:9200 GAUNTLET_ES_USER=elastic GAUNTLET_ES_PASSWORD=... make es-load es-report
+# Security is on, so every request needs a password. HTTP is plain because both ports bind to loopback only.
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-9.5.6}
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "true"
+      xpack.security.http.ssl.enabled: "false"
+      xpack.security.transport.ssl.enabled: "false"
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:?set it in .env}
+      ES_JAVA_OPTS: -Xms1g -Xmx1g
+    ports:
+      - "127.0.0.1:9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs -u elastic:$$ELASTIC_PASSWORD http://localhost:9200/_cluster/health"]
+      interval: 10s
+      retries: 30
+
+  # Kibana may not log in as `elastic`, so give its own user a password once.
+  kibana-password:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-9.5.6}
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:?set it in .env}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:?set it in .env}
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - >-
+        curl -fs -u elastic:$$ELASTIC_PASSWORD -H 'Content-Type: application/json'
+        -X POST http://elasticsearch:9200/_security/user/kibana_system/_password
+        -d "{\"password\":\"$$KIBANA_SYSTEM_PASSWORD\"}"
+    restart: "no"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION:-9.5.6}
+    depends_on:
+      kibana-password:
+        condition: service_completed_successfully
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:?set it in .env}
+      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: ${KIBANA_ENCRYPTION_KEY:?set it in .env}
+    ports:
+      - "127.0.0.1:5601:5601"
+
+volumes:
+  es-data:

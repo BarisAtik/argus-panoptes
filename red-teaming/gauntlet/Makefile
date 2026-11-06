@@ -1,7 +1,7 @@
 PY ?= python
 MODEL ?= qwen2.5:7b
 
-.PHONY: install test worst-case agentdojo baseline report
+.PHONY: install test worst-case agentdojo baseline report es-load es-report
 
 install:
 	$(PY) -m pip install -e ".[dev,llm,agentdojo]"
@@ -52,3 +52,18 @@ holdout-posthoc:
 # Predicted tool lists instead of gold ones. No model needed. About 3 minutes on two cores.
 router:
 	$(PY) -W ignore -m gauntlet.task_router
+
+# Trace analytics. Needs a loopback engine at GAUNTLET_ES_URL, see elastic/docker-compose.yml. No model needed.
+GAUNTLET_ES_URL ?= http://127.0.0.1:9200
+export GAUNTLET_ES_URL
+ES_RUN := runs/trace-analytics
+
+es-load:
+	$(PY) elastic/run_with_finals.py --out $(ES_RUN).jsonl
+	$(PY) -m gauntlet.cli export-elastic $(ES_RUN).jsonl > $(ES_RUN).bulk.ndjson
+	$(PY) elastic/trace_search.py load $(ES_RUN).bulk.ndjson
+
+# Exits 1 and writes nothing if the engine and the JSONL disagree.
+es-report:
+	$(PY) elastic/trace_search.py report --jsonl $(ES_RUN).jsonl --bulk $(ES_RUN).bulk.ndjson \
+	  --reference reports/worst-case.json --md reports/trace-analytics.md

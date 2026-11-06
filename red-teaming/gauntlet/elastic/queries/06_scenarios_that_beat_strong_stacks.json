@@ -1,0 +1,84 @@
+{
+  "name": "Scenarios that beat a strong stack",
+  "question": "Which attack scenarios still succeed against `layered`, `strict`, or `layered` minus one defense? A scenario that appears only under a leave-one-out stack needs that defense.",
+  "body": {
+    "size": 0,
+    "track_total_hits": true,
+    "query": {
+      "bool": {
+        "filter": [
+          {
+            "term": {
+              "control": false
+            }
+          },
+          {
+            "bool": {
+              "should": [
+                {
+                  "terms": {
+                    "defense": [
+                      "layered",
+                      "strict"
+                    ]
+                  }
+                },
+                {
+                  "wildcard": {
+                    "defense": "*+*"
+                  }
+                }
+              ],
+              "minimum_should_match": 1
+            }
+          }
+        ]
+      }
+    },
+    "aggs": {
+      "defense": {
+        "terms": {
+          "field": "defense",
+          "size": 100
+        },
+        "aggs": {
+          "scenario": {
+            "terms": {
+              "field": "scenario",
+              "size": 100
+            },
+            "aggs": {
+              "succeeded": {
+                "filter": {
+                  "term": {
+                    "attack": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "columns": [
+    [
+      "Defense",
+      "defense"
+    ],
+    [
+      "Scenario",
+      "scenario"
+    ],
+    [
+      "Succeeded",
+      "succeeded"
+    ],
+    [
+      "Attack trials",
+      "scenario_n"
+    ]
+  ],
+  "drop_zero": "succeeded",
+  "sort": "key"
+}

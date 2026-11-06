@@ -1,0 +1,75 @@
+{
+  "name": "Attack success by category and defense",
+  "question": "Which kinds of weakness does each single stack still leave open? Leave-one-out stacks are left out to keep the table readable. Cells are successes over attack trials.",
+  "body": {
+    "size": 0,
+    "track_total_hits": true,
+    "query": {
+      "bool": {
+        "filter": [
+          {
+            "term": {
+              "control": false
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "wildcard": {
+              "defense": "*+*"
+            }
+          }
+        ]
+      }
+    },
+    "aggs": {
+      "category": {
+        "terms": {
+          "field": "category",
+          "size": 100
+        },
+        "aggs": {
+          "defense": {
+            "terms": {
+              "field": "defense",
+              "size": 100
+            },
+            "aggs": {
+              "succeeded": {
+                "filter": {
+                  "term": {
+                    "attack": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "columns": [
+    [
+      "Category",
+      "category"
+    ],
+    [
+      "Defense",
+      "defense"
+    ],
+    [
+      "Succeeded",
+      "succeeded"
+    ],
+    [
+      "Attack trials",
+      "defense_n"
+    ]
+  ],
+  "pivot": {
+    "row": "category",
+    "col": "defense",
+    "k": "succeeded",
+    "n": "defense_n"
+  }
+}

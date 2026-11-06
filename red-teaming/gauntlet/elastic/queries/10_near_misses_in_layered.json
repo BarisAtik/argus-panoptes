@@ -1,0 +1,82 @@
+{
+  "name": "What the last barrier was in layered",
+  "question": "For near misses under `layered`: the tool that was stopped and the defense that stopped it.",
+  "body": {
+    "size": 0,
+    "track_total_hits": true,
+    "query": {
+      "bool": {
+        "filter": [
+          {
+            "term": {
+              "control": false
+            }
+          },
+          {
+            "term": {
+              "attack": false
+            }
+          },
+          {
+            "term": {
+              "attempted": true
+            }
+          },
+          {
+            "term": {
+              "last_call_blocked": true
+            }
+          },
+          {
+            "term": {
+              "defense": "layered"
+            }
+          }
+        ]
+      }
+    },
+    "aggs": {
+      "tool": {
+        "terms": {
+          "field": "last_tool",
+          "size": 100
+        },
+        "aggs": {
+          "defense": {
+            "terms": {
+              "field": "last_blocked_defense",
+              "size": 100
+            },
+            "aggs": {
+              "scenarios": {
+                "cardinality": {
+                  "field": "scenario",
+                  "precision_threshold": 1000
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "columns": [
+    [
+      "Tool",
+      "tool"
+    ],
+    [
+      "Blocked by",
+      "defense"
+    ],
+    [
+      "Near misses",
+      "defense_n"
+    ],
+    [
+      "Scenarios",
+      "scenarios"
+    ]
+  ],
+  "sort": "key"
+}

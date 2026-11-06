@@ -1,0 +1,77 @@
+{
+  "name": "Attack success by defense",
+  "question": "Of the attack trials under each stack, how many ended with an oracle firing, and on how many scenarios?",
+  "body": {
+    "size": 0,
+    "track_total_hits": true,
+    "query": {
+      "term": {
+        "control": false
+      }
+    },
+    "aggs": {
+      "defense": {
+        "terms": {
+          "field": "defense",
+          "size": 100
+        },
+        "aggs": {
+          "succeeded": {
+            "filter": {
+              "term": {
+                "attack": true
+              }
+            },
+            "aggs": {
+              "scenarios_beaten": {
+                "cardinality": {
+                  "field": "scenario",
+                  "precision_threshold": 1000
+                }
+              }
+            }
+          },
+          "scenarios": {
+            "cardinality": {
+              "field": "scenario",
+              "precision_threshold": 1000
+            }
+          }
+        }
+      }
+    }
+  },
+  "columns": [
+    [
+      "Defense",
+      "defense"
+    ],
+    [
+      "Succeeded",
+      "succeeded"
+    ],
+    [
+      "Attack trials",
+      "defense_n"
+    ],
+    [
+      "Scenarios beaten",
+      "scenarios_beaten"
+    ],
+    [
+      "Scenarios",
+      "scenarios"
+    ]
+  ],
+  "rate": [
+    "Success rate",
+    "succeeded",
+    "defense_n"
+  ],
+  "ci": {
+    "by": "defense",
+    "flag": "attack",
+    "control": false
+  },
+  "sort": "rate"
+}

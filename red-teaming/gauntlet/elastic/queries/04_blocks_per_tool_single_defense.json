@@ -1,0 +1,87 @@
+{
+  "name": "Which defense blocks most per tool, each alone",
+  "question": "Run each defense on its own and count refused calls per tool on attack trials, out of the calls to that tool in that run. No defense can shadow another here. `injection_filter` edits text and never refuses a call, so it has no rows.",
+  "body": {
+    "size": 0,
+    "track_total_hits": true,
+    "query": {
+      "bool": {
+        "filter": [
+          {
+            "term": {
+              "control": false
+            }
+          },
+          {
+            "terms": {
+              "defense": [
+                "allowlist",
+                "egress",
+                "dlp",
+                "trifecta",
+                "provenance"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "aggs": {
+      "defense": {
+        "terms": {
+          "field": "defense",
+          "size": 100
+        },
+        "aggs": {
+          "events": {
+            "nested": {
+              "path": "events"
+            },
+            "aggs": {
+              "tool": {
+                "terms": {
+                  "field": "events.tool",
+                  "size": 100
+                },
+                "aggs": {
+                  "blocks": {
+                    "filter": {
+                      "term": {
+                        "events.executed": false
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "columns": [
+    [
+      "Tool",
+      "tool"
+    ],
+    [
+      "Defense",
+      "defense"
+    ],
+    [
+      "Blocks",
+      "blocks"
+    ],
+    [
+      "Calls to tool",
+      "tool_n"
+    ]
+  ],
+  "rate": [
+    "Blocks per call",
+    "blocks",
+    "tool_n"
+  ],
+  "sort": "key",
+  "drop_zero": "blocks"
+}

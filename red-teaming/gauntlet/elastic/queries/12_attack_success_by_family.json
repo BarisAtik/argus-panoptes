@@ -1,0 +1,61 @@
+{
+  "name": "Attack success by scenario family",
+  "question": "The same success rate grouped by the id prefix of the scenario, under `egress`. `scenario_family` is computed at search time, not stored.",
+  "body": {
+    "size": 0,
+    "track_total_hits": true,
+    "query": {
+      "bool": {
+        "filter": [
+          {
+            "term": {
+              "control": false
+            }
+          },
+          {
+            "term": {
+              "defense": "egress"
+            }
+          }
+        ]
+      }
+    },
+    "aggs": {
+      "family": {
+        "terms": {
+          "field": "scenario_family",
+          "size": 100
+        },
+        "aggs": {
+          "succeeded": {
+            "filter": {
+              "term": {
+                "attack": true
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "columns": [
+    [
+      "Family",
+      "family"
+    ],
+    [
+      "Succeeded",
+      "succeeded"
+    ],
+    [
+      "Attack trials",
+      "family_n"
+    ]
+  ],
+  "rate": [
+    "Success rate",
+    "succeeded",
+    "family_n"
+  ],
+  "sort": "key"
+}

@@ -1,0 +1,80 @@
+{
+  "name": "Which defense blocks most per tool, in the layered stack",
+  "question": "Inside `layered`, which defense stops each tool on attack trials? Only the first defense that objects is recorded, so a defense early in the stack shadows later ones. This shows who acts first, not who is needed.",
+  "body": {
+    "size": 0,
+    "track_total_hits": true,
+    "query": {
+      "bool": {
+        "filter": [
+          {
+            "term": {
+              "control": false
+            }
+          },
+          {
+            "term": {
+              "defense": "layered"
+            }
+          }
+        ]
+      }
+    },
+    "aggs": {
+      "events": {
+        "nested": {
+          "path": "events"
+        },
+        "aggs": {
+          "tool": {
+            "terms": {
+              "field": "events.tool",
+              "size": 100
+            },
+            "aggs": {
+              "blocks": {
+                "filter": {
+                  "term": {
+                    "events.executed": false
+                  }
+                },
+                "aggs": {
+                  "defense": {
+                    "terms": {
+                      "field": "events.defense",
+                      "size": 100
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "columns": [
+    [
+      "Tool",
+      "tool"
+    ],
+    [
+      "Blocked by",
+      "defense"
+    ],
+    [
+      "Blocks",
+      "defense_n"
+    ],
+    [
+      "Calls to tool",
+      "tool_n"
+    ]
+  ],
+  "rate": [
+    "Blocks per call",
+    "defense_n",
+    "tool_n"
+  ],
+  "sort": "key"
+}

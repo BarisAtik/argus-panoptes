@@ -1,0 +1,67 @@
+{
+  "index_patterns": ["gauntlet-trials*"],
+  "priority": 200,
+  "_meta": {"description": "One document per trial, from `gauntlet export-elastic`. Strict, so a new field fails loudly at load time."},
+  "template": {
+    "settings": {"index": {"number_of_shards": 1, "number_of_replicas": 0}},
+    "mappings": {
+      "dynamic": "strict",
+      "properties": {
+        "run_at": {"type": "date"},
+        "scenario": {"type": "keyword"},
+        "category": {"type": "keyword"},
+        "vector": {"type": "keyword"},
+        "agent": {"type": "keyword"},
+        "defense": {"type": "keyword"},
+        "defense_label": {"type": "keyword"},
+        "seed": {"type": "integer"},
+        "control": {"type": "boolean"},
+        "attack": {"type": "boolean"},
+        "attack_naive": {"type": "boolean"},
+        "attempted": {"type": "boolean"},
+        "utility": {"type": "boolean"},
+        "last_call_blocked": {"type": "boolean"},
+        "blocked": {"type": "integer"},
+        "n_calls": {"type": "integer"},
+        "encodings": {"type": "keyword"},
+        "tools_called": {"type": "keyword"},
+        "destinations": {"type": "keyword"},
+        "blocked_by": {"type": "keyword"},
+        "last_tool": {"type": "keyword"},
+        "last_blocked_defense": {"type": "keyword"},
+        "reasons": {"type": "keyword", "fields": {"text": {"type": "text"}}},
+        "error": {"type": "text", "fields": {"raw": {"type": "keyword", "ignore_above": 1024}}},
+        "final_answer": {"type": "text"},
+        "call_text": {"type": "text"},
+        "events": {
+          "type": "nested",
+          "dynamic": "strict",
+          "properties": {
+            "step": {"type": "integer"},
+            "session": {"type": "integer"},
+            "tool": {"type": "keyword"},
+            "executed": {"type": "boolean"},
+            "reason": {"type": "keyword"},
+            "defense": {"type": "keyword"},
+            "labels": {"type": "keyword"},
+            "destination": {"type": "keyword"}
+          }
+        }
+      },
+      "runtime": {
+        "scenario_family": {
+          "type": "keyword",
+          "script": {"source": "def s = doc['scenario'].value; int i = s.indexOf('-'); emit(i < 0 ? s : s.substring(0, i));"}
+        },
+        "is_leave_one_out": {
+          "type": "boolean",
+          "script": {"source": "emit(doc['defense'].value.contains('+'));"}
+        },
+        "blocked_share": {
+          "type": "double",
+          "script": {"source": "long n = doc['n_calls'].value; emit(n == 0 ? 0.0 : (double) doc['blocked'].value / n);"}
+        }
+      }
+    }
+  }
+}
