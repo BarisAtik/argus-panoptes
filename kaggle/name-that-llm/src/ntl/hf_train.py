@@ -22,28 +22,27 @@ from .metrics import balanced_accuracy
 from .splits import grouped_folds
 
 
-def encode(tokenizer, texts: list[str], max_length: int) -> dict[str, torch.Tensor]:
-    return dict(tokenizer(texts, truncation=True, padding=True, max_length=max_length,
-                          return_tensors="pt"))
+def batches(tokenizer, texts: list[str], labels, bs: int, max_length: int, shuffle: bool):
+    """Pad per batch, not to the longest passage overall. On CPU that saves a lot of time."""
+    enc = tokenizer(list(texts), truncation=True, max_length=max_length)
+    rows = [{k: v[i] for k, v in enc.items()} for i in range(len(texts))]
 
+    def collate(picked: list[int]):
+        batch = dict(tokenizer.pad([rows[i] for i in picked], padding=True, return_tensors="pt"))
+        return (batch, torch.as_tensor(labels[picked]) if labels is not None else None)
 
-def _loader(enc: dict[str, torch.Tensor], labels: torch.Tensor | None, bs: int, shuffle: bool):
-    keys = list(enc)
-    tensors = [enc[k] for k in keys] + ([labels] if labels is not None else [])
-    ds = torch.utils.data.TensorDataset(*tensors)
-    return keys, DataLoader(ds, batch_size=bs, shuffle=shuffle)
+    return DataLoader(range(len(rows)), batch_size=bs, shuffle=shuffle, collate_fn=collate)
 
 
 def train_one(model, tokenizer, tr_texts, tr_y, va_texts, args, device) -> np.ndarray:
-    keys, loader = _loader(encode(tokenizer, tr_texts, args.max_length),
-                           torch.as_tensor(tr_y), args.batch_size, True)
+    loader = batches(tokenizer, tr_texts, np.asarray(tr_y), args.batch_size, args.max_length, True)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
     steps = max(1, len(loader) * args.epochs)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=args.lr, total_steps=steps)
     model.to(device).train()
     for _ in range(args.epochs):
-        for *xs, y in loader:
-            batch = {k: x.to(device) for k, x in zip(keys, xs)}
+        for batch, y in loader:
+            batch = {k: x.to(device) for k, x in batch.items()}
             loss = cross_entropy(model(**batch).logits, y.to(device),
                                  label_smoothing=args.label_smoothing)
             opt.zero_grad()
@@ -57,11 +56,15 @@ def train_one(model, tokenizer, tr_texts, tr_y, va_texts, args, device) -> np.nd
 @torch.no_grad()
 def predict(model, tokenizer, texts, args, device) -> np.ndarray:
     model.to(device).eval()
-    keys, loader = _loader(encode(tokenizer, texts, args.max_length), None,
-                           args.batch_size * 2, False)
-    out = [torch.softmax(model(**{k: x.to(device) for k, x in zip(keys, xs)}).logits, -1).cpu()
-           for xs in loader]
-    return torch.cat(out).numpy()
+    order = np.argsort([len(t) for t in texts])  # similar lengths together, less padding
+    sorted_texts = [texts[i] for i in order]
+    loader = batches(tokenizer, sorted_texts, None, args.batch_size * 2, args.max_length, False)
+    out = [torch.softmax(model(**{k: x.to(device) for k, x in batch.items()}).logits, -1).cpu()
+           for batch, _ in loader]
+    proba = torch.cat(out).numpy()
+    restored = np.empty_like(proba)
+    restored[order] = proba
+    return restored
 
 
 def run(train: pd.DataFrame, args, build_model, tokenizer, device) -> tuple[np.ndarray, np.ndarray]:

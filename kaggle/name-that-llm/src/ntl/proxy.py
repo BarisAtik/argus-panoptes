@@ -32,17 +32,33 @@ MIN_WORDS, MAX_WORDS = 40, 250  # the competition's stated passage length
 FAMILY = {a: ("gpt" if a.startswith("gpt") else a) for a in AUTHORS}
 
 
-def download(cache: Path, workers: int = 16) -> int:
-    """Fetch every text once. Files already cached are skipped, so reruns are cheap."""
+def download(cache: Path, workers: int = 6, tries: int = 4) -> int:
+    """Fetch every text once. Files already cached are skipped, so reruns are cheap.
+
+    A connection dropped by a proxy must not end the run halfway: a partial cache quietly builds a
+    tiny, easy dataset (`build` now refuses one), so failed files are retried with a pause.
+    """
+    import time
+
     import requests
 
     session = requests.Session()
+
+    def get(url: str):
+        for attempt in range(tries):
+            try:
+                return session.get(url, timeout=30)
+            except requests.RequestException:
+                time.sleep(2 ** attempt)
+        return None
 
     def fetch(rel: str) -> bool:
         path = cache / rel
         if path.exists():
             return True
-        reply = session.get(f"{BASE}/{rel}", timeout=30)
+        reply = get(f"{BASE}/{rel}")
+        if reply is None:
+            return False
         if reply.status_code != 200:
             return False
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -101,6 +117,8 @@ def make_split(grid: pd.DataFrame, train_prompts: int, test_prompts: int,
     rng.shuffle(prompts)
     if train_prompts + test_prompts > len(prompts):
         raise ValueError(f"asked for {train_prompts + test_prompts}, have {len(prompts)} prompts")
+    if grid["model"].nunique() < len(AUTHORS):
+        raise ValueError(f"only {grid['model'].nunique()} of {len(AUTHORS)} authors: partial cache?")
     train = frame[frame["prompt_id"].isin(prompts[:train_prompts])]
     test = frame[frame["prompt_id"].isin(prompts[train_prompts:train_prompts + test_prompts])]
     return _shuffle(train, seed), _shuffle(test, seed + 1)
