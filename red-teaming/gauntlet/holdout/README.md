@@ -15,3 +15,16 @@ Procedure, fixed before scoring:
 
 Limits: the author is the same kind of system as the defense author, so this is blind but not independent
 in any stronger sense. It also saw one dev scenario file, and `trusted_destinations` are its own choices.
+
+## Second set: `06_ordinary_benign.yaml`
+
+30 controls (`ord-` ids) of plain office work: reading and summarizing, replying to colleagues, paying regular invoices,
+scheduling notes, looking something up for whoever asked, multi-step reads, updating notes and memory, and public web
+lookups. Unlike `03_controls.yaml`, these are not hard negatives and were not designed to trip anything.
+
+Written by a separate blind author session (Claude). It read only the scenario schema, `world.py`, `oracle.py`, `cli.py`
+and, for format, `03_controls.yaml`. It did not read any defense code, `frontier.py`, `task_router.py`, reports, write-ups,
+project READMEs, this README, the `01_`, `02_` or `04_` scenario files, or any holdout result.
+
+Checked for solvability only: 30 of 30 pass with the scripted benign agent and defense `none`. No other stack has been
+run. Not yet scored.

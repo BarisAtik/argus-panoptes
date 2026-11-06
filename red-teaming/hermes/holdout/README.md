@@ -11,3 +11,14 @@ attack file. Nothing was saved. That content was not retried, reworded or delega
 results. See "Needs Baris" in `../../PROGRESS.md`.
 
 Limits: the author is the same kind of system as me, so this is blind, not independent. It also chose its own grants.
+
+## Second set: `06_blind_controls_2.yaml`
+
+20 benign mesh controls (`blind2-` ids) of ordinary multi-agent work: research delegated to a helper, a writer sending the
+result to a named contact, chains of two to three agents, routed lookups, typed replies, and work that spans two tasks.
+
+Written by a separate blind author session (Claude). It read only `docs/DSL.md`, `scenario.py`, `core.py` and `oracle.py`.
+It did not read `controls.py`, `frontier.py`, reports, `PREREGISTRATION.md`, project READMEs, this README,
+`05_blind_controls.yaml` or any holdout result.
+
+Checked for solvability only: 20 of 20 pass with `hermes run --stacks none`. No other stack has been run. Not yet scored.
