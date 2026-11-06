@@ -84,3 +84,20 @@ and 41.1% in transcripts, which is not good enough to run unreviewed. Nearly all
 lowercase text, where neither casing cues nor the news model help. The tradition gap shrinks with
 rules (Hindustani +10.9, interval -0.5 to 22.2) but this does not show it is gone. Rate estimates
 describe this template set, not any real archive.
+
+## Second round, pre-registered 2026-11-06
+
+After first scoring, `test` is spent: it may now be read and used for tuning, and its numbers above
+stay as recorded. A new blind set, `test2`, has 36 templates by a fresh agent with the same brief,
+different topics, and more phone and BSN slots. It is scored once, with seed 1, after rules freeze.
+
+New system `rules_lg_tc`: `rules_lg`, but lowercase lines are truecased before the news model reads
+them. Words rare in general Dutch (by `wordfreq`) get a capital. Offsets don't change.
+
+9. **Replication.** `rules_lg` all-kinds leak on `test2` falls inside the `test` interval, 2.5% to
+   12.4%.
+10. **Truecasing pays.** `rules_lg_tc` lowers person leak in `chat` plus `transcript` by at least 10
+    points against `rules_lg` on `test2`, with ordinary-word masking up by at most 1 point.
+11. **Common-word surnames stay hard.** On `test2` with `rules_lg_tc`, the Dutch list, whose surnames
+    are often ordinary words, leaks more persons than the mean of the other four lists in `chat`
+    plus `transcript`.

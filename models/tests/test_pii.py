@@ -72,7 +72,7 @@ def test_rate_uses_template_clusters():
 
 
 def test_templates_only_use_known_slots():
-    for split in ("dev", "test"):
+    for split in ("dev", "test", "test2"):
         docs = generate(split, repeats=1)
         assert docs
 
@@ -80,6 +80,7 @@ def test_templates_only_use_known_slots():
 def test_split_sizes():
     assert len(load_templates("dev")) == 24
     assert len(load_templates("test")) == 36
+    assert len(load_templates("test2")) == 36
 
 
 def test_rules_mask_title_cue_and_propagate():
