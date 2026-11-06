@@ -62,6 +62,7 @@ Rscript R/01_eda_stylometry.R data/raw            # who wrote it vs what was ask
 Rscript R/02_tidymodels_grouped_cv.R data/raw     # interpretable multinomial model
 Rscript R/03_oof_audit.R artifacts/real/oof_blend.parquet
 Rscript R/04_prompt_effects.R data/raw artifacts/real/oof_blend.parquet  # how clustered are errors?
+Rscript R/05_transformer_audit.R artifacts/transformer/predictions.parquet  # needs ntl.transformer_export
 ```
 
 Packages: tidyverse, tidymodels, glmnet, lme4, arrow.
