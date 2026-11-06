@@ -9,7 +9,7 @@ from ner_nl import audit, perturb
 from ner_nl.backends import Gazetteer
 from ner_nl.data import Sentence, parse_conll2002
 from ner_nl.label_map import SPACY_TO_CONLL
-from ner_nl.metrics import entity_ece, paired_f1_difference, recall_by_seen
+from ner_nl.metrics import entity_ece, missed_tokens, paired_f1_difference, recall_by_seen
 from ner_nl.names import NAMES, swap_names
 from ner_nl.spans import ALL_LABELS, bio_spans, count_by_doc, f1_interval, prf, spans_to_bio
 
@@ -336,3 +336,31 @@ def test_redact_uses_a_model_when_given_one():
 
     out, _ = redact("Bel Sanne Bakker", lambda _: Doc())
     assert out == "Bel [PERSOON]r"
+
+
+def test_missed_tokens_ignore_label_but_not_coverage():
+    s = Sentence(("Jan", "Peeters", "x"), ("B-PER", "I-PER", "O"), "d")
+    missed, total, _ = missed_tokens([s], [["B-ORG", "O", "O"]])
+    assert missed.sum() == 1 and total.sum() == 2
+    assert missed_tokens([s], [["B-MISC", "I-MISC", "O"]])[0].sum() == 2
+
+
+def test_deduce_adapter_maps_offsets_and_tags_to_tokens():
+    from types import SimpleNamespace as NS
+
+    from ner_nl.backends import Deduce
+
+    class Engine:
+        def deidentify(self, text):
+            assert text == "Dr Jan Peeters in Gent"
+            return NS(
+                annotations=[
+                    NS(start_char=3, end_char=14, tag="persoon"),
+                    NS(start_char=18, end_char=22, tag="locatie"),
+                    NS(start_char=0, end_char=2, tag="datum"),
+                ]
+            )
+
+    tags = Deduce(Engine()).tag(["Dr", "Jan", "Peeters", "in", "Gent"])
+    assert tags == ["O", "B-PER", "I-PER", "O", "B-LOC"]
+    assert Deduce(Engine()).tag([]) == []

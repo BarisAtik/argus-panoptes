@@ -22,13 +22,13 @@ from pathlib import Path
 import numpy as np
 
 from forge.report import markdown_table, run_metadata, write_report
-from forge.stats import holm
+from forge.stats import holm, ratio_ci
 
 from . import audit as audit_mod
 from . import perturb
-from .backends import Gazetteer, SpacyNER
+from .backends import Deduce, Gazetteer, SpacyNER
 from .data import load_split
-from .metrics import entity_ece, paired_f1_difference, recall_by_seen
+from .metrics import entity_ece, missed_tokens, paired_f1_difference, recall_by_seen
 from .names import NAMES, swap_names
 from .spans import ALL_LABELS, SHARED_LABELS, bio_spans, count_by_doc, f1_interval, prf
 
@@ -137,7 +137,7 @@ def stage_train(args) -> None:
 
 
 def predictors(data: dict) -> dict:
-    found = {"gazetteer": Gazetteer(data["train"])}
+    found = {"gazetteer": Gazetteer(data["train"]), "deduce": Deduce()}
     for name in SPACY_MODELS:
         found[name] = SpacyNER(name)
     for path in sorted(OUT.glob("own*_s*")):
@@ -177,6 +177,7 @@ def best_seed(prefix: str) -> str:
 def stage_names(args) -> None:
     data = splits(args.data_dir)
     models = {name: SpacyNER(name) for name in SPACY_MODELS}
+    models["deduce"] = Deduce()
     for prefix in ("own", "own_aug"):
         name = best_seed(prefix)
         models[name] = Own(OUT / name)
@@ -360,6 +361,21 @@ def stage_report(args) -> None:
     for name in ("gazetteer", "nl_core_news_lg", best):
         out = recall_by_seen(data["train"], test, stored[(name, "test", "clean")])
         seen.append({"model": name, **out})
+    leaks = []
+    for name in (*SPACY_MODELS, "deduce"):
+        for condition in ("clean", "transcript"):
+            sentences = CONDITIONS[condition](test)
+            missed, total, docs = missed_tokens(sentences, stored[(name, "test", condition)])
+            ci = ratio_ci(missed, total, docs)
+            leaks.append(
+                {
+                    "model": name,
+                    "condition": condition,
+                    "name tokens": int(total.sum()),
+                    "share unmasked": ci.estimate,
+                    "95% CI": f"{ci.low:.3f} to {ci.high:.3f}",
+                }
+            )
     # Article-level against sentence-level intervals for the same score.
     r, docs = count_by_doc(test, stored[(best, "test", "clean")], ALL_LABELS)
     by_doc = f1_interval(r, docs)
@@ -396,6 +412,7 @@ def stage_report(args) -> None:
         "comparisons": comparisons,
         "robustness": robust,
         "recall_by_seen": seen,
+        "name_tokens_left_unmasked": leaks,
         "interval_width": width,
         "seed_f1": seeds,
         "names": names_summary,
@@ -417,6 +434,8 @@ def stage_report(args) -> None:
         markdown_table(robust),
         "## Recall by whether the entity string occurred in training\n",
         markdown_table(seen),
+        "## Person-name tokens a redactor would leave visible\n",
+        markdown_table(leaks),
         "## Calibration of span confidence\n",
         markdown_table(calibration),
         "## Name swap\n",

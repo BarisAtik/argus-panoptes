@@ -73,3 +73,28 @@ def entity_ece(confidence: np.ndarray, correct: np.ndarray, bins: int = 15) -> f
             gap = abs(confidence[group].mean() - correct[group].mean())
             total += gap * len(group) / len(order)
     return float(total)
+
+
+def missed_tokens(
+    sentences: Sequence[Sentence],
+    predictions: Sequence[Sequence[str]],
+    gold_label: str = "PER",
+    masking: Sequence[str] = ("PER", "LOC", "ORG"),
+) -> tuple[np.ndarray, np.ndarray, list[str]]:
+    """Per sentence: gold tokens of `gold_label` left unmasked, and all such tokens.
+
+    Redaction doesn't need the right span or label: a name tagged ORG is still hidden. So this
+    counts tokens that no predicted span of a masking label covers.
+    """
+    missed, total = np.zeros(len(sentences)), np.zeros(len(sentences))
+    for i, (s, tags) in enumerate(zip(sentences, predictions)):
+        covered = set()
+        for start, end, label in bio_spans(tags):
+            if label in masking:
+                covered.update(range(start, end))
+        for start, end, label in bio_spans(s.tags):
+            if label == gold_label:
+                for k in range(start, end):
+                    total[i] += 1
+                    missed[i] += k not in covered
+    return missed, total, [s.doc_id for s in sentences]

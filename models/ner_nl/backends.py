@@ -74,3 +74,65 @@ class SpacyNER:
             ]
             out.append(spans_to_bio(spans, len(s.tokens)))
         return out
+
+
+class Deduce:
+    """DEDUCE, a rule-and-lookup de-identifier built for Dutch medical text.
+
+    It works on raw text, so tokens are joined with spaces and its character offsets are mapped
+    back to tokens. A token counts as tagged if any part of it was annotated. Institution tags
+    count as ORG, location-like tags as LOC.
+    """
+
+    LABELS = {
+        "persoon": "PER",
+        "patient": "PER",
+        "locatie": "LOC",
+        "ziekenhuis": "ORG",
+        "instelling": "ORG",
+        "zorginstelling": "ORG",
+    }
+
+    def __init__(self, engine=None):
+        if engine is None:
+            import deduce
+
+            engine = deduce.Deduce()
+        self.engine = engine
+
+    def _kind(self, tag: str) -> str | None:
+        tag = tag.lower()
+        for key, label in self.LABELS.items():
+            if key in tag:
+                return label
+        return None
+
+    def tag(self, tokens: Sequence[str]) -> list[str]:
+        text = " ".join(tokens)
+        if not text.strip():
+            return ["O"] * len(tokens)
+        starts, at = [], 0
+        for token in tokens:
+            starts.append(at)
+            at += len(token) + 1
+        spans = []
+        for a in self.engine.deidentify(text).annotations:
+            label = self._kind(a.tag)
+            if label is None:
+                continue
+            inside = [
+                i
+                for i, begin in enumerate(starts)
+                if begin < a.end_char and a.start_char < begin + len(tokens[i])
+            ]
+            if inside:
+                spans.append((inside[0], inside[-1] + 1, label))
+        kept, covered = [], set()
+        for span in sorted(spans):
+            if not covered & set(range(span[0], span[1])):
+                kept.append(span)
+                covered |= set(range(span[0], span[1]))
+        return spans_to_bio(kept, len(tokens))
+
+    def __call__(self, sentences: Sequence[Sentence]) -> list[list[str]]:
+        return [self.tag(s.tokens) for s in sentences]

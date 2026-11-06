@@ -28,6 +28,7 @@ pipelines are CC BY-SA 4.0 according to their own metadata.
 | --- | --- |
 | `gazetteer` | Baseline: longest case-sensitive lookup of entity strings from training |
 | `nl_core_news_sm/md/lg` | spaCy 3.8 CNN pipelines trained on a different Dutch corpus (Lassy) |
+| `deduce` | DEDUCE 3, rules and lookup lists built for Dutch medical text (added before any test score) |
 | `own` | BiLSTM-CRF in plain PyTorch: frozen fastText-style vectors, char CNN, word shape |
 | `own_aug` | Same, with half of the training sentences turned into transcript style each epoch |
 
@@ -72,6 +73,12 @@ Own models use seeds 0, 1 and 2. Follow-up analyses use the seed with the best d
 11. **Gold isn't gold.** In a random sample of 100 spans where `own` and `lg` agree against the
     gold labels, at least 25 are annotation errors or defensible both ways. Review by Claude
     against the sentence, not by a trained annotator. Verdicts are recorded by position only.
+12. **The right tool for the wrong text.** Added before any test score was computed. On clean news
+    text DEDUCE leaves at least 5 points more person-name tokens visible than `lg`, and on the
+    non-Dutch lists its any-overlap recall is at least 5 points below its Dutch recall.
+
+Metric for 12: `missed_tokens`, the share of gold PER tokens that no predicted PER, LOC or ORG span
+covers, because a redactor doesn't care about the label.
 
 ## Known limits
 
