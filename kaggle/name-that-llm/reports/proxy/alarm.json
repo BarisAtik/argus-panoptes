@@ -1,0 +1,58 @@
+{
+ "runs": [
+  {
+   "seed": 0,
+   "train": "wp",
+   "auc_same_genre": 0.5022047000618429,
+   "auc_other_genre": 0.9989876314162028
+  },
+  {
+   "seed": 0,
+   "train": "essay",
+   "auc_same_genre": 0.5179579468150897,
+   "auc_other_genre": 0.9963234384662957
+  },
+  {
+   "seed": 0,
+   "train": "mixed",
+   "grouped": 0.5057142857142857,
+   "topic_held_out": 0.5066666666666667
+  },
+  {
+   "seed": 1,
+   "train": "wp",
+   "auc_same_genre": 0.5051051329622758,
+   "auc_other_genre": 0.9980946196660483
+  },
+  {
+   "seed": 1,
+   "train": "essay",
+   "auc_same_genre": 0.5476072974644404,
+   "auc_other_genre": 0.9984100185528757
+  },
+  {
+   "seed": 1,
+   "train": "mixed",
+   "grouped": 0.4761904761904763,
+   "topic_held_out": 0.4438095238095238
+  },
+  {
+   "seed": 2,
+   "train": "wp",
+   "auc_same_genre": 0.5171935683364255,
+   "auc_other_genre": 0.9982442795299938
+  },
+  {
+   "seed": 2,
+   "train": "essay",
+   "auc_same_genre": 0.5126165739022882,
+   "auc_other_genre": 0.9987099567099568
+  },
+  {
+   "seed": 2,
+   "train": "mixed",
+   "grouped": 0.4876190476190477,
+   "topic_held_out": 0.4733333333333333
+  }
+ ]
+}

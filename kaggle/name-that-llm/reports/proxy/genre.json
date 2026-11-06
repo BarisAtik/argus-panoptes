@@ -1,0 +1,192 @@
+{
+ "runs": [
+  {
+   "seed": 0,
+   "train": "wp",
+   "model": "tfidf_lr",
+   "grouped_cv": 0.5504761904761905,
+   "same_genre": 0.548051948051948,
+   "other_genre": 0.2512987012987013
+  },
+  {
+   "seed": 0,
+   "train": "wp",
+   "model": "masked_lr",
+   "grouped_cv": 0.5257142857142857,
+   "same_genre": 0.5305194805194805,
+   "other_genre": 0.2603896103896104
+  },
+  {
+   "seed": 0,
+   "train": "wp",
+   "model": "style_lr",
+   "grouped_cv": 0.43714285714285717,
+   "same_genre": 0.425974025974026,
+   "other_genre": 0.17207792207792208
+  },
+  {
+   "seed": 0,
+   "train": "essay",
+   "model": "tfidf_lr",
+   "grouped_cv": 0.5542857142857143,
+   "same_genre": 0.5409090909090909,
+   "other_genre": 0.15454545454545454
+  },
+  {
+   "seed": 0,
+   "train": "essay",
+   "model": "masked_lr",
+   "grouped_cv": 0.5066666666666666,
+   "same_genre": 0.5129870129870129,
+   "other_genre": 0.19935064935064936
+  },
+  {
+   "seed": 0,
+   "train": "essay",
+   "model": "style_lr",
+   "grouped_cv": 0.42857142857142855,
+   "same_genre": 0.41688311688311686,
+   "other_genre": 0.12402597402597403
+  },
+  {
+   "seed": 1,
+   "train": "wp",
+   "model": "tfidf_lr",
+   "grouped_cv": 0.5323809523809525,
+   "same_genre": 0.55,
+   "other_genre": 0.24805194805194805
+  },
+  {
+   "seed": 1,
+   "train": "wp",
+   "model": "masked_lr",
+   "grouped_cv": 0.48761904761904756,
+   "same_genre": 0.5071428571428572,
+   "other_genre": 0.24545454545454545
+  },
+  {
+   "seed": 1,
+   "train": "wp",
+   "model": "style_lr",
+   "grouped_cv": 0.40952380952380946,
+   "same_genre": 0.4214285714285714,
+   "other_genre": 0.1396103896103896
+  },
+  {
+   "seed": 1,
+   "train": "essay",
+   "model": "tfidf_lr",
+   "grouped_cv": 0.5257142857142857,
+   "same_genre": 0.5363636363636364,
+   "other_genre": 0.15324675324675324
+  },
+  {
+   "seed": 1,
+   "train": "essay",
+   "model": "masked_lr",
+   "grouped_cv": 0.4923809523809524,
+   "same_genre": 0.5019480519480519,
+   "other_genre": 0.18116883116883115
+  },
+  {
+   "seed": 1,
+   "train": "essay",
+   "model": "style_lr",
+   "grouped_cv": 0.43142857142857144,
+   "same_genre": 0.41818181818181827,
+   "other_genre": 0.10259740259740259
+  },
+  {
+   "seed": 2,
+   "train": "wp",
+   "model": "tfidf_lr",
+   "grouped_cv": 0.5466666666666667,
+   "same_genre": 0.5415584415584416,
+   "other_genre": 0.2324675324675325
+  },
+  {
+   "seed": 2,
+   "train": "wp",
+   "model": "masked_lr",
+   "grouped_cv": 0.4847619047619048,
+   "same_genre": 0.5064935064935064,
+   "other_genre": 0.23181818181818184
+  },
+  {
+   "seed": 2,
+   "train": "wp",
+   "model": "style_lr",
+   "grouped_cv": 0.42952380952380953,
+   "same_genre": 0.42532467532467527,
+   "other_genre": 0.12402597402597403
+  },
+  {
+   "seed": 2,
+   "train": "essay",
+   "model": "tfidf_lr",
+   "grouped_cv": 0.5390476190476191,
+   "same_genre": 0.538961038961039,
+   "other_genre": 0.17987012987012982
+  },
+  {
+   "seed": 2,
+   "train": "essay",
+   "model": "masked_lr",
+   "grouped_cv": 0.5152380952380952,
+   "same_genre": 0.5110389610389611,
+   "other_genre": 0.19415584415584416
+  },
+  {
+   "seed": 2,
+   "train": "essay",
+   "model": "style_lr",
+   "grouped_cv": 0.4161904761904762,
+   "same_genre": 0.42727272727272725,
+   "other_genre": 0.10714285714285714
+  }
+ ],
+ "summary": [
+  {
+   "train": "essay",
+   "model": "masked_lr",
+   "grouped_cv": 0.5047619047619047,
+   "same_genre": 0.5086580086580086,
+   "other_genre": 0.19155844155844157
+  },
+  {
+   "train": "essay",
+   "model": "style_lr",
+   "grouped_cv": 0.4253968253968254,
+   "same_genre": 0.42077922077922075,
+   "other_genre": 0.11125541125541126
+  },
+  {
+   "train": "essay",
+   "model": "tfidf_lr",
+   "grouped_cv": 0.5396825396825397,
+   "same_genre": 0.5387445887445887,
+   "other_genre": 0.16255411255411253
+  },
+  {
+   "train": "wp",
+   "model": "masked_lr",
+   "grouped_cv": 0.4993650793650793,
+   "same_genre": 0.5147186147186148,
+   "other_genre": 0.2458874458874459
+  },
+  {
+   "train": "wp",
+   "model": "style_lr",
+   "grouped_cv": 0.4253968253968254,
+   "same_genre": 0.42424242424242425,
+   "other_genre": 0.14523809523809525
+  },
+  {
+   "train": "wp",
+   "model": "tfidf_lr",
+   "grouped_cv": 0.5431746031746032,
+   "same_genre": 0.5465367965367965,
+   "other_genre": 0.24393939393939393
+  }
+ ]
+}

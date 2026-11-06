@@ -12,14 +12,15 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .assign import assign_within_clusters, cluster_passages
+from .assign import assign_within_clusters, balance_classes, cluster_passages
 from .cv import blend
 from .data import ID, LABEL, TEXT, load
 from .models import REGISTRY
 
 
 def predict_test(train: pd.DataFrame, test: pd.DataFrame, names: list[str],
-                 assign: bool = False, threshold: float = 0.9) -> pd.DataFrame:
+                 assign: bool = False, threshold: float = 0.9,
+                 balance: bool = False) -> pd.DataFrame:
     classes = np.array(sorted(train[LABEL].unique()))
     probas = []
     for name in names:
@@ -29,6 +30,8 @@ def predict_test(train: pd.DataFrame, test: pd.DataFrame, names: list[str],
         p[:, col] = model.predict_proba(test[TEXT].tolist())
         probas.append(p)
     proba = blend(probas) if len(probas) > 1 else probas[0]
+    if balance:
+        proba = balance_classes(proba)
     if assign:
         clusters = cluster_passages(test[TEXT].tolist(), len(classes), threshold)
         idx = assign_within_clusters(proba, clusters)
@@ -59,11 +62,13 @@ def main() -> None:
     ap.add_argument("--models", nargs="+", default=["tfidf_lr", "masked_lr"])
     ap.add_argument("--assign", action="store_true",
                     help="use within-prompt assignment; read NOTES.md first")
+    ap.add_argument("--balance", action="store_true",
+                    help="even out predicted class shares; assumes test is roughly balanced")
     ap.add_argument("--threshold", type=float, default=0.9,
                     help="clustering distance; use the value ntl.cv picked on real train")
     args = ap.parse_args()
     train, test = load(args.data)
-    sub = predict_test(train, test, args.models, args.assign, args.threshold)
+    sub = predict_test(train, test, args.models, args.assign, args.threshold, args.balance)
     validate_submission(sub, test, train[LABEL].unique())
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     sub.to_parquet(args.out, index=False)

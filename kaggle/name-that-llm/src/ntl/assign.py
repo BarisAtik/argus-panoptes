@@ -58,17 +58,37 @@ def _cap_clusters(labels: np.ndarray, dist: np.ndarray, max_size: int) -> np.nda
     return out
 
 
-def assign_within_clusters(proba: np.ndarray, clusters: np.ndarray) -> np.ndarray:
-    """Return class indices maximising summed log-probability, with no class repeated in a cluster."""
+def assign_within_clusters(proba: np.ndarray, clusters: np.ndarray,
+                           min_size: int = 2) -> np.ndarray:
+    """Return class indices maximising summed log-probability, with no class repeated in a cluster.
+
+    Clusters smaller than `min_size` keep their argmax. Set it to the number of classes to trust
+    only full clusters, which are the ones most likely to be a real prompt.
+    """
     pred = proba.argmax(axis=1)
     log_p = np.log(np.clip(proba, 1e-12, 1.0))
     for c in np.unique(clusters):
         idx = np.flatnonzero(clusters == c)
-        if len(idx) < 2 or len(idx) > proba.shape[1]:
+        if len(idx) < max(min_size, 2) or len(idx) > proba.shape[1]:
             continue
         rows, cols = linear_sum_assignment(-log_p[idx])
         pred[idx[rows]] = cols
     return pred
+
+
+def balance_classes(proba: np.ndarray, n_iter: int = 50) -> np.ndarray:
+    """Rescale probabilities so each class gets an equal share of the predicted mass.
+
+    If every model wrote about as many test passages, predicted shares should be even. Balanced
+    accuracy pays for that, since a shy class costs as much as any other. This uses no labels and
+    needs only the share of each class in test, not which passages share a prompt, so it rests on
+    a much weaker assumption than `assign_within_clusters`.
+    """
+    p = np.clip(proba, 1e-12, 1.0)
+    for _ in range(n_iter):
+        p = p / (p.mean(axis=0, keepdims=True) * p.shape[1])
+        p = p / p.sum(axis=1, keepdims=True)
+    return p
 
 
 def tune_threshold(texts, prompts, max_size: int = 18,

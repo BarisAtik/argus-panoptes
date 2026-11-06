@@ -11,8 +11,8 @@ For each entry:
 
 | Competition | Data type | Language | Status | Result |
 | --- | --- | --- | --- | --- |
-| [Name That LLM](name-that-llm/) | Text | Python, R | Pipeline tested on synthetic data; awaiting real data | — |
-| [NFL Big Data Bowl 2027](nfl-big-data-bowl-2027/) | Player tracking | Python, R | Statistics tested on synthetic data; awaiting real data | — |
+| [Name That LLM](name-that-llm/) | Text | Python, R | Validation tested on real public text; awaiting competition data | — |
+| [NFL Big Data Bowl 2027](nfl-big-data-bowl-2027/) | Player tracking | Python, R | Per-drill analysis tested on synthetic data; write-up skeleton ready; awaiting real data | — |
 
 Notes for picking this up: [PROGRESS.md](PROGRESS.md) has the to-do list, and
 [CLAUDE.md](CLAUDE.md) explains how to work in this folder.

@@ -30,8 +30,9 @@ def prompt_bootstrap_ci(y_true, y_pred, groups, n_boot: int = 1000, seed: int = 
                         level: float = 0.95) -> dict[str, float]:
     """CI for balanced accuracy, resampling whole prompts.
 
-    Passages that share a prompt are not independent, so resampling rows gives intervals that are
-    too narrow. Prompts are the unit the test set will sample.
+    Prompts are the unit the test set will sample, so they are what gets resampled. On the real-text
+    proxy this was conservative: 10 of 10 holdouts fell inside it. See NOTES.md, including why the
+    usual reason, that passages sharing a prompt are correlated, did not hold there.
     """
     y_true, y_pred, groups = map(np.asarray, (y_true, y_pred, groups))
     rng = np.random.default_rng(seed)

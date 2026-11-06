@@ -1,0 +1,71 @@
+{
+ "runs": [
+  {
+   "seed": 0,
+   "train_prompts": 38,
+   "rows": 266,
+   "holdout": 0.42107142857142854
+  },
+  {
+   "seed": 0,
+   "train_prompts": 75,
+   "rows": 525,
+   "holdout": 0.46928571428571425
+  },
+  {
+   "seed": 0,
+   "train_prompts": 150,
+   "rows": 1050,
+   "holdout": 0.48714285714285716
+  },
+  {
+   "seed": 0,
+   "train_prompts": 300,
+   "rows": 2100,
+   "holdout": 0.5296428571428572
+  },
+  {
+   "seed": 0,
+   "train_prompts": 600,
+   "rows": 4200,
+   "holdout": 0.5485714285714286
+  },
+  {
+   "seed": 0,
+   "train_prompts": 1200,
+   "rows": 8400,
+   "holdout": 0.5653571428571429
+  },
+  {
+   "seed": 1,
+   "train_prompts": 38,
+   "rows": 266,
+   "holdout": 0.4239285714285715
+  },
+  {
+   "seed": 1,
+   "train_prompts": 75,
+   "rows": 525,
+   "holdout": 0.4635714285714286
+  },
+  {
+   "seed": 1,
+   "train_prompts": 150,
+   "rows": 1050,
+   "holdout": 0.5028571428571429
+  },
+  {
+   "seed": 1,
+   "train_prompts": 300,
+   "rows": 2100,
+   "holdout": 0.5367857142857143
+  },
+  {
+   "seed": 1,
+   "train_prompts": 600,
+   "rows": 4200,
+   "holdout": 0.5592857142857143
+  }
+ ],
+ "n_classes": 7
+}

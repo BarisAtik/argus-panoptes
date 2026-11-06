@@ -28,7 +28,7 @@ from .metrics import (
     prompt_bootstrap_ci,
 )
 from .models import REGISTRY
-from .splits import grouped_folds, random_folds
+from .splits import grouped_folds, random_folds, topic_folds
 
 
 def oof_proba(model, train: pd.DataFrame, folds: np.ndarray, classes: np.ndarray) -> np.ndarray:
@@ -95,6 +95,8 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--compare-random", action="store_true",
                     help="also score the first model under (wrong) random folds")
+    ap.add_argument("--topic-folds", action="store_true",
+                    help="also score the first model with whole topics held out")
     ap.add_argument("--no-leakage", action="store_true", help="skip the slower leakage report")
     args = ap.parse_args()
 
@@ -150,6 +152,16 @@ def main() -> None:
             "grouped": balanced_accuracy(y, classes[probas[first].argmax(axis=1)]),
         }
         print(json.dumps(results["random_vs_grouped"], indent=2))
+
+    if args.topic_folds:
+        first = args.models[0]
+        p = oof_proba(REGISTRY[first](), train, topic_folds(train, args.folds), classes)
+        results["topic_held_out"] = {
+            "model": first,
+            "topic_held_out": balanced_accuracy(y, classes[p.argmax(axis=1)]),
+            "grouped": balanced_accuracy(y, classes[probas[first].argmax(axis=1)]),
+        }
+        print(json.dumps(results["topic_held_out"], indent=2))
 
     (out / "metrics.json").write_text(json.dumps(results, indent=2, default=float))
 

@@ -1,0 +1,159 @@
+{
+ "runs": [
+  {
+   "seed": 0,
+   "candidate": "tfidf",
+   "oof": 0.5057142857142857,
+   "holdout": 0.48766233766233763,
+   "holdout_balanced": 0.48831168831168836
+  },
+  {
+   "seed": 0,
+   "candidate": "tfidf+masked",
+   "oof": 0.5009523809523809,
+   "holdout": 0.5149350649350649,
+   "holdout_balanced": 0.5201298701298701
+  },
+  {
+   "seed": 0,
+   "candidate": "all_three",
+   "oof": 0.49333333333333335,
+   "holdout": 0.5292207792207793,
+   "holdout_balanced": 0.5285714285714286
+  },
+  {
+   "seed": 1,
+   "candidate": "tfidf",
+   "oof": 0.4761904761904763,
+   "holdout": 0.4896103896103896,
+   "holdout_balanced": 0.49805194805194797
+  },
+  {
+   "seed": 1,
+   "candidate": "tfidf+masked",
+   "oof": 0.4942857142857143,
+   "holdout": 0.4993506493506493,
+   "holdout_balanced": 0.5064935064935066
+  },
+  {
+   "seed": 1,
+   "candidate": "all_three",
+   "oof": 0.5038095238095238,
+   "holdout": 0.5077922077922078,
+   "holdout_balanced": 0.5084415584415584
+  },
+  {
+   "seed": 2,
+   "candidate": "tfidf",
+   "oof": 0.4876190476190477,
+   "holdout": 0.487012987012987,
+   "holdout_balanced": 0.4909090909090909
+  },
+  {
+   "seed": 2,
+   "candidate": "tfidf+masked",
+   "oof": 0.49523809523809526,
+   "holdout": 0.5019480519480519,
+   "holdout_balanced": 0.4993506493506493
+  },
+  {
+   "seed": 2,
+   "candidate": "all_three",
+   "oof": 0.4838095238095238,
+   "holdout": 0.49220779220779226,
+   "holdout_balanced": 0.4928571428571429
+  },
+  {
+   "seed": 3,
+   "candidate": "tfidf",
+   "oof": 0.4857142857142857,
+   "holdout": 0.5,
+   "holdout_balanced": 0.4987012987012987
+  },
+  {
+   "seed": 3,
+   "candidate": "tfidf+masked",
+   "oof": 0.4857142857142857,
+   "holdout": 0.5168831168831169,
+   "holdout_balanced": 0.5181818181818182
+  },
+  {
+   "seed": 3,
+   "candidate": "all_three",
+   "oof": 0.4914285714285715,
+   "holdout": 0.5032467532467532,
+   "holdout_balanced": 0.5025974025974026
+  },
+  {
+   "seed": 4,
+   "candidate": "tfidf",
+   "oof": 0.48190476190476195,
+   "holdout": 0.49740259740259735,
+   "holdout_balanced": 0.501948051948052
+  },
+  {
+   "seed": 4,
+   "candidate": "tfidf+masked",
+   "oof": 0.4942857142857143,
+   "holdout": 0.4993506493506493,
+   "holdout_balanced": 0.5032467532467532
+  },
+  {
+   "seed": 4,
+   "candidate": "all_three",
+   "oof": 0.5009523809523809,
+   "holdout": 0.5077922077922078,
+   "holdout_balanced": 0.5077922077922078
+  },
+  {
+   "seed": 5,
+   "candidate": "tfidf",
+   "oof": 0.5009523809523809,
+   "holdout": 0.5032467532467533,
+   "holdout_balanced": 0.5006493506493507
+  },
+  {
+   "seed": 5,
+   "candidate": "tfidf+masked",
+   "oof": 0.5152380952380952,
+   "holdout": 0.5058441558441559,
+   "holdout_balanced": 0.5097402597402597
+  },
+  {
+   "seed": 5,
+   "candidate": "all_three",
+   "oof": 0.5133333333333334,
+   "holdout": 0.5058441558441558,
+   "holdout_balanced": 0.5025974025974025
+  }
+ ],
+ "mean": [
+  {
+   "candidate": "all_three",
+   "oof": 0.4977777777777778,
+   "holdout": 0.5076839826839826,
+   "holdout_balanced": 0.5071428571428571
+  },
+  {
+   "candidate": "tfidf",
+   "oof": 0.4896825396825397,
+   "holdout": 0.4941558441558442,
+   "holdout_balanced": 0.49642857142857144
+  },
+  {
+   "candidate": "tfidf+masked",
+   "oof": 0.4976190476190476,
+   "holdout": 0.5063852813852814,
+   "holdout_balanced": 0.5095238095238095
+  }
+ ],
+ "oof_pick_by_seed": {
+  "0": "tfidf",
+  "1": "all_three",
+  "2": "tfidf+masked",
+  "3": "all_three",
+  "4": "all_three",
+  "5": "tfidf+masked"
+ },
+ "mean_regret_of_oof_pick": 0.009199134199134235
+}

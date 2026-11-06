@@ -1,16 +1,21 @@
+import importlib.util
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pytest
 
 from combinelink import synth
-from combinelink.run import analyse
+from combinelink.run import METRICS, analyse, analyse_by_drill
 from combinelink.schema import check
 from combinelink.stats import (
     benjamini_hochberg,
+    composite,
     correlation_ceiling,
     empirical_bayes,
     grouped_skill,
     icc1,
+    minimum_detectable_effect,
     selection_report,
 )
 
@@ -83,3 +88,66 @@ def test_schema_check_names_the_problem(tmp_path):
     problems = check(tmp_path)
     assert any("combine_tracking.csv: not found" in p for p in problems)
     assert any("lined_up_position" in p for p in problems)
+
+
+def test_composite_is_one_trait_with_a_stable_sign():
+    rng = np.random.default_rng(0)
+    t = rng.normal(size=300)
+    df = pd.DataFrame({"a": t + rng.normal(0, .2, 300), "b": 2 * t + rng.normal(0, .4, 300),
+                       "c": -t + rng.normal(0, .2, 300)})
+    assert np.corrcoef(composite(df, ["a", "b", "c"]), t)[0, 1] > 0.95
+    assert composite(df, ["a"]).corr(df["a"]) == pytest.approx(1)
+
+
+def test_minimum_detectable_effect_finds_the_scale_of_noise():
+    rng = np.random.default_rng(0)
+    players = 200
+    groups = np.repeat(np.arange(players), 20)
+    pos = np.repeat(rng.choice(["WR", "TE"], players), 20)
+    x = np.repeat(rng.normal(size=players), 20)
+    y = rng.normal(0, 1.5, len(groups))
+    out = minimum_detectable_effect(x, y, pos, groups, effects=(0.005, 1.0), n_sim=15, n_null=30)
+    assert out["power_curve"][0.005] < 0.5
+    assert out["power_curve"][1.0] == 1.0
+    assert out["min_detectable_per_sd"] == 1.0
+
+
+def _with_noise_drill():
+    tracks, plays = synth.make(n_players=60, attempts=3, plays=30, effect=0.8)
+    noise = tracks.copy()
+    rng = np.random.default_rng(0)
+    ids = noise["nfl_id"].unique()
+    swap = dict(zip(ids, rng.permutation(ids)))
+    keyed = noise["nfl_id"].astype(str) + "_" + noise["drill_attempt_id"].astype(str)
+    shift = keyed.map({k: rng.normal(0, .9) for k in keyed.unique()})
+    noise["x"] = noise["x"] * (1 + shift / 8.5)
+    noise["y"] = noise["y"] * (1 + shift / 8.5)
+    noise["nfl_id"] = noise["nfl_id"].map(swap)
+    noise["drill_name"] = "pure_noise"
+    return pd.concat([tracks, noise], ignore_index=True), plays
+
+
+def test_by_drill_gates_on_reliability_before_touching_outcomes():
+    tracks, plays = _with_noise_drill()
+    out = analyse_by_drill(tracks, plays, n_perm=19, power=False)
+    good, bad = out["drills"]["shuttle"], out["drills"]["pure_noise"]
+    assert len(good["kept"]) > len(bad["kept"])
+    assert "peak_speed" in good["kept"] and "peak_speed" not in bad["kept"]
+    assert set(good["kept"]) <= set(METRICS)
+    assert good["composite"]["p_value"] <= 0.1 and good["composite"]["observed_r2"] > 0
+    assert "q_value" in good["composite"]
+
+
+def test_by_drill_finds_no_link_when_none_exists():
+    tracks, plays = synth.make(n_players=60, attempts=3, plays=30, effect=0.0)
+    out = analyse_by_drill(tracks, plays, n_perm=19, power=False)
+    assert out["drills"]["shuttle"]["composite"]["observed_r2"] < 0.02
+
+
+def test_writeup_counter_skips_comments_code_and_tables():
+    path = Path(__file__).parents[1] / "scripts" / "check_writeup.py"
+    spec = importlib.util.spec_from_file_location("check_writeup", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    text = "one two\n<!-- hidden words -->\n```\ncode\n```\n| a |\n| --- |\n| b |\n![x](y.png)\nthree\n"
+    assert module.measure(text) == (3, 2)

@@ -31,6 +31,25 @@ Rscript R/01_reliability_and_linkage.R data/synth artifacts/synth/player_feature
 ./scripts/download_data.sh    # your credentials; also runs the schema check. Fix schema.py if it complains
 ```
 
+## The planned analysis: per drill, one primary test
+
+`python -m combinelink.run --by-drill` is what to run on real data. Drills measure different things,
+so pooling them turns a drill difference into a fake player difference. For each drill it:
+
+1. keeps metrics whose reliability of the mean is at least 0.7, before touching any game outcome;
+2. combines those into one composite (first principal component), since correlated metrics are one
+   finding;
+3. tests the composite with whole players shuffled within position, then corrects across drills;
+4. measures the smallest effect the sample could detect. This is what makes a null result worth
+   reading: "no link" means little without "and we would have seen one this big".
+
+On fake data with 0.5 yards per trait SD planted, and 120 players, one drill: out-of-player R² 0.086,
+q 0.005, and 80% power from 0.2 yards per SD. A planted pure-noise drill fails the reliability gate
+in the tests, and no effect gives R² near zero.
+
+`WRITEUP.md` is the skeleton of the deliverable. `python scripts/check_writeup.py WRITEUP.md` checks
+it against the stated limits.
+
 ## Results on fake data only
 
 Planted effect (0.5 yards per trait SD), 120 players:

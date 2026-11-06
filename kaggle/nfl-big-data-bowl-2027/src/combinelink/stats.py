@@ -85,6 +85,56 @@ def permutation_test(x: np.ndarray, y: np.ndarray, position: np.ndarray, groups:
             "p_value": float((1 + (null >= observed).sum()) / (n_perm + 1))}
 
 
+def composite(players: pd.DataFrame, metrics: list[str]) -> pd.Series:
+    """First principal component of z-scored metrics, for testing correlated metrics as one trait.
+
+    Five metrics reflecting one trait are one finding, so this is the single primary test. It uses
+    no outcome, so building it on all players leaks nothing. The sign follows the first metric.
+    """
+    z = players[metrics]
+    z = (z - z.mean()) / z.std(ddof=1).replace(0, 1)
+    z = z.fillna(0.0).to_numpy()
+    if z.shape[1] == 1:
+        return pd.Series(z[:, 0], index=players.index)
+    vec = np.linalg.svd(z, full_matrices=False)[2][0]
+    return pd.Series(z @ (vec * np.sign(vec[0] or 1.0)), index=players.index)
+
+
+def minimum_detectable_effect(x: np.ndarray, y: np.ndarray, position: np.ndarray,
+                              groups: np.ndarray, effects=(0.1, 0.2, 0.3, 0.5, 0.75, 1.0),
+                              n_sim: int = 40, n_null: int = 100, power: float = 0.8,
+                              seed: int = 0) -> dict:
+    """The effect this sample could have detected, which is what makes a null result worth reading.
+
+    Uses the real outcomes and player structure. Each simulation shuffles players within position
+    to remove any real link, then adds a known effect in outcome units per SD of `x`. Detection
+    means beating the 95th percentile of the no-effect R2.
+    """
+    rng = np.random.default_rng(seed)
+    frame = pd.DataFrame({"g": groups, "pos": position, "x": np.ravel(x)})
+    players = frame.drop_duplicates("g").reset_index(drop=True)
+    std = players["x"].std(ddof=1) or 1.0
+    players["x"] = (players["x"] - players["x"].mean()) / std
+    row_player = pd.Series(np.arange(len(players)), index=players["g"]).loc[groups].to_numpy()
+
+    def shuffled() -> np.ndarray:
+        values = players["x"].to_numpy().copy()
+        for idx in players.groupby("pos").indices.values():
+            values[idx] = rng.permutation(values[idx])
+        return values[row_player]
+
+    def skill(beta: float) -> float:
+        fake = shuffled()
+        return grouped_skill(fake[:, None], y + beta * fake, position, groups)
+
+    cut = float(np.quantile([skill(0.0) for _ in range(n_null)], 0.95))
+    curve = {float(b): float(np.mean([skill(b) > cut for _ in range(n_sim)])) for b in effects}
+    reached = [b for b, share in curve.items() if share >= power]
+    return {"power_curve": curve, "null_r2_p95": cut,
+            "min_detectable_per_sd": min(reached) if reached else None,
+            "players": len(players), "rows": len(y)}
+
+
 def benjamini_hochberg(p_values) -> np.ndarray:
     """Adjusted p-values; a project scanning many metrics needs this before claiming anything."""
     p = np.asarray(p_values, float)

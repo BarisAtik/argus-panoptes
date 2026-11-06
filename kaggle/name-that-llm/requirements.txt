@@ -5,6 +5,7 @@ scikit-learn>=1.4
 scipy
 joblib
 tabulate
+requests
 pytest
 ruff
 kaggle
