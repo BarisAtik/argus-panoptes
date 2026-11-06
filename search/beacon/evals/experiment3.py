@@ -242,7 +242,9 @@ def score() -> None:
         }
         for name, run in runs.items()
     }
-    summary = {"frozen": frozen["routing"], "power": frozen["power"], "tests": tests, "table": table}
+    summary = {
+        "frozen": frozen["routing"], "power": frozen["power"], "tests": tests, "table": table,
+    }  # fmt: skip
     summary["statute"] = {
         name: {
             kind: round(mean(run, [q.id for q in statute if q.kind == kind]), 3)
