@@ -62,7 +62,7 @@ class Mention:
 
 
 def swap_names(
-    sentences: Sequence[Sentence], group: str, seed: int = 0
+    sentences: Sequence[Sentence], group: str, seed: int = 0, pool: dict | None = None
 ) -> tuple[list[Sentence], list[Mention]]:
     """Replace every gold PER span by a name from `group`, keeping the rest of the sentence.
 
@@ -70,7 +70,7 @@ def swap_names(
     first name + surname. Within an article one original name stays one new name, and because the
     random draw depends only on the seed and position, all groups see the same design.
     """
-    pool = NAMES[group]
+    pool = NAMES[group] if pool is None else pool
     rng = random.Random(seed)
     assigned: dict[tuple[str, str], tuple[str, str]] = {}
     out, mentions = [], []

@@ -114,6 +114,22 @@ simple story about familiarity. They may depend on the hand-picked names.
 - Hypothesis 2 didn't name a scope. The card calls `shared` primary, so that decides it.
 - Hypothesis 12 was added during training, before any test score. Own dev F1 was already visible.
 
+## Follow-up: per-name audit (registered 2026-11-06, before any per-name or Faker score)
+
+The swap gaps were known when these were written. Per-name recall and every Faker list were not.
+Model `nl_core_news_lg`, exact PER recall, 5 repeats, code in `name_audit.py`. Faker has no
+Moroccan or Surinamese-Hindustani table, so only Dutch, Turkish and Polish can be checked this way.
+
+13. **Not a handful.** Dropping the three worst names from the Hindustani and the Turkish list
+    keeps at least two thirds of each gap.
+14. **Lists.** With names and articles resampled, the Hindustani and Turkish gaps still exclude 15
+    points on the favourable side (upper bound below -0.15).
+15. **Word frequency.** Across the hand lists, Spearman between a name's Zipf frequency in Dutch and
+    its recall is at least 0.3.
+16. **Independent lists.** With Faker tables, the Turkish gap against Faker Dutch is at least 15
+    points and Polish at least 5, both intervals excluding zero.
+17. **Diacritics.** Folding accents changes recall by less than 3 points for both Faker lists.
+
 ## Known limits
 
 - One newspaper, one region, one year. Nothing here says how Dutch from the Netherlands, social
